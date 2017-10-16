@@ -1,0 +1,6 @@
+# File to ignore when pushing to repo  
+cadetenv/*
+.DS_Store 
+
+
+
