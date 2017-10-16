@@ -25,7 +25,7 @@ SECRET_KEY = 'h&1ro2g+^oq=e57iv&^^d#*k80&5zw07%h9ng1p_)%jy6jx(5s'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'cadetsandbox.pythonanywhere.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'cadetsandbox.pythonanywhere.com']
 
 
 # Application definition
