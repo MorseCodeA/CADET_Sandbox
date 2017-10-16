@@ -1,8 +1,10 @@
 # File to ignore when pushing to repo  
 condenv/*
 cadetenv/*
+env2/*
 .DS_Store 
-cadetapp/__pycache__/
+cadetapp/__pycache__/*
+cadetapp/cadetapp/__pycache__/*
 db.sqlite3
 
 
