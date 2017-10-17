@@ -13,7 +13,7 @@ git clone https://github.com/AshleyMorse/CADET_Sandbox
 cd CADET_Sandbox 
 ```
 
-2. Virtual Environment (highly recommended)
+### 2. Virtual Environment (highly recommended)
 
 A. General virtualenv 
 ```bash 
@@ -27,7 +27,7 @@ Mac and Ubuntu users might also run into installation error if pyenv is broken [
 python -m venv cadetenv --without-pip 
 ```
 
-B. With Anaconda
+### B. With Anaconda
 If not using virtualenv and has anaconda installation use this:
 ```bash   
 conda create -n my-dev python=3.4
@@ -52,6 +52,10 @@ source cadetenv/bin/activate
 sudo pip install django --upgrade 
 ```
 
+# install dependencies
+```bash
+pip install -r requirements.txt
+```
 ### III. Activate Django App  
 
 ```bash
