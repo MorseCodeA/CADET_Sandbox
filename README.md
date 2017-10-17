@@ -52,18 +52,20 @@ source cadetenv/bin/activate
 sudo pip install django --upgrade 
 ```
 
-# install dependencies
-```bash
-pip install -r requirements.txt
-```
+
 ### III. Activate Django App  
 
 ```bash
+#install dependencies
+pip install -r requirements.txt
+
 # migrate database, default is sqlite
 python manage.py migrate 
 
 # run server,
-python manage.py runserver  
+python manage.py runserver
+
+
 ```
 
 
