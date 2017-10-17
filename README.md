@@ -1,4 +1,5 @@
 # CADET_Sandbox
+Python 3.4, Django 1.11
 
 A text repo to put all of our CADET Django code before we push it to Phabricator. 
 
@@ -13,7 +14,7 @@ git clone https://github.com/AshleyMorse/CADET_Sandbox
 cd CADET_Sandbox 
 ```
 
-### 2. Virtual Environment (highly recommended)
+### 2. Virtual Environment (optional, but highly recommended)
 
 A. General virtualenv 
 ```bash 
@@ -52,11 +53,12 @@ source cadetenv/bin/activate
 sudo pip install django --upgrade 
 ```
 
-# install dependencies
+### III. Activate Django App
+
 ```bash
+# install dependencies
 pip install -r requirements.txt
 ```
-### III. Activate Django App  
 
 ```bash
 # migrate database, default is sqlite
