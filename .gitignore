@@ -7,6 +7,8 @@ cadetapp/__pycache__/*
 cadetapp/dashboard/__pycache__/*
 cadetapp/cadetapp/__pycache__/*
 db.sqlite3
+*.pyc
+
 
 
 
