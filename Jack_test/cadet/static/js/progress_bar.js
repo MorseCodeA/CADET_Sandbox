@@ -1,5 +1,19 @@
 $(document).ready(function(){
+            $("#open_btn").click(function() {
+            $.FileDialog({multiple: true}).on('files.bs.filedialog', function(ev) {
+                var files = ev.files;
+                var text = "";
+                files.forEach(function(f) {
+                    text += f.name + "<br/>";
+                });
+                $("#output").html(text);
+            }).on('cancel.bs.filedialog', function(ev) {
+                $("#output").html("Cancelled!");
+            });
+        });
+  //Deals with uploader
   uuid = $('#progressBar').data('progress_bar_uuid');
+
   // form submission
   $('form').submit(function(){
     // Prevent multiple submits
@@ -9,14 +23,8 @@ $(document).ready(function(){
     // Update progress bar
     function update_progress_info() {
       $.getJSON(upload_progress_url, {'X-Progress-ID': uuid}, function(data, status){
-        //if(data){
-          //$('#progressBar').removeAttr('hidden');  // show progress bar if there are datas
           var progress = parseInt(data.received, 10)/parseInt(data.size, 10)*100;
           $('#progressBar').attr('value', progress);
-        //}
-        //else {
-          //$('#progressBar').attr('hidden', '');  // hide progress bar if no datas
-        //}
         window.setTimeout(update_progress_info, 200);
       });
     }

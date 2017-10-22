@@ -5,21 +5,25 @@ from django.shortcuts import render, redirect
 from django.core.cache import cache
 import json
 from django.http import HttpResponse
-from django.core.files.storage import FileSystemStorage
+from .forms import DocumentForm
+from .models import Document
+
 
 def home(request):
-    return render(request, 'home.html')
+    documents = Document.objects.all()
+    return render(request, 'home.html', { 'documents': documents })
 
 def file_upload(request):
-    if request.method == 'POST' and request.FILES['file']:
-        file = request.FILES['file']
-        fs = FileSystemStorage()
-        filename = fs.save(file.name, file)
-        uploaded_file_url = fs.url(filename)
-        return redirect('home')
+    if request.method == 'POST':
+        files = request.FILES.getlist('file')
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            for a_file in files:
+                Document(file=a_file).save()
+            return redirect('home')
     else:
-        return render(request, 'file_upload.html')
-
+        form = DocumentForm()
+    return render(request, 'file_upload.html', {'form': form})
 
 def upload_progress(request):
     #Uses Ajax calls to return the upload progress and total length values
