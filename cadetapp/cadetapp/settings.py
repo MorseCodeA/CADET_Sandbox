@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'dashboard',
+    'pipeline',   
 ]
 
 MIDDLEWARE = [
@@ -118,5 +119,51 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_URL = '/bak-static/'
+#STATIC_ROOT = os.path.join(BASE_DIR, 'bak-static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_final')
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "bak-static"),
+]
+
+## Add storage for pipeline
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage' 
+
+# Add PipelineFinder 
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'pipeline.finders.PipelineFinder',
+)
+
+PIPELINE_COMPILERS = (
+    'pipeline.compilers.coffee.CoffeeScriptCompiler',
+    'pipeline.compilers.stylus.StylusCompiler',
+    'pipeline.compilers.sass.SASSCompiler',
+)
+
+# Config on assets for pipeline
+PIPELINE = {
+    'PIPELINE_ENABLED': True,
+    'STYLESHEETS': {
+        'maincss': {
+            'source_filenames': (
+              'scss/main.scss',
+            ),
+            'output_filename': 'css/main.css',
+            'variant': 'datauri',
+        },
+    },
+    'JAVASCRIPT': {
+        'mainjs': {
+            'source_filenames': (
+                'js/main.js',
+                'js/sb-admin.js',
+                'js/sb-admin-charts.js',
+                'js/sb-admin-databases.js',
+            ),
+            'output_filename': 'js/main.js',
+        },
+    }
+}

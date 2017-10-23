@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load pipeline %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,15 +9,20 @@
   <meta name="description" content="CADET Test Website, JHU, Fall 2017">
   <meta name="author" content="Team KAJJA">
   <title>CADET Dashboard - V1 </title>
+
   <!-- Bootstrap core CSS-->
-  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}"
-        rel="stylesheet">
-  <!-- Custom fonts for this template-->
-  <link href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}"
-        rel="stylesheet" type="text/css">
-  <!-- Custom styles for this template-->
-  <link href=" {% static 'css/sb-admin.css' %}" rel="stylesheet">
-</head>
+  <!--<link href="{% bak-static 'vendor/bootstrap/css/bootstrap.min.css' %}"-->
+        <!--rel="stylesheet">-->
+  <!--&lt;!&ndash; Custom fonts for this template&ndash;&gt;-->
+  <!--<link href="{% bak-static 'vendor/font-awesome/css/font-awesome.min.css' %}"-->
+        <!--rel="stylesheet" type="text/css">-->
+  <!--&lt;!&ndash; Custom styles for this template&ndash;&gt;-->
+  <!--<link href=" {% bak-static 'css/sb-admin.css' %}" rel="stylesheet">-->
+
+  <!-- Test assets pipeline -->
+  {% stylesheet 'maincss' %}
+  {% javascript 'mainjs' %}
+
 <body class="fixed-nav sticky-footer" id="page-top">
   <!-- Navigation-->
   <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">

@@ -12,13 +12,3 @@ urlpatterns = [
     url('upload', views.upload_view, name='upload'),
     url('stopword', views.stopword_view, name='stopword'),
 ]
-
-# refactor later in classes when have models
-# urlpatterns = [
-#     url(r'^$', views.DashboardView.as_view(), name='index'),
-#     url('topic-distribution', views.TopicDistributionView.as_view(),
-#         name='topic-distribution'),
-#     url('instructor-distribution',
-#         views.InstructorDistributionView.as_view(),
-#         name='instructor-distribution'),
-#     ]
