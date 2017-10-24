@@ -30,9 +30,8 @@ def stopword_view(request):
     return render(request, 'dashboard/stopword.html')
 
 
-def upload_view(request):
-    return render(request, 'dashboard/upload.html')
-
+def export_view(request):
+    return render(request, 'dashboard/export.html')
 
 
 
