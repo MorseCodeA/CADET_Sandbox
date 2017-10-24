@@ -118,18 +118,26 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/public/'
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static_final')
-STATIC_ROOT = os.path.join(BASE_DIR, 'public/')
+STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
+
+# STATIC_ROOT = '/Users/akh/WWW/CADET_Sandbox/cadetapp/assets'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, "public"),
+)
 
 ## Add storage for pipeline
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage' 
+STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage' 
 
 # Add PipelineFinder 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'pipeline.finders.PipelineFinder',
+
 )
 
 PIPELINE_COMPILERS = (
@@ -143,45 +151,35 @@ PIPELINE = {
     'STYLESHEETS': {
         'maincss': {
             'source_filenames': (
-                'scss/_variables.scss',
-                'scss/_mixins.scss',
-                'scss/_globals.scss'
-                'scss/_utilities.scss',
-                'scss/navbar/navbar_global.scss',
-                'scss/navbar/navbar_fixed.scss',
-                'scss/navbar/navbar_static.scss',
-                'scss/navbar/navbar_toggle.scss',
-                'scss/navbar/navbar_colors.scss',
-                'scss/cards.scss',
-                'scss/login.scss',
-                'scss/footer.scss',
+                'css/sb-admin.css',
             ),
-            'output_filename': 'css/compiled-main.css',
+            'output_filename': 'css/main-compiled.css',
             'variant': 'datauri',
         },
         'vendorcss': {
             'source_filenames': (
-                'vendor/bootstrap/bootstrap.css',
-                'vendor/bootstrap/bootstrap-grid.css',
-                'vendor/bootstrap/bootstrap-reboot.css',
-                'vendor/datatables/dataTables.bootstrap4.css',
-                'vendor/font-awesome/css/font-awesome.css',
+                'css/bootstrap/css/bootstrap.css',
+                'css/bootstrap/css/bootstrap-grid.css',
+                'css/bootstrap/css/bootstrap-reboot.css.css',
             ),
-            'output_filename': 'vendor/compiled-vendors.css',
+            'output_filename': 'css/vendors-compiled.css',
         }
     },
     'JAVASCRIPT': {
         'mainjs': {
             'source_filenames': (
-                'vendor/jquery/jquery.js',
-                'vendor/popper/popper.js',
-                'vendor/bootstrap/js/bootstrap.js',
-                # 'vendor/jquery-easing/jquery-easing.js',
-                'js/sb-admin-charts.js',
+                'js/jquery/jquery.js',
+                'js/bootstrap.js',
+                'js/jquery.easing.js',
+                'js/jquery.easing.compatibility.js',
+                'js/popper.min.js',
                 'js/sb-admin-databases.js',
                 'js/sb-admin.js',
             ),
-            'output_filename': 'js/sb-all.js',
+            'output_filename': 'js/main-compiled.js',
         }
     }
 }
+
+PIPELINE['CSS_COMPRESSOR'] = 'pipeline.compressors.yuglify.YuglifyCompressor'
+PIPELINE['JS_COMPRESSOR'] = 'pipeline.compressors.yuglify.YuglifyCompressor'
