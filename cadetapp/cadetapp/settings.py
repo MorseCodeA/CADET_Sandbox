@@ -55,7 +55,7 @@ ROOT_URLCONF = 'cadetapp.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'dashboard/templates/dashboard')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

@@ -31,6 +31,7 @@
             <span class="nav-link-text">Dashboard</span>
           </a>
         </li>
+
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
           <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#exampleAccordion">
             <i class="fa fa-fw fa-area-chart"></i>
@@ -38,11 +39,10 @@
           </a>
           <ul class="sidenav-second-level collapse" id="collapseComponents">
             <li>
-              <a href="topic-distribution.html">Topics Distribution</a>
+              <a href="navbar.html">Topics Distribution</a>
             </li>
             <li>
-              <a href="instructor-distribution.html">Instructor
-                Distribution</a>
+              <a href="cards.html">Instructor Distribution</a>
             </li>
           </ul>
         </li>
@@ -109,6 +109,13 @@
               <div class="dropdown-message small">I was wondering if you could meet for an appointment at 3:00 instead of 4:00. Thanks!</div>
             </a>
             <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">
+              <strong>John Doe</strong>
+              <span class="small float-right text-muted">11:21 AM</span>
+              <div class="dropdown-message small">I've sent the final files over to you for review. When you're able to sign off of them let me know and we can discuss distribution.</div>
+            </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item small" href="#">View all messages</a>
           </div>
         </li>
         <li class="nav-item dropdown">
@@ -173,19 +180,11 @@
       </ul>
     </div>
   </nav>
-  <div class="content-wrapper">
-    <div class="container-fluid">
-      <!-- Breadcrumbs-->
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <a href="#">Dashboard</a>
-        </li>
-        <li class="breadcrumb-item active">Navbar</li>
-      </ol>
-      <h2>Overview</h2>
-      <hr>
-      <div style="height: 1000px;"></div>
-    </div>
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <!-- call content here -->
+            {% block content %}{% endblock %}
+
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
     <footer class="sticky-footer">
