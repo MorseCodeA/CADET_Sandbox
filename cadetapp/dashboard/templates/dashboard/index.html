@@ -1,4 +1,3 @@
-{% load staticfiles %}
 {% load pipeline %}
 <!DOCTYPE html>
 <html lang="en">
@@ -9,19 +8,9 @@
   <meta name="description" content="CADET Test Website, JHU, Fall 2017">
   <meta name="author" content="Team KAJJA">
   <title>CADET Dashboard - V1 </title>
-
-  <!-- Bootstrap core CSS-->
-  <!--<link href="{% bak-static 'vendor/bootstrap/css/bootstrap.min.css' %}"-->
-        <!--rel="stylesheet">-->
-  <!--&lt;!&ndash; Custom fonts for this template&ndash;&gt;-->
-  <!--<link href="{% bak-static 'vendor/font-awesome/css/font-awesome.min.css' %}"-->
-        <!--rel="stylesheet" type="text/css">-->
-  <!--&lt;!&ndash; Custom styles for this template&ndash;&gt;-->
-  <!--<link href=" {% bak-static 'css/sb-admin.css' %}" rel="stylesheet">-->
-
-  <!-- Test assets pipeline -->
+  <!-- Assets pipeline -CSS -->
+  {% stylesheet 'vendorcss' %}
   {% stylesheet 'maincss' %}
-  {% javascript 'mainjs' %}
 
 <body class="fixed-nav sticky-footer" id="page-top">
   <!-- Navigation-->
@@ -223,15 +212,9 @@
         </div>
       </div>
     </div>
-    <!-- Bootstrap core JavaScript-->
-    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
-    <script src="{% static 'vendor/popper/popper.min.js' %}"></script>
-    <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
-    <!-- Core plugin JavaScript-->
-    <script
-            src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
-    <!-- Custom scripts for all pages-->
-    <script src="{% static 'js/sb-admin.min.js' %}"></script>
+    <!-- Asset pipeline - JS -->
+     {% javascript 'vendorjs' %}
+     {% javascript 'mainjs' %}
   </div>
 </body>
 

@@ -29,7 +29,6 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'cadetsandbox.pythonanywhere.com']
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -119,13 +118,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = '/bak-static/'
-#STATIC_ROOT = os.path.join(BASE_DIR, 'bak-static')
-STATIC_ROOT = os.path.join(BASE_DIR, 'static_final')
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "bak-static"),
-]
+STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static_final')
+STATIC_ROOT = os.path.join(BASE_DIR, 'public/')
 
 ## Add storage for pipeline
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage' 
@@ -138,32 +133,55 @@ STATICFILES_FINDERS = (
 )
 
 PIPELINE_COMPILERS = (
-    'pipeline.compilers.coffee.CoffeeScriptCompiler',
-    'pipeline.compilers.stylus.StylusCompiler',
     'pipeline.compilers.sass.SASSCompiler',
 )
 
 # Config on assets for pipeline
+
 PIPELINE = {
     'PIPELINE_ENABLED': True,
     'STYLESHEETS': {
         'maincss': {
             'source_filenames': (
-              'scss/main.scss',
+                'scss/_variables.scss',
+                'scss/_mixins.scss',
+                'scss/_globals.scss'
+                'scss/_utilities.scss',
+                'scss/navbar/navbar_global.scss',
+                'scss/navbar/navbar_fixed.scss',
+                'scss/navbar/navbar_static.scss',
+                'scss/navbar/navbar_toggle.scss',
+                'scss/navbar/navbar_colors.scss',
+                'scss/cards.scss',
+                'scss/login.scss',
+                'scss/footer.scss',
             ),
-            'output_filename': 'css/main.css',
+            'output_filename': 'css/compiled-main.css',
             'variant': 'datauri',
         },
+        'vendorcss': {
+            'source_filenames': (
+                'vendor/bootstrap/bootstrap.css',
+                'vendor/bootstrap/bootstrap-grid.css',
+                'vendor/bootstrap/bootstrap-reboot.css',
+                'vendor/datatables/dataTables.bootstrap4.css',
+                'vendor/font-awesome/css/font-awesome.css',
+            ),
+            'output_filename': 'vendor/compiled-vendors.css',
+        }
     },
     'JAVASCRIPT': {
         'mainjs': {
             'source_filenames': (
-                'js/main.js',
-                'js/sb-admin.js',
+                'vendor/jquery/jquery.js',
+                'vendor/popper/popper.js',
+                'vendor/bootstrap/js/bootstrap.js',
+                # 'vendor/jquery-easing/jquery-easing.js',
                 'js/sb-admin-charts.js',
                 'js/sb-admin-databases.js',
+                'js/sb-admin.js',
             ),
-            'output_filename': 'js/main.js',
-        },
+            'output_filename': 'js/sb-all.js',
+        }
     }
 }
