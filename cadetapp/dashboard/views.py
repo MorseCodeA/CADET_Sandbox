@@ -23,6 +23,18 @@ def instructor_distribution(request):
     return render(request, 'dashboard/instructor-distribution.html')
 
 
+def upload_view(request):
+    return render(request, 'dashboard/upload.html')
+
+def stopword_view(request):
+    return render(request, 'dashboard/stopword.html')
+
+
+def upload_view(request):
+    return render(request, 'dashboard/upload.html')
+
+
+
 
 # for refactoring later, when models can be instantiated for query_set
 

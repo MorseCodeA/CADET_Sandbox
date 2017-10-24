@@ -9,6 +9,9 @@ urlpatterns = [
         name='topic-distribution'),
     url('instructor-distribution', views.instructor_distribution,
         name='instructor-distribution'),
+    url('upload', views.upload_view, name='upload'),
+    url('stopword', views.stopword_view, name='stopword'),
+    url('export', views.export_view, name='export'),
 ]
 
 # refactor later in classes when have models

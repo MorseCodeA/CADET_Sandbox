@@ -20,18 +20,17 @@
 <body class="fixed-nav sticky-footer" id="page-top">
   <!-- Navigation-->
   <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
-    <a class="navbar-brand" href="index.html">CADET</a>
+    <a class="navbar-brand" href="/dashboard">CADET</a>
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
-          <a class="nav-link" href="index.html">
+          <a class="nav-link" href="/dashboard">
             <span class="nav-link-text">Dashboard</span>
           </a>
         </li>
-
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
           <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#exampleAccordion">
             <i class="fa fa-fw fa-area-chart"></i>
@@ -39,10 +38,11 @@
           </a>
           <ul class="sidenav-second-level collapse" id="collapseComponents">
             <li>
-              <a href="navbar.html">Topics Distribution</a>
+              <a href="topic-distribution.html">Topics Distribution</a>
             </li>
             <li>
-              <a href="cards.html">Instructor Distribution</a>
+              <a href="instructor-distribution.html">Instructor
+                Distribution</a>
             </li>
           </ul>
         </li>
@@ -53,13 +53,13 @@
           </a>
           <ul class="sidenav-second-level collapse" id="collapseExamplePages">
             <li>
-              <a href="login.html">Stop Words</a>
+              <a href="stopword.html">Stop Words</a>
             </li>
           </ul>
         </li>
         <li class="nav-item" data-toggle="tooltip" data-placement="right"
             title="Upload">
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="upload.html">
             <i class="fa fa-fw fa-upload"></i>
             <span class="nav-link-text">Upload</span>
           </a>
@@ -71,7 +71,7 @@
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="about.html">
             <span class="nav-link-text">About</span>
           </a>
         </li>
@@ -109,13 +109,6 @@
               <div class="dropdown-message small">I was wondering if you could meet for an appointment at 3:00 instead of 4:00. Thanks!</div>
             </a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">
-              <strong>John Doe</strong>
-              <span class="small float-right text-muted">11:21 AM</span>
-              <div class="dropdown-message small">I've sent the final files over to you for review. When you're able to sign off of them let me know and we can discuss distribution.</div>
-            </a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item small" href="#">View all messages</a>
           </div>
         </li>
         <li class="nav-item dropdown">
@@ -180,11 +173,19 @@
       </ul>
     </div>
   </nav>
-    <div class="content-wrapper">
-        <div class="container-fluid">
-            <!-- call content here -->
-            {% block content %}{% endblock %}
-
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Navbar</li>
+      </ol>
+      <h2>Overview</h2>
+      <hr>
+      <div style="height: 1000px;"></div>
+    </div>
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
     <footer class="sticky-footer">
@@ -215,7 +216,7 @@
           </div>
         </div>
       </div>
-    </div>
+</div>
     <!-- Bootstrap core JavaScript-->
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'vendor/popper/popper.min.js' %}"></script>
