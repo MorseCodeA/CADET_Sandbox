@@ -23,6 +23,7 @@ from django.http import HttpResponseRedirect
 urlpatterns = [
     url(r'^$', lambda x: HttpResponseRedirect('/upload/')),
     url(r'^upload/', include('fileupload.urls')),
+    url(r'^progressbarupload/', include('progressbarupload.urls')),
 ]
 
 if settings.DEBUG:
