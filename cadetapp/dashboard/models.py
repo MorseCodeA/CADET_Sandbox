@@ -18,7 +18,12 @@ class Course(models.Model):
 	name = models.CharField(max_length=50)
 	section = models.FloatField('format xxx.xxx')
 	year = models.PositiveSmallIntegerField('format xxxx')
-	semester = models.PositiveSmallIntegerField('[1,2,3]')
+	SEMESTERS = (
+		('1', 'Spring'),
+		('2', 'Summer'),
+		('3', 'Fall'),
+	)
+	semester = models.CharField(max_length=1, choices=SEMESTERS)
 
 class Instructor(models.Model):
 	primary_key = models.IntegerField()
