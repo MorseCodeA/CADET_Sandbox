@@ -50,7 +50,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# Jack's integration layer for fileupload
 FILE_UPLOAD_HANDLERS = (
     #Use custom upload handler
     "fileupload.uploadhandler.ProgressBarUploadHandler",
