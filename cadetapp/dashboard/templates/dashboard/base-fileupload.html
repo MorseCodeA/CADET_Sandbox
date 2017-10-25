@@ -7,8 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="CADET Test Website, JHU, Fall 2017">
   <meta name="author" content="Team KAJJA">
-  <title>CADET Dashboard - V1 </title>
-  <!-- Bootstrap core CSS-->
+  <title>File Upload </title>
+  <!-- Bootstrap 3.3.7 for Jack's compatibility CSS-->
   <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}"
         rel="stylesheet">
   <!-- Custom fonts for this template-->
@@ -16,9 +16,36 @@
         rel="stylesheet" type="text/css">
   <!-- Custom styles for this template-->
   <link href=" {% static 'css/sb-admin.css' %}" rel="stylesheet">
+  <script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+  <style>
+    #drop-zone {
+        width: 600px;
+        height: 200px;
+        //position:absolute;
+        top:10px;
+        border: 2px dashed rgba(0,0,0,.3);
+        border-radius: 20px;
+        text-align: center;
+        position: relative;
+        line-height: 180px;
+        font-size: 20px;
+        color: rgba(0,0,0,.3);1
+    }
+    #drop-zone input {
+        /*Important*/
+        position: absolute;
+        /*Important*/
+        cursor: pointer;
+
+    /*Important*/
+    #drop-zone.mouse-over {
+        border: 2px dashed rgba(0,0,0,.5);
+        color: rgba(0,0,0,.5);
+    }
+  </style>
 </head>
 <body class="fixed-nav sticky-footer" id="page-top">
-  <!-- Navigation-->
+<!-- Navigation-->
   <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
     <a class="navbar-brand" href="/dashboard">CADET</a>
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,7 +92,7 @@
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
-          <a class="nav-link" href="export.html">
+          <a class="nav-link" href="#">
             <i class="fa fa-fw fa-arrow-down"></i>
             <span class="nav-link-text">Export</span>
           </a>
@@ -74,6 +101,18 @@
           <a class="nav-link" href="about.html">
             <span class="nav-link-text">About</span>
           </a>
+        </li>
+      </ul>
+      <ul class="navbar-nav sidenav-toggler">
+        <li class="nav-item">
+          <a class="nav-link text-center" id="sidenavToggler">
+            <i class="fa fa-fw fa-angle-left"></i>
+          </a>
+        </li>
+      </ul>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
+            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
         </li>
       </ul>
     </div>
@@ -90,13 +129,14 @@
       <h2>Overview</h2>
       <hr>
       <div style="height: 1000px;">
-          <!-- call content here -->
-          {% block content %}{% endblock %}
+        <!-- call content here -->
+        {% block content %}{% endblock %}
       </div>
     </div>
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
-    <footer class="sticky-footer">
+
+ <footer class="sticky-footer">
       <div class="container">
         <div class="text-center">
           <small>Copyright © CADET 2017</small>
@@ -112,10 +152,57 @@
     <script src="{% static 'vendor/popper/popper.min.js' %}"></script>
     <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
     <!-- Core plugin JavaScript-->
-    <script
-            src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
     <!-- Custom scripts for all pages-->
     <script src="{% static 'js/sb-admin.min.js' %}"></script>
-  </div>
+
+      <!-- Jack's dependencies -->
+    <script src="{% static 'vendor/bootstrap/js/bootstrap337.min.js' %}"></script>
+    <script src="{% static 'js/progress_bar.js' %}"></script>
+    <script>upload_progress_url = "/upload/upload_progress"</script><script>
+        function addFile() {
+        var table = document.getElementById("myTable");
+        var row = table.insertRow(-1);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var Upfile1 = document.getElementById("id_file");
+        cell1.innerHTML = Upfile1.files.item(0).name;
+        cell2.innerHTML = (Upfile1.files.item(0).size/1048576).toFixed(2) + " MB";
+        cell3.innerHTML = Upfile1.files.item(0).type;
+        }
+        function deleteRows() {
+        for(var i=document.getElementById("myTable").rows.length;i>1;i--) {
+        document.getElementById("myTable").deleteRow(i-1);
+        }
+        document.getElementById("file").value = "";
+        }
+    </script>
+    <script>
+        $(function () {
+        var dropZoneId = "drop-zone";
+        var mouseOverClass = "mouse-over";
+        var dropZone = $("#" + dropZoneId);
+        var ooleft = dropZone.offset().left;
+        var ooright = dropZone.outerWidth() + ooleft;
+        var ootop = dropZone.offset().top;
+        var oobottom = dropZone.outerHeight() + ootop;
+        var inputFile = dropZone.find("input");
+        document.getElementById(dropZoneId).addEventListener("dragover", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.addClass(mouseOverClass);
+        var x = e.pageX;
+        var y = e.pageY;
+        if (!(x < ooleft || x > ooright || y < ootop || y > oobottom)) {
+        inputFile.offset({ top: y - 15, left: x - 100 });
+        } else {
+        inputFile.offset({ top: -400, left: -400 });
+        }
+        }, true);
+        })
+    </script>
 </body>
 </html>
+
+

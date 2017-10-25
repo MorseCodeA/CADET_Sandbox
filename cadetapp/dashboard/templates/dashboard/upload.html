@@ -1,7 +1,17 @@
-{% extends 'dashboard/base.html' %}
+{% extends 'dashboard/base-fileupload.html' %}
 {% block content %}
-        <div class="upload">
-            <p> UPLOAD Page </p>
+        <div class="file-upload-container container">
+            <h1> Upload Page </h1>
+            <ul>
+                {% for doc in documents %}
+                  <li>
+                    <a href="{{ obj.document.url }}">{{ doc.document.name
+                        }}</a>
+                    <small>(Uploaded at: {{ doc.uploaded_at }})</small>
+                  </li>
+                {% endfor %}
+            </ul>
         </div>
 {% endblock %}
+
 

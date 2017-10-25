@@ -1,5 +1,5 @@
 from django import forms
-from .models import Document
+from fileupload.models import Document
 
 class DocumentForm(forms.ModelForm):
     class Meta:

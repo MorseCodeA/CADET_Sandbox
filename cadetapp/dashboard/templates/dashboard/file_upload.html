@@ -1,0 +1,46 @@
+{% extends 'dashboard/base-fileupload.html' %}
+{% block content %}
+<div class="file-uploader-container container">
+  <div class="jumbotron">
+    <div class="container">
+      <h2 class="display-3">CADET File Uploader</h2>
+      <p>Select the files to upload</p>
+      <form method="post" enctype="multipart/form-data" action="?X-Progress-ID=test">
+        {% csrf_token %}
+        <label class="btn btn-success" for="id_file" onclick="addFile()">
+          <input type="file" name="file" id="id_file" required="" style="display:none;" multiple>
+          <span>Add files...</span>
+        </label>
+        <button type="submit" class="btn btn-primary">Upload Files</button>
+        <h2>
+          <progress id="progressBar" data-progress_bar_uuid="test" style="width:50%" value="0" max="100"></progress>
+        </h2>
+        <div id="drop-zone">
+          Drop files here...
+          <div id="clickHere">
+            <input type="file" name="file" style="opacity:0;" id="id_file" multiple/>
+          </div>
+        </div>
+      </form>
+<h3>File Browser</h3>
+<div class="table-responsive">
+  <table id= "myTable" class="table table-striped">
+    <thead>
+    <tr>
+      <th>File Name</th>
+      <th>File Size</th>
+      <th><button type="button" class="btn btn-danger" onclick="deleteRows()" >Delete Files</button></th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  </div><!-- END jumbotron -->
+</div><!-- END file uploader container  -->
+{% endblock %}
+
+
+
+
+

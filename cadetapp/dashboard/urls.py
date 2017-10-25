@@ -9,17 +9,13 @@ urlpatterns = [
         name='topic-distribution'),
     url('instructor-distribution', views.instructor_distribution,
         name='instructor-distribution'),
+    url('file_upload', views.file_upload, name='upload-new'),
     url('upload', views.upload_view, name='upload'),
+    url(r'^upload_progress$', views.upload_progress,
+        name='upload_progress'),
+    url('about', views.about_view, name='about'),
+    url('file_upload', views.file_upload, name='file_upload'),
     url('stopword', views.stopword_view, name='stopword'),
     url('export', views.export_view, name='export'),
 ]
 
-# refactor later in classes when have models
-# urlpatterns = [
-#     url(r'^$', views.DashboardView.as_view(), name='index'),
-#     url('topic-distribution', views.TopicDistributionView.as_view(),
-#         name='topic-distribution'),
-#     url('instructor-distribution',
-#         views.InstructorDistributionView.as_view(),
-#         name='instructor-distribution'),
-#     ]
