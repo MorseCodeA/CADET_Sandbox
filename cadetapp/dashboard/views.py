@@ -3,13 +3,14 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.views import generic
+
+from django import forms
 from django.core.cache import cache
 from django.shortcuts import render, redirect
 from fileupload.forms import DocumentForm
 from fileupload.models import Document
 
 def index(request):
-
     # later will call instances from Ashley's models,
     # which contains comments and topics
     # main dashboard located at http://example/dashboard
@@ -26,7 +27,7 @@ def instructor_distribution(request):
 
 def upload_view(request):
     documents = Document.objects.all()
-    return render(request, 'dashboard/file_upload.html', {'documents':
+    return render(request, 'dashboard/upload.html', {'documents':
                                                           documents})
 def file_upload(request):
     if request.method == 'POST':
@@ -35,7 +36,7 @@ def file_upload(request):
         if form.is_valid():
             for a_file in files:
                 Document(file=a_file).save()
-            return redirect('dashboard/file_upload.html')
+            return redirect('dashboard/upload.html')
     else:
         form = DocumentForm()
     return render(request, 'dashboard/file_upload.html', {'form': form})
