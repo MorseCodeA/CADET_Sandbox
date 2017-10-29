@@ -1,0 +1,11 @@
+{% extends 'dashboard/base.html' %}
+{% block content %}
+        <div class="dashboard-home-container container">
+            <h2> Multibars Chart Test </h2>
+                {% include_container chartcontainer 400 600 %}
+                {% include_container chartcontainer_with_date 400 600 %}
+            <h4> Chart Data: {{data}}</h4>
+                {% load_chart charttype chartdata chartcontainer extra %}
+
+        </div>
+{% endblock %}

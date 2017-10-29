@@ -1,6 +1,7 @@
 # File to ignore when pushing to repo  
 condenv/*
 cadetenv/*
+media/*
 env2/*
 .DS_Store 
 cadetapp/__pycache__/*

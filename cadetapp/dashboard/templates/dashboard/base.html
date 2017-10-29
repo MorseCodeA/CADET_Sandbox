@@ -8,6 +8,9 @@
   <meta name="description" content="CADET Test Website, JHU, Fall 2017">
   <meta name="author" content="Team KAJJA">
   <title>CADET Dashboard - V1 </title>
+  <!--[if lte IE 8]>
+            <script src="{% static 'js/excanvas.js' %}"></script>
+        <![endif]-->
   <!-- Bootstrap core CSS-->
   <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}"
         rel="stylesheet">
@@ -16,7 +19,14 @@
         rel="stylesheet" type="text/css">
   <!-- Custom styles for this template-->
   <link href=" {% static 'css/sb-admin.css' %}" rel="stylesheet">
+
+  <!-- Bootstrap JQuery -->
+  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+
+  <!-- ChartJS -->
+ <script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script>
 </head>
+
 <body class="fixed-nav sticky-footer" id="page-top">
   <!-- Navigation-->
   <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
@@ -108,14 +118,15 @@
       <i class="fa fa-angle-up"></i>
     </a>
     <!-- Bootstrap core JavaScript-->
-    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'vendor/popper/popper.min.js' %}"></script>
-    <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}">
+    </script>
     <!-- Core plugin JavaScript-->
-    <script
-            src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}">
+    </script>
     <!-- Custom scripts for all pages-->
     <script src="{% static 'js/sb-admin.min.js' %}"></script>
+
   </div>
 </body>
 </html>

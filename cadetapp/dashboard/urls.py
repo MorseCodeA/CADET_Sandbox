@@ -1,5 +1,9 @@
+from pkg_resources import parse_version
+import django
 from django.conf.urls import url
+from django.views.generic import TemplateView
 from . import views
+
 
 app_name = 'dashboard'
 
@@ -17,5 +21,8 @@ urlpatterns = [
     url('file_upload', views.file_upload, name='file_upload'),
     url('stopword', views.stopword_view, name='stopword'),
     url('export', views.export_view, name='export'),
+
+    # test chartjs
+    url('chartdemo', views.line_chart, name='chartdemo.html')
 ]
 
