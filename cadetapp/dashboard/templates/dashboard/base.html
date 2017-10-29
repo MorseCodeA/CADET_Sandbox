@@ -1,5 +1,4 @@
 {% load staticfiles %}
-{% load nvd3_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +8,9 @@
   <meta name="description" content="CADET Test Website, JHU, Fall 2017">
   <meta name="author" content="Team KAJJA">
   <title>CADET Dashboard - V1 </title>
+  <!--[if lte IE 8]>
+            <script src="{% static 'js/excanvas.js' %}"></script>
+        <![endif]-->
   <!-- Bootstrap core CSS-->
   <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}"
         rel="stylesheet">
@@ -21,13 +23,8 @@
   <!-- Bootstrap JQuery -->
   <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
 
-  <!-- NVD3 -->
-  <link href="{% static 'css/nv.d3.min.css' %}" type="text/css"
-        rel="stylesheet">
-  <script src="{% static 'js/d3.min.js' %}" type="text/javascript"
-          charset="utf-8"></script>
-  <script src="{% static 'js/nv.d3.min.js' %}" type="text/javascript"
-          charset="utf-8"></script>
+  <!-- ChartJS -->
+ <script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script>
 </head>
 
 <body class="fixed-nav sticky-footer" id="page-top">

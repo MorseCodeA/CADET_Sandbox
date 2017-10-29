@@ -20,9 +20,7 @@ from django.conf import settings
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    # routes to Anh's dashboard microapp
     url(r'dashboard/', include('dashboard.urls')),
-    # routes to Jack's fileupload microapp
 
 ]
 

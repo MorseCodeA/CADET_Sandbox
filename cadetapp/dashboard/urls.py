@@ -1,5 +1,9 @@
+from pkg_resources import parse_version
+import django
 from django.conf.urls import url
+from django.views.generic import TemplateView
 from . import views
+
 
 app_name = 'dashboard'
 
@@ -18,7 +22,7 @@ urlpatterns = [
     url('stopword', views.stopword_view, name='stopword'),
     url('export', views.export_view, name='export'),
 
-    #test nvd3 charts
-    url('multibarchart', views.multibarchart, name='multibarchart'),
+    # test chartjs
+    url('chartdemo', views.line_chart, name='chartdemo.html')
 ]
 

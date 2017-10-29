@@ -40,9 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'dashboard',
     'fileupload',
-    'django_nvd3',
     'djangobower',
-    'nvd3graph',
+    'chartjs',
 ]
 
 MIDDLEWARE = [
