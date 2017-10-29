@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'dashboard',
     'fileupload',
     'django_nvd3',
+    'djangobower',
     'nvd3graph',
 ]
 
@@ -110,6 +112,17 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+# Django-bower
+# ------------
+APPLICATION_DIR = os.path.dirname(globals()['__file__'])
+# Specifie path to components root (you need to use absolute path)
+BOWER_COMPONENTS_ROOT = os.path.join(APPLICATION_DIR, '/nvd3graph/bower_components')
+BOWER_PATH = '/usr/local/bin/bower'
+BOWER_INSTALLED_APPS = (
+    'd3#3.3.13',
+    'nvd3#1.7.1',
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/

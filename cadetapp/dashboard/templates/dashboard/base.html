@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load nvd3_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +17,19 @@
         rel="stylesheet" type="text/css">
   <!-- Custom styles for this template-->
   <link href=" {% static 'css/sb-admin.css' %}" rel="stylesheet">
+
+  <!-- Bootstrap JQuery -->
+  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+
+  <!-- NVD3 -->
+  <link href="{% static 'css/nv.d3.min.css' %}" type="text/css"
+        rel="stylesheet">
+  <script src="{% static 'js/d3.min.js' %}" type="text/javascript"
+          charset="utf-8"></script>
+  <script src="{% static 'js/nv.d3.min.js' %}" type="text/javascript"
+          charset="utf-8"></script>
 </head>
+
 <body class="fixed-nav sticky-footer" id="page-top">
   <!-- Navigation-->
   <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
@@ -108,14 +121,15 @@
       <i class="fa fa-angle-up"></i>
     </a>
     <!-- Bootstrap core JavaScript-->
-    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'vendor/popper/popper.min.js' %}"></script>
-    <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}">
+    </script>
     <!-- Core plugin JavaScript-->
-    <script
-            src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}">
+    </script>
     <!-- Custom scripts for all pages-->
     <script src="{% static 'js/sb-admin.min.js' %}"></script>
+
   </div>
 </body>
 </html>

@@ -17,5 +17,8 @@ urlpatterns = [
     url('file_upload', views.file_upload, name='file_upload'),
     url('stopword', views.stopword_view, name='stopword'),
     url('export', views.export_view, name='export'),
+
+    #test nvd3 charts
+    url('multibarchart', views.multibarchart, name='multibarchart'),
 ]
 
