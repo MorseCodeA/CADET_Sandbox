@@ -65,8 +65,27 @@ python manage.py migrate
 # run server,
 python manage.py runserver
 
-
 ```
+
+### IV. Front-End Development Set Up
+
+This section is for future front-end developers who wishes to modify the HTML,
+CSS, and JS of the project.
+
+
+We are using Gulp as a taskrunner to autocompile JS and CSS assets.  Two files
+Gulpfile.js and package.json lists all dependencies and configuration.  In
+order to set up gulp to your local environment, you must have node.js set up.
+Run these commands:
+
+```bash
+# node will search for package.json file and install dependencies
+npm init
+# this command finds the Gulpfile.js and run all tasks there, mostly it tells
+gulp to compile and minify all js and sass files in teh assets directory
+gulp
+```
+
 
 
 

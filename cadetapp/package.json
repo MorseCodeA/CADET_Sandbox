@@ -1,0 +1,22 @@
+{
+  "name": "cadetapp",
+  "version": "1.0.0",
+  "description": "cadetapp front-end",
+  "main": "Gulpfile.js",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-sass": "^3.1.0",
+    "gulp-jshint": "^2.0.4",
+    "jshint": "^2.9.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Anh K. Hoang",
+  "license": "ISC",
+  "keywords": [
+    "cadet",
+    "app"
+  ]
+}
