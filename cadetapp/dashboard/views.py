@@ -1,14 +1,24 @@
+# -*- coding: utf-8 -*-
 import json
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse
-from django.urls import reverse
-from django.views import generic
-
-from django import forms
+from django.shortcuts import render, get_object_or_404, render_to_response, \
+    render, redirect
 from django.core.cache import cache
-from django.shortcuts import render, redirect
+from django.http import HttpResponse, JsonResponse
+
+# Upload dependencies
 from fileupload.forms import DocumentForm
 from fileupload.models import Document
+
+# ChartJS dependencies
+from random import randint
+from random import shuffle, randint
+from itertools import islice
+from django.views.generic import TemplateView
+from django.utils.translation import ugettext_lazy as _
+from chartjs.views.lines import BaseLineChartView, HighchartPlotLineChartView
+from chartjs.views.pie import HighChartPieView, HighChartDonutView
+from chartjs.colors import next_color, COLORS
+from chartjs.views.columns import BaseColumnsHighChartsView
 
 def index(request):
     # later will call instances from Ashley's models,
@@ -64,17 +74,28 @@ def export_view(request):
     return render(request, 'dashboard/export.html')
 
 
+# CHARTS VIEWS
+class LineChartJSONView(BaseLineChartView):
+    template_name = 'dashboard/chartdemo.html'
 
-# for refactoring later, when models can be instantiated for query_set
+    def get_labels(self):
+        """Return 7 labels for the x-axis."""
+        xaxis = ["January", "February", "March", "April", "May", "June", "July"]
+        return xaxis
 
-# class DashboardView(generic.ListView):
-#     context_object_name = 'dashboard'
-#     template_name = 'dashboard/index.html'
-#
+    def get_providers(self):
+        """Return names of datasets."""
+        yaxis = ["Central", "Eastside", "Westside"]
+        return yaxis
 
-# class TopicDistributionView(generic.DetailView):
-#     template_name = 'dashboard/topic-distribution.html'
-#
-#
-# class InstructorDistributionView(generic.DetailView):
-#     template_name = 'dashboard/instructor-distribution.html'
+    def get_data(self):
+        """Return 3 datasets to plot."""
+        sample = [[75, 44, 92, 11, 44, 95, 35],
+                [41, 92, 18, 3, 73, 87, 92],
+                [87, 21, 94, 3, 90, 13, 65]]
+
+        return sample
+
+
+line_chart = TemplateView.as_view(template_name='dashboard/chartdemo.html')
+line_chart_json = LineChartJSONView.as_view()

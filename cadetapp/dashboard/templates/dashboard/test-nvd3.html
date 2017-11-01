@@ -1,0 +1,11 @@
+{% extends 'dashboard/base.html' %}
+{% block content %}
+    <h2> Test NVD3</h2>
+    {% load nvd3_tags %}
+    {% include_chart_jscss %}
+    {% load_chart charttype chartdata chartcontainer extra %}
+    {% include_container chartcontainer 400 600 %}
+{% endblock %}
+
+
+

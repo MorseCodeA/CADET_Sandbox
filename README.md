@@ -64,7 +64,6 @@ python manage.py migrate
 
 # run server,
 python manage.py runserver
-
 ```
 
 ### IV. Front-End Development Set Up
@@ -84,6 +83,7 @@ npm init
 # this command finds the Gulpfile.js and run all tasks there, mostly it tells
 gulp to compile and minify all js and sass files in teh assets directory
 gulp
+
 ```
 
 
