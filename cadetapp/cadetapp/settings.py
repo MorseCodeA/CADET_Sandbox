@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'dashboard',
     'fileupload',
-    'djangobower',
     'chartjs',
 ]
 
@@ -81,7 +80,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'cadetapp.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
@@ -112,17 +110,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Django-bower
-# ------------
-APPLICATION_DIR = os.path.dirname(globals()['__file__'])
-# Specifie path to components root (you need to use absolute path)
-BOWER_COMPONENTS_ROOT = os.path.join(APPLICATION_DIR, '/nvd3graph/bower_components')
-BOWER_PATH = '/usr/local/bin/bower'
-BOWER_INSTALLED_APPS = (
-    'd3#3.3.13',
-    'nvd3#1.7.1',
-)
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
@@ -142,6 +129,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 
 #Create the Media directory where all the files are stored
 MEDIA_URL = '/media/'

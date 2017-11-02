@@ -1,5 +1,4 @@
-// Color Variables
-// Bootstrap Color Defaults
+/* ---  Bootstrap Color Defaults --- */
 $white: #fff !default;
 $gray-100: #f8f9fa !default;
 $gray-200: #e9ecef !default;
@@ -11,7 +10,6 @@ $gray-700: #495057 !default;
 $gray-800: #343a40 !default;
 $gray-900: #212529 !default;
 $black: #000 !default;
-
 $blue: #007bff !default;
 $indigo: #6610f2 !default;
 $purple: #6f42c1 !default;
@@ -23,10 +21,23 @@ $green: #28a745 !default;
 $teal: #20c997 !default;
 $cyan: #17a2b8 !default;
 
-// Spacing Variables
-// Change below variable if the height of the navbar changes
-$navbar-base-height: 56px;
-// Change below variable to change the width of the sidenav
-$sidenav-base-width: 250px;
-// Change below variable to change the width of the sidenav when collapsed
-$sidenav-collapsed-width: 55px;
+/* ---  CADET Theme Color --- */
+$cadet-blue: #005EB8;
+$cadet-light-grey: #E5E2E0;
+$cadet-txt-grey: #9B9B9B;
+$cadet-dark-grey: #2C2C33;
+$cadet-teal: #43D7C5;
+$cadet-purple: #7C7FAB;
+$cadet-red: #E03C31;
+$cadet-slate-white: #F9F9F9;
+
+/* --- CADET Color Defaults --- */
+$navbar-bg-color: $cadet-slate-white;
+$navbar-txt-color: $cadet-blue;
+$navbar-txt-color-hover: $cadet-purple;
+$sidebar-txt-color: #ffffff;
+$sidebar-opacity: rgba(60, 60, 40, 0.75);
+$sidebar-txt-color-hover: $cadet-slate-white;
+$footer-color: $cadet-slate-white;
+
+/* --- Cadet Typography Defaults --- */

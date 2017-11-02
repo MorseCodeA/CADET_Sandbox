@@ -80,8 +80,7 @@ Run these commands:
 ```bash
 # node will search for package.json file and install dependencies
 npm init
-# this command finds the Gulpfile.js and run all tasks there, mostly it tells
-gulp to compile and minify all js and sass files in teh assets directory
+# this command finds the Gulpfile.js and run all tasks there, mostly it tells gulp to compile and minify all js and sass files in teh assets directory
 gulp
 
 ```

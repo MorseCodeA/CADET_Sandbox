@@ -1,5 +1,4 @@
 // Color support for .navbar-dark
-
 #mainNav.navbar-dark {
   .navbar-collapse {
     .navbar-sidenav {
@@ -24,6 +23,11 @@
           }
         }
       }
+    }
+    .navbar-nav {
+        .ml-auto {
+            background: $cadet-blue;
+        }
     }
     .navbar-nav > .nav-item.dropdown > .nav-link:after {
       color: $gray-500;

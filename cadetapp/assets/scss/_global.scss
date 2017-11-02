@@ -7,6 +7,7 @@ html {
 
 body {
   overflow-x: hidden;
+  font-size: 16px;
 }
 
 body.sticky-footer {
@@ -20,9 +21,16 @@ body.fixed-nav {
   padding-top: 56px;
 }
 
+.bg-container {
+    background: url(https://preview.ibb.co/dmTvcb/blue_green_banner.jpg)
+    no-repeat center center;
+    background-size: cover;
+}
+
 .content-wrapper {
-  min-height: calc(100vh - 56px);
+  min-height: calc(200vh - 56px);
   padding-top: 1rem;
+  background: transparent;
 }
 
 // Scroll to top button
@@ -52,4 +60,9 @@ body.fixed-nav {
   i {
     font-weight: 800;
   }
+}
+
+.breadcrumb {
+    background-color: inherit;
+    color: $cadet-slate-white;
 }

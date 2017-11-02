@@ -2,15 +2,19 @@
   .sidenav-toggler {
     display: none;
   }
+  .navbar-sidenav {
+    background: rgba(60, 60, 40, 0.8);
+  }
+
   @media (min-width: 992px) {
     .navbar-sidenav {
-      height: calc(100vh - 112px);
+        height: calc(200vh - 112px);
+        background: $sidebar-opacity;
     }
     .sidenav-toggler {
       position: absolute;
       top: 0;
       left: 0;
-
       display: flex;
       overflow-x: hidden;
       overflow-y: auto;
@@ -29,7 +33,13 @@
       }
     }
   }
+
   &.navbar-dark {
+    .navbar-collapse {
+        .navbar-sidenav {
+            background: rgba(60, 60, 40, 0.8);
+        }
+    }
     .sidenav-toggler {
       background-color: $gray-900;
       a {

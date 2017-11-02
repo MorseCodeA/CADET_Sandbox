@@ -21,17 +21,8 @@ from django.conf import settings
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'dashboard/', include('dashboard.urls')),
-
 ]
-
-#Redirect the homepage
-# from django.http import HttpResponseRedirect
-# urlpatterns = [
-#     url(r'^$', lambda x: HttpResponseRedirect('/upload/')),
-#     url(r'^upload/', include('fileupload.urls')),
-# ]
 
 if settings.DEBUG:
     urlpatterns += static( settings.MEDIA_URL,
                            document_root=settings.MEDIA_ROOT)
-    

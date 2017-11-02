@@ -1,4 +1,7 @@
 #mainNav {
+  .navbar-brand {
+    color: $cadet-blue;
+  }
   .navbar-collapse {
     overflow: auto;
 
@@ -11,11 +14,10 @@
       }
     }
     .navbar-sidenav {
+       background: $sidebar-opacity;
       .nav-link-collapse:after {
         float: right;
-
         content: '\f107';
-
         font-family: 'FontAwesome';
       }
       .nav-link-collapse.collapsed:after {
