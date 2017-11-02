@@ -1,0 +1,7 @@
+/* --- Fonts --- */
+// JHU font-faces, taken from brand.jhu.edu
+@include font-face("quadon", "../fonts/Quadon-Bold", bold, normal);
+@include font-face("gentona-book", "../fonts/Gentona-Book", normal, normal);
+@include font-face("gentona-medium", "../Gentona-Medium", 500, normal);
+@include font-face("gentona-bold", "../Gentona-Bold", bold, normal);
+@include font-face("titling", "../Titling-Gothic-Medium", 500, normal);
