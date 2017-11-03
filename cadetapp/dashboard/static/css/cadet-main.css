@@ -30,13 +30,41 @@
   src: url("../Titling-Gothic-Medium.eot?") format("eot"), url("../Titling-Gothic-Medium.woff2") format("woff2"), url("../Titling-Gothic-Medium.woff") format("woff"), url("../Titling-Gothic-Medium.ttf") format("truetype"), url("../Titling-Gothic-Medium.svg#titling") format("svg"); }
 
 html {
+  font-size: 1em;
   position: relative;
   min-height: 100%; }
 
 body {
-  overflow-x: hidden;
-  font-size: 16px;
-  font-family: "titling", sans-serif; }
+  background-color: white;
+  font-family: "titling", sans-serif;
+  font-weight: 400;
+  line-height: 1.45;
+  color: #2C2C33;
+  overflow-x: hidden; }
+
+p {
+  margin-bottom: 1.3em; }
+
+h1, h2, h3, h4 {
+  margin: 1.414em 0 0.5em;
+  font-weight: inherit;
+  line-height: 1.2; }
+
+h1 {
+  margin-top: 0;
+  font-size: 1.602em; }
+
+h2 {
+  font-size: 1.424em; }
+
+h3 {
+  font-size: 1.266em; }
+
+h4 {
+  font-size: 1.125em; }
+
+small, .font_small {
+  font-size: 0.889em; }
 
 body.sticky-footer {
   margin-bottom: 56px; }
@@ -49,9 +77,17 @@ body.fixed-nav {
 .navbar {
   background: #F9F9F9 !important; }
 
+nav .navbar-toggler {
+  padding: .25rem .75rem;
+  margin-right: 1.25rem;
+  background: rgba(0, 94, 184, 0.7);
+  border: 0px;
+  border-radius: 0px; }
+
 nav #mainNav .navbar-brand {
   font-family: 'quandon';
-  color: #005EB8; }
+  color: #005EB8;
+  width: 300px; }
 
 nav #mainNav a {
   color: #005EB8; }
@@ -70,7 +106,7 @@ nav #mainNav .navbar.navbar-expand-lg.navbar-dark.fixed-top {
   background-color: #F9F9F9 !important; }
 
 .bg-container {
-  background: url(https://preview.ibb.co/dmTvcb/blue_green_banner.jpg) no-repeat center center;
+  background: url("../img/cadet-bg.jpg") no-repeat center center;
   background-size: cover; }
 
 .content-wrapper {
@@ -99,6 +135,53 @@ nav #mainNav .navbar.navbar-expand-lg.navbar-dark.fixed-top {
 .breadcrumb {
   background-color: inherit;
   color: #F9F9F9; }
+
+.dashboard-home-container {
+  background: rgba(255, 255, 255, 0.65); }
+
+.jumbotron {
+  padding: 0.015rem 1rem;
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: 2px;
+  margin-top: -20px; }
+
+#drop-zone {
+  width: 100%;
+  height: 200px;
+  top: 10px;
+  border: 2px dashed rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+  text-align: center;
+  position: relative;
+  line-height: 180px;
+  font-size: 1.25em;
+  color: rgba(0, 0, 0, 0.3); }
+  #drop-zone input {
+    /*Important*/
+    position: absolute;
+    /*Important*/
+    cursor: pointer; }
+  #drop-zone.mouse-over {
+    border: 2px dashed rgba(0, 0, 0, 0.5);
+    color: rgba(0, 0, 0, 0.5); }
+
+.btn.btn-success {
+  color: #F9F9F9;
+  border-radius: 2px;
+  background-color: #868e96;
+  border-color: #868e96; }
+
+.btn .btn-submit, .btn .btn-primary {
+  color: #F9F9F9;
+  border-radius: 2px;
+  background-color: #43D7C5;
+  border-color: #43D7C5; }
+
+.btn.btn-danger {
+  color: #F9F9F9;
+  border-radius: 2px;
+  border-color: #E03C31;
+  background-color: #E03C31; }
 
 body {
   font-size: 16px; }
@@ -360,6 +443,26 @@ body.sidenav-toggled .navbar-sidenav-tooltip.show {
     #mainNav.navbar-dark .navbar-collapse .navbar-sidenav > .nav-item .sidenav-second-level,
     #mainNav.navbar-dark .navbar-collapse .navbar-sidenav > .nav-item .sidenav-third-level {
       background: #343a40; } }
+
+@media only screen and (max-width: 991px) {
+  #mainNav.navbar-dark .navbar-collapse .navbar-sidenav > .nav-item > .nav-link {
+    background: #005EB8;
+    color: #F9F9F9;
+    padding-left: 1rem; }
+    #mainNav.navbar-dark .navbar-collapse .navbar-sidenav > .nav-item > .nav-link:hover {
+      color: #adb5bd; }
+  #mainNav.navbar-dark .navbar-collapse .navbar-sidenav > .nav-item .sidenav-second-level,
+  #mainNav.navbar-dark .navbar-collapse .navbar-sidenav > .nav-item .sidenav-third-level {
+    color: #F9F9F9;
+    font-family: "gentona-book"; }
+    #mainNav.navbar-dark .navbar-collapse .navbar-sidenav > .nav-item .sidenav-second-level > li > a,
+    #mainNav.navbar-dark .navbar-collapse .navbar-sidenav > .nav-item .sidenav-third-level > li > a {
+      color: #868e96;
+      background: #E5E2E0; }
+      #mainNav.navbar-dark .navbar-collapse .navbar-sidenav > .nav-item .sidenav-second-level > li > a:focus, #mainNav.navbar-dark .navbar-collapse .navbar-sidenav > .nav-item .sidenav-second-level > li > a:hover,
+      #mainNav.navbar-dark .navbar-collapse .navbar-sidenav > .nav-item .sidenav-third-level > li > a:focus,
+      #mainNav.navbar-dark .navbar-collapse .navbar-sidenav > .nav-item .sidenav-third-level > li > a:hover {
+        color: #adb5bd; } }
 
 .card-body-icon {
   position: absolute;

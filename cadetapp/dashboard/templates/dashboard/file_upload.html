@@ -1,19 +1,30 @@
 {% extends 'dashboard/base-fileupload.html' %}
 {% block content %}
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="/dashboard">Dashboard</a>
+  </li>
+  <li class="breadcrumb-item active"> Upload</li>
+</ol>
+<hr>
+<div style="height: 1000px;">
 <div class="file-uploader-container container">
   <div class="jumbotron">
     <div class="container">
-      <h2 class="display-3">CADET File Uploader</h2>
+      <h2>Upload A File</h2>
       <p>Select the files to upload</p>
       <form method="post" enctype="multipart/form-data" action="?X-Progress-ID=test">
         {% csrf_token %}
         <label class="btn btn-success" for="id_file" onclick="addFile()">
           <input type="file" name="file" id="id_file" required="" style="display:none;" multiple>
-          <span>Add files...</span>
+          <span> Browse Files...</span>
         </label>
-        <button type="submit" class="btn btn-primary">Upload Files</button>
+        <label class="btn btn-submit">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </label>
         <h2>
-          <progress id="progressBar" data-progress_bar_uuid="test" style="width:50%" value="0" max="100"></progress>
+          <progress id="progressBar" data-progress_bar_uuid="test" style="width:100%" value="0" max="100"></progress>
         </h2>
         <div id="drop-zone">
           Drop files here...
@@ -39,8 +50,3 @@
   </div><!-- END jumbotron -->
 </div><!-- END file uploader container  -->
 {% endblock %}
-
-
-
-
-

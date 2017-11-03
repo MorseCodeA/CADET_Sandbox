@@ -57,4 +57,33 @@
       }
     }
   }
+  @media only screen and (max-width: 991px) {
+    .navbar-collapse {
+      .navbar-sidenav {
+        > .nav-item {
+          > .nav-link {
+            background: $cadet-blue;
+            color: $cadet-slate-white;
+            padding-left: 1rem;
+            &:hover {
+              color: $gray-500;
+            }
+          }
+          .sidenav-second-level,
+          .sidenav-third-level {
+            color: $cadet-slate-white;
+            font-family: $side-dashboard-font;
+            > li > a {
+              color: $gray-600;
+              background: $cadet-light-grey;
+              &:focus,
+              &:hover {
+                color: $gray-500;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }

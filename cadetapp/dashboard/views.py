@@ -73,6 +73,10 @@ def about_view(request):
 def export_view(request):
     return render(request, 'dashboard/export.html')
 
+def documentation_view(request):
+    return render(request, 'documentation/doc-home.html')
+
+
 
 # CHARTS VIEWS
 class LineChartJSONView(BaseLineChartView):

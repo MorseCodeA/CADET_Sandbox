@@ -4,7 +4,6 @@ from django.conf.urls import url
 from django.views.generic import TemplateView
 from . import views
 
-
 app_name = 'dashboard'
 
 urlpatterns = [
@@ -21,9 +20,10 @@ urlpatterns = [
     url('file_upload', views.file_upload, name='file_upload'),
     url('stopword', views.stopword_view, name='stopword'),
     url('export', views.export_view, name='export'),
+    url('documentation', views.documentation_view, name="doc-home"),
 
     # test chartjs
-    url('chartdemo', views.line_chart, name='chartdemo.html'),
+    url('chartdemo', views.line_chart, name='chartdemo'),
 
 
 ]

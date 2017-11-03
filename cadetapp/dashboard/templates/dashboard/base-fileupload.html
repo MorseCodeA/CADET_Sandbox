@@ -17,37 +17,12 @@
   <!-- Custom styles for this template-->
   <link href=" {% static 'css/cadet-main.css' %}" rel="stylesheet">
   <script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.min.js"></script>
-  <style>
-    #drop-zone {
-        width: 600px;
-        height: 200px;
-        //position:absolute;
-        top:10px;
-        border: 2px dashed rgba(0,0,0,.3);
-        border-radius: 20px;
-        text-align: center;
-        position: relative;
-        line-height: 180px;
-        font-size: 20px;
-        color: rgba(0,0,0,.3);1
-    }
-    #drop-zone input {
-        /*Important*/
-        position: absolute;
-        /*Important*/
-        cursor: pointer;
-
-    /*Important*/
-    #drop-zone.mouse-over {
-        border: 2px dashed rgba(0,0,0,.5);
-        color: rgba(0,0,0,.5);
-    }
-  </style>
 </head>
-<body class="fixed-nav sticky-footer bg-dark" id="page-top">
-<!-- Navigation-->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
-    <a class="navbar-brand" href="/dashboard">CADET</a>
+<body class="fixed-nav sticky-footer" id="page-top">
+  <div class="bg-container">
+  <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+    <a class="navbar-brand cadet-brand" href="/dashboard">CADET</a>
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -97,47 +72,42 @@
             <span class="nav-link-text">Export</span>
           </a>
         </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
-          <a class="nav-link" href="about.html">
-            <span class="nav-link-text">About</span>
-          </a>
-        </li>
       </ul>
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
-            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
-        </li>
-      <ul>
       <ul class="navbar-nav sidenav-toggler">
         <li class="nav-item">
-          <a class="nav-link text-center" id="sidenavToggler">
+          <a class="nav-link text-center nav-cadet-link-collapse" id="sidenavToggler">
             <i class="fa fa-fw fa-angle-left"></i>
           </a>
         </li>
       </ul>
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item" data-placement="right">
+          <a class="nav-link" href="documentation/doc-home.html"><span
+                  class="nav-link-text">Documentation</span></a>
+        </li>
+        <li class="nav-item" data-placement="right" >
+          <a class="nav-link" href="https://github.com/AshleyMorse/CADET_Sandbox">GitHub</a>
+        </li>
+        <li class="nav-item" data-placement="right" >
+          <a class="nav-link" href="/team">Team</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#exampleModal">Logout</a>
+        </li>
+      <ul>
     </div>
   </nav>
-  <div class="content-wrapper">
+    <div class="content-wrapper">
     <div class="container-fluid">
-      <!-- Breadcrumbs-->
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <a href="/dashboard">Dashboard</a>
-        </li>
-        <li class="breadcrumb-item active">Navbar</li>
-      </ol>
-      <h2>Overview</h2>
-      <hr>
-      <div style="height: 1000px;">
-        <!-- call content here -->
-        {% block content %}{% endblock %}
+          <!-- call content here -->
+          {% block content %}{% endblock %}
       </div>
     </div>
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
-
- <footer class="sticky-footer">
+    <footer class="sticky-footer">
       <div class="container">
         <div class="text-center">
           <small>Copyright © CADET 2017</small>
