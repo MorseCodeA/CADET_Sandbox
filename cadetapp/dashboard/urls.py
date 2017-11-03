@@ -23,6 +23,7 @@ urlpatterns = [
     url('export', views.export_view, name='export'),
 
     # test chartjs
-    url('chartdemo', views.line_chart, name='chartdemo.html')
-]
+    url('chartdemo', views.line_chart, name='chartdemo.html'),
 
+
+]

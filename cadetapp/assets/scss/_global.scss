@@ -1,5 +1,4 @@
 // Global styling for this template
-
 html {
   position: relative;
   min-height: 100%;
@@ -8,6 +7,7 @@ html {
 body {
   overflow-x: hidden;
   font-size: 16px;
+  font-family: $body-font, sans-serif;
 }
 
 body.sticky-footer {
@@ -16,9 +16,46 @@ body.sticky-footer {
     min-height: calc(100vh - 56px - 56px);
   }
 }
-
 body.fixed-nav {
   padding-top: 56px;
+
+}
+
+.navbar {
+  background: $cadet-slate-white !important;
+}
+
+nav {
+  #mainNav {
+    .navbar-brand {
+      font-family: 'quandon';
+      color: $cadet-blue;
+    }
+    a {
+      color: $cadet-blue;
+    }
+    .navbar {
+      &.navbar-expand-lg {
+        &.navbar-dark {
+          .nav-link {
+            color: $cadet-blue;
+          }
+          &.fixed-top {
+            background: $cadet-slate-white;
+            color: $cadet-blue;
+          }
+        }
+      }
+    }
+  }
+}
+
+.fixed-top {
+  background: $cadet-slate-white;
+}
+
+.bg-dark {
+  background-color: $cadet-slate-white !important;
 }
 
 .bg-container {

@@ -1,5 +1,4 @@
 // This is the gulp file for automating front-end HTML/CSS development
-
 //Include gulp
 var gulp = require('gulp');
 

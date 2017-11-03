@@ -1,16 +1,8 @@
-/* ------------ Typography ----------- */
+//  Typography
 body {
   font-size: 16px;
 }
 
 p {
-  font-family: 'Titling';
+  font-family: 'titling';
 }
-
-/* --- Spacing Variables --- */
-// Change below variable if the height of the navbar changes
-$navbar-base-height: 56px;
-// Change below variable to change the width of the sidenav
-$sidenav-base-width: 250px;
-// Change below variable to change the width of the sidenav when collapsed
-$sidenav-collapsed-width: 55px;

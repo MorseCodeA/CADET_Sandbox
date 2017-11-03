@@ -1,15 +1,22 @@
 #mainNav {
   .navbar-brand {
     color: $cadet-blue;
+    font-family: 'quadon';
+    text-align: center;
+    font-size: 26px;
+    padding: 8px;
   }
   .navbar-collapse {
     overflow: auto;
-
     max-height: 75vh;
     .navbar-nav {
       .nav-item {
+        .nav-cadet-link-collapse {
+          background: $cadet-dark-grey;
+        }
         .nav-link {
           cursor: pointer;
+          color: $cadet-blue;
         }
       }
     }
@@ -84,6 +91,9 @@
   @media (min-width: 992px) {
     .navbar-brand {
       width: $sidenav-base-width;
+      font-family: 'quadon';
+      text-align: center;
+      font-size: 26px;
     }
     .navbar-collapse {
       overflow: visible;
@@ -104,6 +114,7 @@
 
         > .nav-item {
           width: $sidenav-base-width;
+          color: $cadet-blue;
           padding: 0;
           > .nav-link {
             padding: 1em;

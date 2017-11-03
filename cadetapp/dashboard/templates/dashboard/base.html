@@ -8,27 +8,20 @@
   <meta name="description" content="CADET Test Website, JHU, Fall 2017">
   <meta name="author" content="Team KAJJA">
   <title>CADET Dashboard - V1 </title>
-  <!--[if lte IE 8]>
-            <script src="{% static 'js/excanvas.js' %}"></script>
-        <![endif]-->
   <!-- Bootstrap Core CSS-->
   <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}"
         rel="stylesheet">
   <!-- Vendor fonts -->
   <link href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}"
         rel="stylesheet" type="text/css">
-  <!-- Custom styles -->
-  <link href=" {% static 'css/cadet-main.css' %}" rel="stylesheet">
-  <!-- Bootstrap JQuery -->
-  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
-  <!-- ChartJS -->
- <script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script>
+  <!-- CADET styles -->
+  <link href="{% static 'css/cadet-main.css' %}" rel="stylesheet" type="text/css">
 </head>
 <body class="fixed-nav sticky-footer" id="page-top">
   <div class="bg-container">
   <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
-    <a class="navbar-brand" href="/dashboard">CADET</a>
+    <a class="navbar-brand cadet-brand" href="/dashboard">CADET</a>
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -78,24 +71,31 @@
             <span class="nav-link-text">Export</span>
           </a>
         </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
-          <a class="nav-link" href="about.html">
-            <span class="nav-link-text">About</span>
+      </ul>
+      <ul class="navbar-nav sidenav-toggler">
+        <li class="nav-item">
+          <a class="nav-link text-center nav-cadet-link-collapse" id="sidenavToggler">
+            <i class="fa fa-fw fa-angle-left"></i>
           </a>
         </li>
       </ul>
       <ul class="navbar-nav mr-auto">
         <li class="nav-item" data-placement="right">
-          <a class="nav-link" href="/documentation"><span
+          <a class="nav-link" href="/documentation/api.html"><span
                   class="nav-link-text">Documentation</span></a>
         </li>
         <li class="nav-item" data-placement="right" >
-          <a class="nav-link" href="/source">Source</a>
+          <a class="nav-link" href="https://github.com/AshleyMorse/CADET_Sandbox">GitHub</a>
         </li>
         <li class="nav-item" data-placement="right" >
           <a class="nav-link" href="/team">Team</a>
         </li>
       </ul>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#exampleModal">Logout</a>
+        </li>
+      <ul>
     </div>
   </nav>
     <div class="content-wrapper">
@@ -103,11 +103,10 @@
       <!-- Breadcrumbs-->
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-          <a href="/dashboard">Dashboard</a>
+          <a href="/dashboard">Home</a>
         </li>
-        <li class="breadcrumb-item active">Navbar</li>
+        <li class="breadcrumb-item active">Dashboard</li>
       </ol>
-      <h2>Overview</h2>
       <hr>
       <div style="height: 1000px;">
           <!-- call content here -->
@@ -127,13 +126,17 @@
     <a class="scroll-to-top rounded" href="#page-top">
       <i class="fa fa-angle-up"></i>
     </a>
-    <!-- Bootstrap core JavaScript-->
-    <script src="{% static 'vendor/popper/popper.min.js' %}"></script>
-    <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}">
-    </script>
     <!-- Core plugin JavaScript-->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}">
     </script>
+    <!-- ChartJS -->
+   <script type="text/javascript" src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
+    <!-- Page level plugin JavaScript-->
+    <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
+    <script src="{% static 'vendor/datatables/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'vendor/datatables/dataTables.bootstrap4.js' "></script>
     <!-- Custom scripts for all pages-->
     <script src="{% static 'js/sb-admin.min.js' %}"></script>
 

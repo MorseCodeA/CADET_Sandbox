@@ -1,11 +1,9 @@
 #mainNav.fixed-top {
-  .sidenav-toggler {
-    display: none;
-  }
+  background: $cadet-slate-white;
+  padding: 0px;
   .navbar-sidenav {
-    background: rgba(60, 60, 40, 0.8);
+    background: rgba(60, 60, 40, 0.75);
   }
-
   @media (min-width: 992px) {
     .navbar-sidenav {
         height: calc(200vh - 112px);
@@ -21,11 +19,10 @@
       -webkit-flex-direction: column;
       -ms-flex-direction: column;
       flex-direction: column;
-
       margin-top: calc(100vh - 56px);
-
       > .nav-item {
         width: $sidenav-base-width;
+
         padding: 0;
         > .nav-link {
           padding: 1em;
@@ -33,15 +30,14 @@
       }
     }
   }
-
   &.navbar-dark {
     .navbar-collapse {
         .navbar-sidenav {
-            background: rgba(60, 60, 40, 0.8);
+            background: rgba(60, 60, 40, 0.75);
         }
     }
     .sidenav-toggler {
-      background-color: $gray-900;
+      background-color: $cadet-blue;
       a {
         i {
           color: $gray-500;;
