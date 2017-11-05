@@ -15,11 +15,11 @@ class Comment(models.Model):
 	text = models.TextField()
 	# many comments belong to one course
 	course = models.ForeignKey(
-		Course,
+		'Course',
 		on_delete=models.CASCADE)
 	# many comments belong to one topic
 	topic = models.ForeignKey(
-		Topic,
+		'Topic',
 		on_delete=models.CASCADE)
 	instructor_id = models.IntegerField()
 	timestamp = models.DateTimeField('date published')
