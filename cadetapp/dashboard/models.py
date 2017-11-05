@@ -6,14 +6,20 @@ from django.utils import timezone
 class Comment(models.Model):
 	primary_key = models.IntegerField()
 	anon_user_id = models.IntegerField()
+	MODULARITIES = (
+		('1', 'positive'),
+		('2', 'neutral'),
+		('3', 'negative')
+	)
+	modularity = models.CharField(max_length=1, choices=MODULARITIES)
 	text = models.TextField()
 	# many comments belong to one course
 	course = models.ForeignKey(
-		'Course',
+		Course,
 		on_delete=models.CASCADE)
 	# many comments belong to one topic
 	topic = models.ForeignKey(
-		'Topic',
+		Topic,
 		on_delete=models.CASCADE)
 	instructor_id = models.IntegerField()
 	timestamp = models.DateTimeField('date published')
