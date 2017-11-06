@@ -15,10 +15,10 @@ from random import shuffle, randint
 from itertools import islice
 from django.views.generic import TemplateView
 from django.utils.translation import ugettext_lazy as _
-from chartjs.views.lines import BaseLineChartView, HighchartPlotLineChartView
-from chartjs.views.pie import HighChartPieView, HighChartDonutView
-from chartjs.colors import next_color, COLORS
-from chartjs.views.columns import BaseColumnsHighChartsView
+#from chartjs.views.lines import BaseLineChartView, HighchartPlotLineChartView
+#from chartjs.views.pie import HighChartPieView, HighChartDonutView
+#from chartjs.colors import next_color, COLORS
+#from chartjs.views.columns import BaseColumnsHighChartsView
 
 def index(request):
     # later will call instances from Ashley's models,
@@ -79,27 +79,27 @@ def documentation_view(request):
 
 
 # CHARTS VIEWS
-class LineChartJSONView(BaseLineChartView):
-    template_name = 'dashboard/chartdemo.html'
+#class LineChartJSONView(BaseLineChartView):
+#    template_name = 'dashboard/chartdemo.html'
 
-    def get_labels(self):
-        """Return 7 labels for the x-axis."""
-        xaxis = ["January", "February", "March", "April", "May", "June", "July"]
-        return xaxis
+#    def get_labels(self):
+#        """Return 7 labels for the x-axis."""
+#        xaxis = ["January", "February", "March", "April", "May", "June", "July"]
+#        return xaxis
 
-    def get_providers(self):
-        """Return names of datasets."""
-        yaxis = ["Central", "Eastside", "Westside"]
-        return yaxis
+#    def get_providers(self):
+#        """Return names of datasets."""
+#        yaxis = ["Central", "Eastside", "Westside"]
+#        return yaxis
 
-    def get_data(self):
-        """Return 3 datasets to plot."""
-        sample = [[75, 44, 92, 11, 44, 95, 35],
-                [41, 92, 18, 3, 73, 87, 92],
-                [87, 21, 94, 3, 90, 13, 65]]
+#    def get_data(self):
+#        """Return 3 datasets to plot."""
+#        sample = [[75, 44, 92, 11, 44, 95, 35],
+#                [41, 92, 18, 3, 73, 87, 92],
+#                [87, 21, 94, 3, 90, 13, 65]]
 
-        return sample
+#        return sample
 
 
-line_chart = TemplateView.as_view(template_name='dashboard/chartdemo.html')
-line_chart_json = LineChartJSONView.as_view()
+#line_chart = TemplateView.as_view(template_name='dashboard/chartdemo.html')
+#line_chart_json = LineChartJSONView.as_view()

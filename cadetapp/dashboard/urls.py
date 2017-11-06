@@ -23,7 +23,7 @@ urlpatterns = [
     url('documentation', views.documentation_view, name="doc-home"),
 
     # test chartjs
-    url('chartdemo', views.line_chart, name='chartdemo'),
+    #url('chartdemo', views.line_chart, name='chartdemo'),
 
 
 ]
