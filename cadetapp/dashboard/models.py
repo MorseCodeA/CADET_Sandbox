@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils import timezone
 
-# make default values for everything here
 class Course(models.Model):
 	primary_key = models.IntegerField()
 	department = models.CharField(max_length=50)
@@ -17,10 +16,9 @@ class Course(models.Model):
 	semester = models.CharField(max_length=1, choices=SEMESTERS)
 
 class Instructor(models.Model):
-	primary_key = models.IntegerField()
 	first_name = models.CharField(max_length=30)
 	last_name = models.CharField(max_length=30)
-	# An instructor can tach many courses, and a course can be 
+	# An instructor can teach many courses, and a course can be 
 	# taught by many instructors
 	courses = models.ManyToManyField(Course)
 
@@ -42,8 +40,6 @@ class Topic(models.Model):
 # classes below created from back-end-database.rst (D81)
 # I believe we need this to store the information sent up through the back-end
 class Comment(models.Model):
-	primary_key = models.IntegerField()
-	anon_user_id = models.IntegerField()
 	TONES = (
 		('pos', 'positive'),
 		('neu', 'neutral'),
@@ -60,5 +56,4 @@ class Comment(models.Model):
 		Topic,
 		on_delete=models.CASCADE)
 	instructor_id = models.IntegerField()
-	timestamp = models.DateTimeField('date published')
 
