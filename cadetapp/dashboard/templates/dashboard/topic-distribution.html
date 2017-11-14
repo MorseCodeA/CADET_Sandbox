@@ -1,79 +1,140 @@
 {% extends 'dashboard/base.html' %}
+{% load staticfiles %}
 {% block content %}
-        <div class="topic-distribution">
-            <h1> Topic Distribution </h1>
-            <div class='row'>
-                <div class='col-sm-12' url-endpoint='/api/chart/data/'>
-                    <h3>ChartJSL Sample Topic Distribution</h3>
-                    <div class='col-sm-6'>
-                        <canvas id="topicDistGraph" width="400" height="400"></canvas>
-                    </div>
-                    <div class='col-sm-6'>
-                        <canvas id="topicDistGraph2" width="400" height="400"></canvas>
-                    </div>
-
-
-                </div>
+      <div class="topic-distribution">
+          <h1> Topic Distribution </h1>
+          <div class='row'>
+              <div class='col-sm-12' url-endpoint='/api/chart/data/'>
+                  <h3>ChartJS Sample Topic Distribution</h3>
+              </div>
+          </div>
+          <div class='row'>
+            <div class='col-xs-12 col-lg-10'>
+              <!-- testing hardcode on js only -->
+              <canvas id="myChart"></canvas>
             </div>
-        </div>
-        <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js">
-        </script>
-        <script>
-          $(document).ready(function(){
-                $.ajax({
-                    method: "GET",
-                    url: '/api/chart/data/',
-                    success: function(data){
-                        labels = data.topic_labels
-                        comments_count = data.comments_count
-                        setChart()
-                    },
-                    error: function(error_data){
-                        console.log("error")
-                        console.log(error_data)
-                    }
-                })
-                function setChart(){
-                    var ctx = document.getElementById("topicDistGraph");
-                    var ctx2 = document.getElementById("topicDistGraph2");
-                    var myChart = new Chart(ctx2, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Number of Comments',
-                            data: comments_count,
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                                'rgba(54, 162, 235, 0.2)',
-                                'rgba(255, 206, 86, 0.2)',
-                                'rgba(75, 192, 192, 0.2)',
-                                'rgba(153, 102, 255, 0.2)',
-                                'rgba(255, 159, 64, 0.2)'
-                            ],
-                            borderColor: [
-                                'rgba(255,99,132,1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(153, 102, 255, 1)',
-                                'rgba(255, 159, 64, 1)'
-                            ],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero:true
-                                }
-                            }]
-                        }
-                    }
-                });
+          </div>
+          <div class='row'>
+              <div class='col-xs-12 col-lg-10' url-endpoint='/api/chart/data/'>
+                <!-- topicDistGraph has AJAX -->
+                <canvas id="topicDistGraph"></canvas>
+              </div>
+          </div>
+      </div>
+      <!-- script chartjs lib -->
+      <script>
+        var ctx1= document.getElementById('myChart').getContext('2d');
+        var chart = new Chart(ctx1, {
+            // The type of chart we want to create
+            type: 'bar',
+            // The data for our dataset
+            data: {
+                labels: ["Topic 1", "Topic 2", "Topic 3", "Topic 4",
+                                    "Topic 5", "Topic 6"],
+                datasets: [{
+                    label: "Number of Comments",
+                    backgroundColor: 'rgb(0, 141, 142)',
+                    data: [5, 10, 5, 2, 20, 30, 45],
+                }]
+            },
+
+            // Configuration options go here
+            options: {}
+        });
+      </script>
+
+      <!-- test chartjs lib, with ajax call -->
+      <script>
+          var endpoint = '/api/chart/data/'
+          var comments_count = []
+          var labels = [];
+          $.ajax({
+              method: 'GET',
+              url: endpoint,
+              success: function(data){
+                  labels = data.topic_labels
+                  comments_count = data.comments_count
+                  setChart()
+              },
+              error: function(error_data){
+                  console.log("--- error ---")
+                  console.log(error_data)
               }
-        })
+            })
+            function setChart(){
+              var ctx2 = document.getElementById("topicDistGraph");
+              var myChart = new Chart(ctx2, {
+              type: 'bar',
+              data: {
+                  labels: labels,
+                  datasets: [{
+                      label: 'Number of Comments',
+                      data: comments_count,
+                      backgroundColor: [
+                          'rgba(255, 99, 132, 0.2)',
+                          'rgba(54, 162, 235, 0.2)',
+                          'rgba(255, 206, 86, 0.2)',
+                          'rgba(75, 192, 192, 0.2)',
+                          'rgba(153, 102, 255, 0.2)',
+                          'rgba(255, 159, 64, 0.2)'
+                      ],
+                      borderColor: [
+                          'rgba(255,99,132,1)',
+                          'rgba(54, 162, 235, 1)',
+                          'rgba(255, 206, 86, 1)',
+                          'rgba(75, 192, 192, 1)',
+                          'rgba(153, 102, 255, 1)',
+                          'rgba(255, 159, 64, 1)'
+                      ],
+                      borderWidth: 1
+                  }]
+              },
+              options: {
+                  scales: {
+                      yAxes: [{
+                          ticks: {
+                              beginAtZero:true
+                          }
+                      }]
+                  }
+              }
+            });
+              var myChart = new Chart(ctx, {
+              type: 'polarArea',
+              data: {
+                  labels: labels,
+                  datasets: [{
+                      label: 'Number of Comments',
+                      data: comments_count,
+                      backgroundColor: [
+                          'rgba(255, 99, 132, 0.2)',
+                          'rgba(54, 162, 235, 0.2)',
+                          'rgba(255, 206, 86, 0.2)',
+                          'rgba(75, 192, 192, 0.2)',
+                          'rgba(153, 102, 255, 0.2)',
+                          'rgba(255, 159, 64, 0.2)'
+                      ],
+                      borderColor: [
+                          'rgba(255,99,132,1)',
+                          'rgba(54, 162, 235, 1)',
+                          'rgba(255, 206, 86, 1)',
+                          'rgba(75, 192, 192, 1)',
+                          'rgba(153, 102, 255, 1)',
+                          'rgba(255, 159, 64, 1)'
+                      ],
+                      borderWidth: 1
+                  }]
+              },
+              options: {
+                  scales: {
+                      yAxes: [{
+                          ticks: {
+                              beginAtZero:true
+                          }
+                      }]
+                  }
+              }
+            });
+          }
       </script>
 {% endblock %}

@@ -104,6 +104,6 @@ class ChartData(APIView):
         positive_comments = {}
         data = {
             "topic_labels": topic_labels,
-            "comment_count": comments_count,
+            "comments_count": comments_count,
         }
         return Response(data)
