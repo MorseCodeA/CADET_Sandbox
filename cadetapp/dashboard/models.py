@@ -20,7 +20,7 @@ class Instructor(models.Model):
 	primary_key = models.IntegerField()
 	first_name = models.CharField(max_length=30)
 	last_name = models.CharField(max_length=30)
-	# An instructor can tach many courses, and a course can be 
+	# An instructor can tach many courses, and a course can be
 	# taught by many instructors
 	courses = models.ManyToManyField(Course)
 
@@ -61,4 +61,3 @@ class Comment(models.Model):
 		on_delete=models.CASCADE)
 	instructor_id = models.IntegerField()
 	timestamp = models.DateTimeField('date published')
-

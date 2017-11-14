@@ -26,6 +26,9 @@ urlpatterns = [
     url('documentation', DocumentationView.home, name="doc-home"),
 
     # test chartjs
+    # better way of setting up endpoint from backend to frontend
+    # by using Django REST Framework
     url(r'^api/chart/data/$', ChartData.as_view()),
+    # also another way to creating an endpoint to serve json object
     url(r'^api/data/$', get_chart_data, name='api-data'),
 ]
