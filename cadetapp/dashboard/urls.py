@@ -26,6 +26,6 @@ urlpatterns = [
     url('documentation', DocumentationView.home, name="doc-home"),
 
     # test chartjs
-    url(r'^api/chart/data/$', ChartData.as_view),
+    url(r'^api/chart/data/$', ChartData.as_view()),
     url(r'^api/data/$', get_chart_data, name='api-data'),
 ]

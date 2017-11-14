@@ -78,20 +78,7 @@ class DocumentationView(TemplateView):
     def home(request):
         return render(request, 'documentation/doc-home.html')
 
-class ChartData(APIView):
-    authentication_classes = []
-    permission_classes = []
-
-    def get(self, request, format=None):
-        qs_count = User.objects.all().count()
-        labels = ["Users", "Blue", "Yellow", "Green", "Purple", "Orange"]
-        default_items = [qs_count, 23, 2, 3, 12, 2]
-        data = {
-                "labels": labels,
-                "default": default_items,
-        }
-        return Response(data)
-
+# method 1 of delivering json and instance obj data
 def get_chart_data(request, *args, **kwargs):
     data = {
         "comments_count": 10,
@@ -99,6 +86,7 @@ def get_chart_data(request, *args, **kwargs):
     }
     return JsonResponse(data) # http response
 
+# refactored class-based way of delivering json withr django rest framework
 class ChartData(APIView):
     def get(self, request, format = None):
         # hardcoded for now, until we get some real JSON data from backend
@@ -107,6 +95,6 @@ class ChartData(APIView):
         comments_count = [33, 23, 12, 27, 18, 40]
         data = {
             "topic_labels": topic_labels,
-            "comment_count": comments_cmount,
+            "comment_count": comments_count,
         }
         return Response(data)
