@@ -8,97 +8,14 @@
   <meta name="description" content="CADET Test Website, JHU, Fall 2017">
   <meta name="author" content="Team KAJJA">
   <title>File Upload </title>
-  <!-- Bootstrap 3.3.7 for Jack's compatibility CSS-->
-  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}"
-        rel="stylesheet">
-  <!-- Custom font for this template-->
-  <link href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}"
-        rel="stylesheet" type="text/css">
-  <!-- Custom styles for this template-->
-  <link href=" {% static 'css/cadet-main.css' %}" rel="stylesheet">
+  <!-- Load Uploader CSS Partial -->
+  {% include 'base/uploader_css.html' %}
   <script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.min.js"></script>
 </head>
 <body class="fixed-nav sticky-footer" id="page-top">
   <div class="bg-container">
-  <!-- Navigation-->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
-    <a class="navbar-brand cadet-brand" href="/dashboard">CADET</a>
-    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarResponsive">
-      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
-          <a class="nav-link" href="/dashboard">
-            <span class="nav-link-text">Dashboard</span>
-          </a>
-        </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
-          <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#exampleAccordion">
-            <i class="fa fa-fw fa-area-chart"></i>
-            <span class="nav-link-text">Distributions</span>
-          </a>
-          <ul class="sidenav-second-level collapse" id="collapseComponents">
-            <li>
-              <a href="topic-distribution.html">Topics Distribution</a>
-            </li>
-            <li>
-              <a href="instructor-distribution.html">Instructor
-                Distribution</a>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Example Pages">
-          <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseExamplePages" data-parent="#exampleAccordion">
-            <i class="fa fa-fw fa-cog"></i>
-            <span class="nav-link-text">Options</span>
-          </a>
-          <ul class="sidenav-second-level collapse" id="collapseExamplePages">
-            <li>
-              <a href="stopword.html">Stop Words</a>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="right"
-            title="Upload">
-          <a class="nav-link" href="file_upload.html">
-            <i class="fa fa-fw fa-upload"></i>
-            <span class="nav-link-text">Upload</span>
-          </a>
-        </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
-          <a class="nav-link" href="export.html">
-            <i class="fa fa-fw fa-arrow-down"></i>
-            <span class="nav-link-text">Export</span>
-          </a>
-        </li>
-      </ul>
-      <ul class="navbar-nav sidenav-toggler">
-        <li class="nav-item">
-          <a class="nav-link text-center nav-cadet-link-collapse" id="sidenavToggler">
-            <i class="fa fa-fw fa-angle-left"></i>
-          </a>
-        </li>
-      </ul>
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item" data-placement="right">
-          <a class="nav-link" href="documentation/doc-home.html"><span
-                  class="nav-link-text">Documentation</span></a>
-        </li>
-        <li class="nav-item" data-placement="right" >
-          <a class="nav-link" href="https://github.com/AshleyMorse/CADET_Sandbox">GitHub</a>
-        </li>
-        <li class="nav-item" data-placement="right" >
-          <a class="nav-link" href="/team">Team</a>
-        </li>
-      </ul>
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <a class="nav-link" data-toggle="modal" data-target="#exampleModal">Logout</a>
-        </li>
-      <ul>
-    </div>
-  </nav>
+    <!-- Navigation-->
+    {% include 'base/navigation.html' %}
     <div class="content-wrapper">
     <div class="container-fluid">
           <!-- call content here -->
@@ -107,71 +24,15 @@
     </div>
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
-    <footer class="sticky-footer">
-      <div class="container">
-        <div class="text-center">
-          <small>Copyright © CADET 2017</small>
-        </div>
-      </div>
-    </footer>
+
+    <!-- Load Footer Partial -->
+    {% include 'base/footer.html' %}
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
       <i class="fa fa-angle-up"></i>
     </a>
-    <!-- Bootstrap core JavaScript-->
-    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
-    <script src="{% static 'vendor/popper/popper.min.js' %}"></script>
-    <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
-    <!-- Core plugin JavaScript-->
-    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
-    <!-- Custom scripts for all pages-->
-    <script src="{% static 'js/sb-admin.min.js' %}"></script>
-
-      <!-- Jack's dependencies -->
-    <script src="{% static 'vendor/bootstrap/js/bootstrap337.min.js' %}"></script>
-    <script src="{% static 'js/progress_bar.js' %}"></script>
-    <script>upload_progress_url = "/upload/upload_progress"</script><script>
-        function addFile() {
-        var table = document.getElementById("myTable");
-        var row = table.insertRow(-1);
-        var cell1 = row.insertCell(0);
-        var cell2 = row.insertCell(1);
-        var cell3 = row.insertCell(2);
-        var Upfile1 = document.getElementById("id_file");
-        cell1.innerHTML = Upfile1.files.item(0).name;
-        cell2.innerHTML = (Upfile1.files.item(0).size/1048576).toFixed(2) + " MB";
-        cell3.innerHTML = Upfile1.files.item(0).type;
-        }
-        function deleteRows() {
-        for(var i=document.getElementById("myTable").rows.length;i>1;i--) {
-        document.getElementById("myTable").deleteRow(i-1);
-        }
-        document.getElementById("file").value = "";
-        }
-    </script>
-    <script>
-        $(function () {
-        var dropZoneId = "drop-zone";
-        var mouseOverClass = "mouse-over";
-        var dropZone = $("#" + dropZoneId);
-        var ooleft = dropZone.offset().left;
-        var ooright = dropZone.outerWidth() + ooleft;
-        var ootop = dropZone.offset().top;
-        var oobottom = dropZone.outerHeight() + ootop;
-        var inputFile = dropZone.find("input");
-        document.getElementById(dropZoneId).addEventListener("dragover", function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        dropZone.addClass(mouseOverClass);
-        var x = e.pageX;
-        var y = e.pageY;
-        if (!(x < ooleft || x > ooright || y < ootop || y > oobottom)) {
-        inputFile.offset({ top: y - 15, left: x - 100 });
-        } else {
-        inputFile.offset({ top: -400, left: -400 });
-        }
-        }, true);
-        })
-    </script>
+    <!-- Load JS scripts -->
+    {% include 'base/js.html' %}
+    {% include 'base/uploader_js.html' %}
 </body>
 </html>

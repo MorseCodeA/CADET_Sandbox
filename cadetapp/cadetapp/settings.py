@@ -40,8 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'dashboard',
     'fileupload',
-    'controller'
-    #'chartjs',
+    'controller',
 ]
 
 MIDDLEWARE = [

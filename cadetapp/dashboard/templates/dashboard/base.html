@@ -8,139 +8,38 @@
   <meta name="description" content="CADET Test Website, JHU, Fall 2017">
   <meta name="author" content="Team KAJJA">
   <title>CADET Dashboard - V1 </title>
-  <!-- Bootstrap Core CSS-->
-  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}"
-        rel="stylesheet">
-  <!-- Vendor fonts -->
-  <link href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}"
-        rel="stylesheet" type="text/css">
-  <!-- CADET styles -->
-  <link href="{% static 'css/cadet-main.css' %}" rel="stylesheet" type="text/css">
+  {% include 'base/css.html' %}
 </head>
 <body class="fixed-nav sticky-footer" id="page-top">
   <div class="bg-container">
-  <!-- Navigation-->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
-    <a class="navbar-brand cadet-brand" href="/dashboard">CADET</a>
-    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarResponsive">
-      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
-          <a class="nav-link" href="/dashboard">
-            <span class="nav-link-text">Dashboard</span>
-          </a>
-        </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
-          <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#exampleAccordion">
-            <i class="fa fa-fw fa-area-chart"></i>
-            <span class="nav-link-text">Distributions</span>
-          </a>
-          <ul class="sidenav-second-level collapse" id="collapseComponents">
-            <li>
-              <a href="topic-distribution.html">Topics Distribution</a>
-            </li>
-            <li>
-              <a href="instructor-distribution.html">Instructor
-                Distribution</a>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Example Pages">
-          <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseExamplePages" data-parent="#exampleAccordion">
-            <i class="fa fa-fw fa-cog"></i>
-            <span class="nav-link-text">Options</span>
-          </a>
-          <ul class="sidenav-second-level collapse" id="collapseExamplePages">
-            <li>
-              <a href="stopword.html">Stop Words</a>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="right"
-            title="Upload">
-          <a class="nav-link" href="file_upload.html">
-            <i class="fa fa-fw fa-upload"></i>
-            <span class="nav-link-text">Upload</span>
-          </a>
-        </li>
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
-          <a class="nav-link" href="export.html">
-            <i class="fa fa-fw fa-arrow-down"></i>
-            <span class="nav-link-text">Export</span>
-          </a>
-        </li>
-      </ul>
-      <ul class="navbar-nav sidenav-toggler">
-        <li class="nav-item">
-          <a class="nav-link text-center nav-cadet-link-collapse" id="sidenavToggler">
-            <i class="fa fa-fw fa-angle-left"></i>
-          </a>
-        </li>
-      </ul>
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item" data-placement="right">
-          <a class="nav-link" href="documentation/doc-home.html"><span
-                  class="nav-link-text">Documentation</span></a>
-        </li>
-        <li class="nav-item" data-placement="right" >
-          <a class="nav-link" href="https://github.com/AshleyMorse/CADET_Sandbox">GitHub</a>
-        </li>
-        <li class="nav-item" data-placement="right" >
-          <a class="nav-link" href="/team">Team</a>
-        </li>
-      </ul>
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <a class="nav-link" data-toggle="modal" data-target="#exampleModal">Logout</a>
-        </li>
-      <ul>
-    </div>
-  </nav>
+    <!-- Calling Navigation Partial -->
+    {% include 'base/navigation.html' %}
     <div class="content-wrapper">
-    <div class="container-fluid">
-      <!-- Breadcrumbs-->
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <a href="/dashboard">Home</a>
-        </li>
-        <li class="breadcrumb-item active">Dashboard</li>
-      </ol>
-      <hr>
-      <div style="height: 1000px;">
+      <div class="container-fluid">
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="/dashboard">Home</a>
+          </li>
+          <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+        <hr>
+        <div style="height: 1000px;">
           <!-- call content here -->
           {% block content %}{% endblock %}
-      </div>
-    </div>
-    <!-- /.container-fluid-->
-    <!-- /.content-wrapper-->
-    <footer class="sticky-footer">
-      <div class="container">
-        <div class="text-center">
-          <small>Copyright © CADET 2017</small>
         </div>
       </div>
-    </footer>
+    <!-- end container-fluid-->
+    <!-- end content-wrapper-->
+
+    <!-- Calling Footer Partial -->
+    {% include 'base/footer.html' %}
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
       <i class="fa fa-angle-up"></i>
     </a>
-    <!-- Core plugin JavaScript-->
-    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
-    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}">
-    </script>
-    <!-- ChartJS -->
-   <script type="text/javascript" src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
-    <!-- Page level plugin JavaScript-->
-    <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
-    <script src="{% static 'vendor/datatables/jquery.dataTables.js' %}"></script>
-    <script src="{% static 'vendor/datatables/dataTables.bootstrap4.js' "></script>
-    <!-- Custom scripts for all pages-->
-    <script src="{% static 'js/sb-admin.min.js' %}"></script>
-
-  </div>
+      {% include 'base/js.html' %}
+    </div><!-- end content-wrapper -->
   </div><!-- end bg-container -->
 </body>
 </html>
