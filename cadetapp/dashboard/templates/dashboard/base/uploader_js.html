@@ -1,0 +1,47 @@
+{% load staticfiles %}
+<!-- Jack's dependencies -->
+<script src="{% static 'vendor/bootstrap/js/bootstrap337.min.js' %}"></script>
+<script src="{% static 'js/progress_bar.js' %}"></script>
+<script>upload_progress_url = "/upload/upload_progress"</script><script>
+    function addFile() {
+    var table = document.getElementById("myTable");
+    var row = table.insertRow(-1);
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    var cell3 = row.insertCell(2);
+    var Upfile1 = document.getElementById("id_file");
+    cell1.innerHTML = Upfile1.files.item(0).name;
+    cell2.innerHTML = (Upfile1.files.item(0).size/1048576).toFixed(2) + " MB";
+    cell3.innerHTML = Upfile1.files.item(0).type;
+    }
+    function deleteRows() {
+    for(var i=document.getElementById("myTable").rows.length;i>1;i--) {
+    document.getElementById("myTable").deleteRow(i-1);
+    }
+    document.getElementById("file").value = "";
+    }
+</script>
+<script>
+    $(function () {
+    var dropZoneId = "drop-zone";
+    var mouseOverClass = "mouse-over";
+    var dropZone = $("#" + dropZoneId);
+    var ooleft = dropZone.offset().left;
+    var ooright = dropZone.outerWidth() + ooleft;
+    var ootop = dropZone.offset().top;
+    var oobottom = dropZone.outerHeight() + ootop;
+    var inputFile = dropZone.find("input");
+    document.getElementById(dropZoneId).addEventListener("dragover", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    dropZone.addClass(mouseOverClass);
+    var x = e.pageX;
+    var y = e.pageY;
+    if (!(x < ooleft || x > ooright || y < ootop || y > oobottom)) {
+    inputFile.offset({ top: y - 15, left: x - 100 });
+    } else {
+    inputFile.offset({ top: -400, left: -400 });
+    }
+    }, true);
+    })
+</script>

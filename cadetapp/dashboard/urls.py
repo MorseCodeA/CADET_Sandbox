@@ -1,29 +1,34 @@
 from pkg_resources import parse_version
 import django
 from django.conf.urls import url
-from django.views.generic import TemplateView
 from . import views
+from .views import DashboardView, UploadView, DocumentationView, ChartData, \
+    get_chart_data
 
 app_name = 'dashboard'
 
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
-    url('topic-distribution', views.topic_distribution,
+    url(r'^$', DashboardView.as_view()),
+    url('topic-distribution', DashboardView.topic_distribution,
         name='topic-distribution'),
-    url('instructor-distribution', views.instructor_distribution,
+    url('instructor-distribution', DashboardView.instructor_distribution,
         name='instructor-distribution'),
-    url('file_upload', views.file_upload, name='upload-new'),
-    url('upload', views.upload_view, name='upload'),
-    url(r'^upload_progress$', views.upload_progress,
+    url('file_upload', UploadView.file_upload, name='upload-new'),
+    url('upload', UploadView.upload_view, name='upload'),
+    url(r'^upload_progress$', UploadView.upload_progress,
         name='upload_progress'),
-    url('about', views.about_view, name='about'),
-    url('file_upload', views.file_upload, name='file_upload'),
-    url('stopword', views.stopword_view, name='stopword'),
-    url('export', views.export_view, name='export'),
-    url('documentation', views.documentation_view, name="doc-home"),
+    url('about', DashboardView.about_view, name='about'),
+    url('file_upload', UploadView.file_upload, name='file_upload'),
+    url('stopword', DashboardView.stopword_view, name='stopword'),
+    url('export', DashboardView.export_view, name='export'),
+
+    # documentation urls
+    url('documentation', DocumentationView.home, name="doc-home"),
 
     # test chartjs
-    #url('chartdemo', views.line_chart, name='chartdemo'),
-
-
+    # better way of setting up endpoint from backend to frontend
+    # by using Django REST Framework
+    url(r'^api/chart/data/$', ChartData.as_view()),
+    # also another way to creating an endpoint to serve json object
+    url(r'^api/data/$', get_chart_data, name='api-data'),
 ]

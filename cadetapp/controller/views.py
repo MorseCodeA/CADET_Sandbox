@@ -48,4 +48,3 @@ def organizeResults(result):
             neg_comment_record.save()
 
     return HttpResponse("results for the graph")
-
