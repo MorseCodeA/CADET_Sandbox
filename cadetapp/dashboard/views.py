@@ -4,11 +4,19 @@ from django.shortcuts import render, get_object_or_404, render_to_response, \
     render, redirect
 from django.core.cache import cache
 from django.http import HttpResponse, JsonResponse
-from django.views.generic import TemplateView
+from django.views.generic import View, TemplateView
 
 # Upload dependencies
 from fileupload.forms import DocumentForm
 from fileupload.models import Document
+
+
+# Django REST API viewsrom rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+# Models dependencies
+from .models import Result
 
 class DashboardView(TemplateView):
     template_name = 'dashboard/index.html'
@@ -20,7 +28,6 @@ class DashboardView(TemplateView):
         return render(request, 'dashboard/index.html')
 
     def topic_distribution(request):
-
         # http://example/dashboard/topic-distribution
         return render(request, 'dashboard/topic-distribution.html')
 
@@ -28,6 +35,16 @@ class DashboardView(TemplateView):
         # http://example/dashboard/instructor-distribution
         return render(request, 'dashboard/instructor-distribution.html')
 
+    def stopword_view(request):
+        return render(request, 'dashboard/stopword.html')
+
+    def about_view(request):
+        return render(request, 'dashboard/about.html')
+
+    def export_view(request):
+        return render(request, 'dashboard/export.html')
+
+class UploadView(View):
     def upload_view(request):
         documents = Document.objects.all()
         return render(request, 'dashboard/upload.html', {'documents':
@@ -57,14 +74,39 @@ class DashboardView(TemplateView):
             data = cache.get(cache_key)
             return HttpResponse(json.dumps(data))
 
-    def stopword_view(request):
-        return render(request, 'dashboard/stopword.html')
-
-    def about_view(request):
-        return render(request, 'dashboard/about.html')
-
-    def export_view(request):
-        return render(request, 'dashboard/export.html')
-
-    def documentation_view(request):
+class DocumentationView(TemplateView):
+    def home(request):
         return render(request, 'documentation/doc-home.html')
+
+class ChartData(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, request, format=None):
+        qs_count = User.objects.all().count()
+        labels = ["Users", "Blue", "Yellow", "Green", "Purple", "Orange"]
+        default_items = [qs_count, 23, 2, 3, 12, 2]
+        data = {
+                "labels": labels,
+                "default": default_items,
+        }
+        return Response(data)
+
+def get_chart_data(request, *args, **kwargs):
+    data = {
+        "comments_count": 10,
+        "anon_id": 2,
+    }
+    return JsonResponse(data) # http response
+
+class ChartData(APIView):
+    def get(self, request, format = None):
+        # hardcoded for now, until we get some real JSON data from backend
+        topic_labels = ["Topic 1", "Topic 2", "Topic 3", "Topic 4",
+                        "Topic 5", "Topic 6"]
+        comments_count = [33, 23, 12, 27, 18, 40]
+        data = {
+            "topic_labels": topic_labels,
+            "comment_count": comments_cmount,
+        }
+        return Response(data)

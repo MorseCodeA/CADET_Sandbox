@@ -1,16 +1,71 @@
 {% extends 'dashboard/base.html' %}
+<script>
+      $.ajax({
+          method: "GET",
+          url: '/api/chart/data/',
+          success: function(data){
+              labels = data.topic_labels
+              comments_count = data.comments_count
+              setChart()
+          },
+          error: function(error_data){
+              console.log("error")
+              console.log(error_data)
+          }
+      })
+      function setChart(){
+          var ctx = document.getElementById("topicDistGraph");
+          var ctx2 = document.getElementById("topicDistGraph2");
+          var myChart = new Chart(ctx2, {
+          type: 'bar',
+          data: {
+              labels: labels,
+              datasets: [{
+                  label: 'Number of Comments',
+                  data: comments_count,
+                  backgroundColor: [
+                      'rgba(255, 99, 132, 0.2)',
+                      'rgba(54, 162, 235, 0.2)',
+                      'rgba(255, 206, 86, 0.2)',
+                      'rgba(75, 192, 192, 0.2)',
+                      'rgba(153, 102, 255, 0.2)',
+                      'rgba(255, 159, 64, 0.2)'
+                  ],
+                  borderColor: [
+                      'rgba(255,99,132,1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(255, 206, 86, 1)',
+                      'rgba(75, 192, 192, 1)',
+                      'rgba(153, 102, 255, 1)',
+                      'rgba(255, 159, 64, 1)'
+                  ],
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              scales: {
+                  yAxes: [{
+                      ticks: {
+                          beginAtZero:true
+                      }
+                  }]
+              }
+          }
+      });
+    }
+</script>
 {% block content %}
-        <div class="topic-container container">
-             <canvas id="topicDistGraph" width="500" height="400"></canvas>
+<div class='row'>
+    <div class='col-sm-12' url-endpoint='{% url "api-data" %}'>
+        <h1>Chart Sample Data/h1>
+        <div class='col-sm-6'>
+            <canvas id="topicDistGraph" width="400" height="400"></canvas>
         </div>
-        <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
-        <script type="text/javascript">
-            $.get('{% url "line_chart_json" %}', function(data) {
-                var ctx = $("#topicDistGraph").get(0).getContext("2d");
-                new Chart(ctx, {
-                    type: 'line', data: data
-                });
-            });
-        </script>
-{% endblock %}
+        <div class='col-sm-6'>
+            <canvas id="topicDistGraph2" width="400" height="400"></canvas>
+        </div>
+
+
+    </div>
+</div>
+{% endblock content %}

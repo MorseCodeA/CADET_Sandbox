@@ -1,9 +1,79 @@
 {% extends 'dashboard/base.html' %}
 {% block content %}
         <div class="topic-distribution">
-            <h2> Topic Distribution </h2>
-            <p> Also the default view after user login. </p>
-            <p>Place future topic distribution graph.</p>
-        </div>
-{% endblock %}
+            <h1> Topic Distribution </h1>
+            <div class='row'>
+                <div class='col-sm-12' url-endpoint='{% url "api-data" %}'>
+                    <h1>Chart Sample Data/h1>
+                    <div class='col-sm-6'>
+                        <canvas id="topicDistGraph" width="400" height="400"></canvas>
+                    </div>
+                    <div class='col-sm-6'>
+                        <canvas id="topicDistGraph2" width="400" height="400"></canvas>
+                    </div>
 
+
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js">
+        </script>
+        <script>
+          $(document).ready(function(){
+                $.ajax({
+                    method: "GET",
+                    url: '/api/chart/data/',
+                    success: function(data){
+                        labels = data.topic_labels
+                        comments_count = data.comments_count
+                        setChart()
+                    },
+                    error: function(error_data){
+                        console.log("error")
+                        console.log(error_data)
+                    }
+                })
+                function setChart(){
+                    var ctx = document.getElementById("topicDistGraph");
+                    var ctx2 = document.getElementById("topicDistGraph2");
+                    var myChart = new Chart(ctx2, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Number of Comments',
+                            data: comments_count,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255,99,132,1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero:true
+                                }
+                            }]
+                        }
+                    }
+                });
+              }
+        })
+      </script>
+{% endblock %}

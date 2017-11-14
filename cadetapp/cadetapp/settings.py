@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'dashboard',
     'fileupload',
     'controller',
+    'rest_framework',
+    'chartjs',
 ]
 
 MIDDLEWARE = [

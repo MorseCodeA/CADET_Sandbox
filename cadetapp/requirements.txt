@@ -15,3 +15,4 @@ numpydoc==0.7.0
 panda==0.3.1
 pandas==0.20.3
 django-chartjs-1.2
+djangorestframework-3.7.3
