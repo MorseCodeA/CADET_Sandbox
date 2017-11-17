@@ -62,15 +62,34 @@ pip install -r requirements.txt
 # migrate database, default is sqlite
 python manage.py migrate 
 
-# run server,
+# Run this when you first begin
+python manage.py migrate --run-synchdb
+
+# run server
 python manage.py runserver
+```
+
+#### Common Issues in the Installation Steps  
+
+**Make sure you're using python +3.0**  
+
+You need these libraries installed in order to run our Django Cadet:  
+```
+# notice we install with pip3 not pip
+pip3 install djangorestframework
+
+# node for setting up node modules
+sudo apt-get install npm
+
+# d3 library
+pip3 install django-nvd3
+
 ```
 
 ### IV. Front-End Development Set Up
 
 This section is for future front-end developers who wishes to modify the HTML,
 CSS, and JS of the project.
-
 
 We are using Gulp as a taskrunner to autocompile JS and CSS assets.  Two files
 Gulpfile.js and package.json lists all dependencies and configuration.  In
