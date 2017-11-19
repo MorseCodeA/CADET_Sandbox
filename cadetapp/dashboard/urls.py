@@ -2,8 +2,13 @@ from pkg_resources import parse_version
 import django
 from django.conf.urls import url
 from . import views
-from .views import DashboardView, UploadView, DocumentationView, ChartData, \
+from .views import DashboardView, DocumentationView, ChartData, \
     get_chart_data
+
+from fileupload.views import UploadView
+
+# Importing custom upload handler class
+from fileupload.uploadhandler import ProgressBarUploadHandler
 
 app_name = 'dashboard'
 
