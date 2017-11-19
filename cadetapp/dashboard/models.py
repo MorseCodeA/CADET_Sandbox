@@ -4,6 +4,11 @@ from django.utils import timezone
 class Course(models.Model):
 	primary_key = models.IntegerField()
 	department = models.CharField(max_length=50)
+	MODALITY = (
+		('0', 'Online'),
+		('1', 'In Class'),
+	)
+	modality= models.CharField(max_length=1, choices= MODALITY)
 	program = models.CharField(max_length=50)
 	name = models.CharField(max_length=50)
 	section = models.FloatField('format xxx.xxx')
