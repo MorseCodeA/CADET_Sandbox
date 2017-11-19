@@ -9,11 +9,12 @@ from django.views.generic import View, TemplateView
 # Upload dependencies
 from fileupload.forms import DocumentForm
 from fileupload.models import Document
+from fileupload.uploadhandler import ProgressBarUploadHandler
 
 # Importing custom upload handler class
 from django.core.cache import cache
 from django.core.files.uploadhandler import TemporaryFileUploadHandler
-from fileupload.uploadhandler import ProgressBarUploadHandler
+
 
 class UploadView(View):
     def upload_view(request):

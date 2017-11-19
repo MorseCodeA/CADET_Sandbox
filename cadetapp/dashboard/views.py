@@ -10,6 +10,8 @@ from django.urls import reverse
 # Upload dependencies
 from fileupload.forms import DocumentForm
 from fileupload.models import Document
+# Importing custom upload handler class
+from fileupload.uploadhandler import ProgressBarUploadHandler
 
 
 # Django REST API viewsrom rest_framework.views import APIView
@@ -44,7 +46,7 @@ class DashboardView(TemplateView):
 
     def export_view(request):
         return render(request, 'dashboard/export.html')
-    
+
 
 class DocumentationView(TemplateView):
     def home(request):
