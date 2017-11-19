@@ -16,6 +16,9 @@ from fileupload.uploadhandler import ProgressBarUploadHandler
 # Chart dependencies
 from distribution_chart.views import ChartData
 
+# Documentation depenciences
+from documentation.views import DocumentationView
+
 # Models dependencies
 from .models import Result
 
@@ -46,6 +49,3 @@ class DashboardView(TemplateView):
         return render(request, 'dashboard/export.html')
 
 
-class DocumentationView(TemplateView):
-    def home(request):
-        return render(request, 'documentation/doc-home.html')
