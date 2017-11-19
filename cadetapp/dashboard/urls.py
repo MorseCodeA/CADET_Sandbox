@@ -3,7 +3,8 @@ import django
 from django.conf.urls import url
 from . import views
 from .views import DashboardView, DocumentationView
-from distribution_chart.views import get_chart_data, ChartData
+from distribution_chart.views import get_chart_data, \
+ChartTopicData, ChartInstructorData
 
 from fileupload.views import UploadView
 
@@ -30,11 +31,11 @@ urlpatterns = [
 
     # documentation urls
     url('documentation', DocumentationView.home, name="doc-home"),
-
-    # test chartjs
+    
     # better way of setting up endpoint from backend to frontend
     # by using Django REST Framework
-    url(r'^api/chart/data/$', ChartData.as_view()),
+    url(r'^api/chart/topic/data/$', ChartTopicData.as_view()),
+    url(r'^api/chart/instructor/data/$', ChartInstructorData.as_view()),
     # also another way to creating an endpoint to serve json object
     url(r'^api/data/$', get_chart_data, name='api-data'),
 ]

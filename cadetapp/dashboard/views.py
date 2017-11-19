@@ -14,7 +14,8 @@ from fileupload.models import Document
 from fileupload.uploadhandler import ProgressBarUploadHandler
 
 # Chart dependencies
-from distribution_chart.views import ChartData
+from distribution_chart.views import ChartTopicData, \
+ChartInstructorData
 
 # Documentation depenciences
 from documentation.views import DocumentationView
