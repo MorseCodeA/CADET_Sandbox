@@ -154,10 +154,82 @@ nav {
 }
 
 // Distributions
+#instructor-distribution {
+  .instructor-distribution-container, 
+  .instructor-comment-container {
+    background: rgba(255,255,255,0.85); 
+    padding: 20px;
+    margin: 20px;
+  }
+  .instructor-distribution-container {
+    .panel-heading {
+        background: $cadet-teal-rgba;
+        text-align: center;
+        color: white;
+    }
+    .panel-body {
+        background: $cadet-cloud-grey;
+        padding: 0.75rem 0rem 0.75rem 1.5rem;
+        font-size: 0.85rem;
+        color: $cadet-txt-grey;
+    }
+    .instructor-side-table {
+        table {
+          tbody {
+            tr {
+              th {
+                color: $cadet-teal-rgba;
+                padding: 0.45rem;
+              }
+            }
+          }
+          td {
+            font-size: $small-text;
+            color: $cadet-txt-grey;
+            padding: 0.45rem;
+          }
+        }
+
+    }
+  }
+  .dist-subtitle {
+    text-align: center;
+    font-family: $subheading-font, sans-serif;
+    color: $cadet-blue-rgba;
+  }
+  .instructor-comment-container {
+    table {
+      thead {
+        tr {
+          &.table-heading {
+            font-size: $small-text;
+            color: $cadet-grey;
+          }
+          th {
+            padding: 0.45rem;
+          }
+        }  
+      }
+      tbody {
+        tr {
+          th {
+            color: $cadet-teal-rgba;
+            padding: 0.45rem;
+          }
+        }
+      }
+      td {
+        font-size: $small-text;
+        color: $cadet-txt-grey;
+        padding: 0.45rem;
+      }
+    }
+  }
+}
+
 #topic-distribution {
   .topic-distribution-container, 
-  .topic-comment-container,
-  .instructor-distribution-container {
+  .topic-comment-container {
     background: rgba(255,255,255,0.85); 
     padding: 20px;
     margin: 20px;

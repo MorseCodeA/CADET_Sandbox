@@ -149,9 +149,55 @@ nav #mainNav .navbar.navbar-expand-lg.navbar-dark.fixed-top {
   border-radius: 2px;
   margin-top: -20px; }
 
+#instructor-distribution .instructor-distribution-container,
+#instructor-distribution .instructor-comment-container {
+  background: rgba(255, 255, 255, 0.85);
+  padding: 20px;
+  margin: 20px; }
+
+#instructor-distribution .instructor-distribution-container .panel-heading {
+  background: rgba(67, 215, 197, 0.8);
+  text-align: center;
+  color: white; }
+
+#instructor-distribution .instructor-distribution-container .panel-body {
+  background: #dee2e6;
+  padding: 0.75rem 0rem 0.75rem 1.5rem;
+  font-size: 0.85rem;
+  color: #9B9B9B; }
+
+#instructor-distribution .instructor-distribution-container .instructor-side-table table tbody tr th {
+  color: rgba(67, 215, 197, 0.8);
+  padding: 0.45rem; }
+
+#instructor-distribution .instructor-distribution-container .instructor-side-table table td {
+  font-size: 0.85em;
+  color: #9B9B9B;
+  padding: 0.45rem; }
+
+#instructor-distribution .dist-subtitle {
+  text-align: center;
+  font-family: "gentona-bold", sans-serif;
+  color: rgba(0, 94, 184, 0.8); }
+
+#instructor-distribution .instructor-comment-container table thead tr.table-heading {
+  font-size: 0.85em;
+  color: #868e96; }
+
+#instructor-distribution .instructor-comment-container table thead tr th {
+  padding: 0.45rem; }
+
+#instructor-distribution .instructor-comment-container table tbody tr th {
+  color: rgba(67, 215, 197, 0.8);
+  padding: 0.45rem; }
+
+#instructor-distribution .instructor-comment-container table td {
+  font-size: 0.85em;
+  color: #9B9B9B;
+  padding: 0.45rem; }
+
 #topic-distribution .topic-distribution-container,
-#topic-distribution .topic-comment-container,
-#topic-distribution .instructor-distribution-container {
+#topic-distribution .topic-comment-container {
   background: rgba(255, 255, 255, 0.85);
   padding: 20px;
   margin: 20px; }

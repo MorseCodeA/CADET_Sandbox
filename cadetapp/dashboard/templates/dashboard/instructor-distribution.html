@@ -1,8 +1,130 @@
 {% extends 'dashboard/base.html' %}
+{% load staticfiles %}
 {% block content %}
-        <div class="instructor-distribution-container">
-           <h2> Instructor Distribution </h2>
-            <p>Place future instructor distribution graph here.</p>
+<div id="instructor-distribution">
+	<h1 class="main-heading"> Instructor Distribution </h1>
+    <div class="instructor-distribution-container">
+      <div class='row'>
+        <div class='col-sm-12 col-lg-8' url-endpoint='/api/chart/data/'>
+          <div class='row'>
+            <div class='col-xs-12 col-lg-12'>
+              <h4 class="dist-subtitle">Instructor Distribution</h4>
+              <!-- testing hardcode on js only -->
+              <canvas id="instructor-dist-chart"></canvas>
+            </div>
+          </div>
         </div>
+    	<div class='instructor-side-bar col-sm-12 col-lg-4'>
+    		<div class="panel panel-default">
+    		  <!-- Default panel contents -->
+    		  <div class="panel-heading">Instructors</div>
+    		  <div class="panel-body" style="max-height: 120px;overflow-y: scroll;">
+    		    <!-- Table -->
+    		  <table class="instructor-side-table">
+    		  	<tbody> 
+    		  		<tr> 
+    		  			<td>Birdy Birdface</td> 
+    		  		</tr> 
+    		  		<tr> 
+    		  			<td>Mark Otto</td> 
+    		  		</tr> 
+    		  		<tr> 
+    		  			<td>Jacob Thornton</td> 
+    		  		</tr> 
+    		  		<tr> 
+    		  			<td>Larry the Bird</td> 
+    		  		</tr> 
+    		  		<tr> 
+    		  			<td>Luther Rex</td> 
+    		  		</tr> 
+    		  			<td>Mr. Beans</td> 
+    		  		</tr> 
+    		  	</tbody> 
+    		  </table>
+    		  </div>
+    		</div>
+    	</div>
+      </div>
+    </div>
+    <div class="instructor-comment-container">
+      <div class='row'>
+        <div class='col-xs-12 col-lg-12'>
+          <h5 class="dist-subtitle">Instructor Comments</h5>
+          <div class="instructor-table-container" data-example-id="hoverable-table">
+            <table class="table table-hover">
+              <thead>
+                <tr class="table-heading">
+                  <th>Topic ID</th>
+                  <th>Comment</th>
+                  <th>More</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>A lot more social and happy than I thought it would be. People are willing to help you out, very friendly </td>
+                  <td>See All</td>
+                </tr>
+                <tr>
+                  <th scope="row">2</th>
+                  <td>Great school, especially for all things science/medicine. Exceptionally challenging, but if you put in the work you will succeed</td>
+                  <td>See All</td>
+                </tr>
+                <tr>
+                  <th scope="row">3</th>
+                  <td>Grade deflation is very real and the competition is tough. Expect putting in a lot of work for little results.</td>
+                  <td>See All</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<!-- script chartjs lib -->
+<script>
+    var ctx1= document.getElementById('instructor-dist-chart').getContext('2d');
+    var chart = new Chart(ctx1, {
+    // The type of chart we want to create
+    type: 'bar',
+    // The data for our dataset
+    data: {
+      labels: ["Name 1", "Name 2", "Name 3", "Name 4",
+      "Name 5", "Name 6"],
+      datasets: [{
+        label: "Positive",
+        backgroundColor: "rgba(0, 141, 142, 0.7)",
+        data: [3,7,13,4,23,2]
+        },
+        {
+        label: "Neutral",
+        backgroundColor: "rgb(155, 155, 155)",
+        data: [4,3,5,1,2,1]
+        },
+        {
+        label: "Negative",
+        backgroundColor: "rgba(224, 60, 49, 0.7)",
+        data: [7,2,6,4,2,18]
+        }]
+    },
+    // Configuration options go here
+    options: {
+      scales: {
+      yAxes: [{
+        scaleLabel: {
+        display: true,
+        labelString: 'Number of Comments'
+        },
+    }],
+      xAxes: [{
+        scaleLabel: {
+        display: true,
+        labelString: 'Instructor Name'
+      }
+    }],
+    }
+  }
+});
+</script>
 {% endblock %}
--container
