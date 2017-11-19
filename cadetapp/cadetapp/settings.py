@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'controller',
     'rest_framework',
     'distribution_chart',
+    'documentation',
 ]
 
 MIDDLEWARE = [
