@@ -2,8 +2,8 @@ from pkg_resources import parse_version
 import django
 from django.conf.urls import url
 from . import views
-from .views import DashboardView, DocumentationView, ChartData, \
-    get_chart_data
+from .views import DashboardView, DocumentationView
+from distribution_chart.views import get_chart_data, ChartData
 
 from fileupload.views import UploadView
 

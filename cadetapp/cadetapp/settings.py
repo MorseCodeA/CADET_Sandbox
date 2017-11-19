@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'fileupload',
     'controller',
     'rest_framework',
+    'distribution_chart',
 ]
 
 MIDDLEWARE = [
