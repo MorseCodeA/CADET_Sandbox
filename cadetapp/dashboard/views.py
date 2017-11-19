@@ -44,36 +44,7 @@ class DashboardView(TemplateView):
 
     def export_view(request):
         return render(request, 'dashboard/export.html')
-
-class UploadView(View):
-    def upload_view(request):
-        documents = Document.objects.all()
-        return render(request, 'dashboard/upload.html', {'documents':
-                                                              documents})
-    def file_upload(request):
-        if request.method == 'POST':
-            files = request.FILES.getlist('file')
-            form = DocumentForm(request.POST, request.FILES)
-            if form.is_valid():
-                for a_file in files:
-                    Document(file=a_file).save()
-                return redirect('dashboard/upload.html')
-        else:
-            form = DocumentForm()
-        return render(request, 'dashboard/file_upload.html', {'form': form})
-
-    def upload_progress(request):
-        # Uses Ajax calls to return the upload progress and total length values
-        if 'X-Progress-ID' in request.GET:
-            progress_id = request.GET['X-Progress-ID']
-        elif 'X-Progress-ID' in request.META:
-            progress_id = request.META['X-Progress-ID']
-        else:
-            progress_id = None
-        if progress_id:
-            cache_key = "%s_%s" % (request.META['REMOTE_ADDR'], progress_id)
-            data = cache.get(cache_key)
-            return HttpResponse(json.dumps(data))
+    
 
 class DocumentationView(TemplateView):
     def home(request):

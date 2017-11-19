@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8">
+
+<title>JavaScript for Programmers</title>
+
+</head>
+
+<body>
+
+<h1>CS 22 A Grades</h1>
+
+<div id = "allgrades"></div>
+
+<script>
+	var gradebook = {'Alice': 'A', 'Bob': 'B', 'Charlie': 'C'};
+	var result = '';
+
+    for (var student in gradebook) {
+        // Missing statement goes here
+        result += "<p>" + student + ": " + gradebook[student] + "</p>";
+
+    }
+
+    document.getElementById('allgrades').innerHTML = result;
+</script> 
+
+</body>
+
+</html>
