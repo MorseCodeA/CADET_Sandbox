@@ -26,6 +26,7 @@ urlpatterns = [
     url('file_upload', UploadView.file_upload, name='file_upload'),
     url('stopword', DashboardView.stopword_view, name='stopword'),
     url('export', DashboardView.export_view, name='export'),
+    url('options', DashboardView.after_upload_options, name='options'),
 
     # documentation urls
     url('documentation', DocumentationView.home, name="doc-home"),

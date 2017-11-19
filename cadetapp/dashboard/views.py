@@ -48,4 +48,5 @@ class DashboardView(TemplateView):
     def export_view(request):
         return render(request, 'dashboard/export.html')
 
-
+    def after_upload_options(request):
+        return render(request, 'dashboard/options.html')

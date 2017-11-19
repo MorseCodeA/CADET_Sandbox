@@ -141,16 +141,60 @@ nav {
     background-color: inherit;
     color: $cadet-slate-white;
 }
-// Dashboard home
+// Dashboard Home
 .dashboard-home-container{
     background: rgba(255,255,255,0.65);
 }
-// Upload page
+// Upload Page
 .jumbotron {
   padding: 0.015rem 1rem;
   background: rgba(255, 255, 255, 0.65);
   border-radius: 2px;
   margin-top: -20px;
+}
+// Options Page
+.options-container {
+  background: $cadet-opague-white-rgba;
+  margin: 2em auto;
+  border-radius: 1px;
+  padding: 1.25rem;
+  font-family: $logo-font, sans-serif;
+  color: $cadet-blue;
+  button {
+    text-align: center;
+    border-radius: 0px;
+    background: transparent;
+    border: 2px solid $cadet-blue-rgba;
+    color: $cadet-blue-rgba;
+    margin: 1em;   
+  }
+  .btn-block {
+    width: 50%;
+    display: inline;
+  }
+}
+
+// Stopword Page
+.stopword-container {
+  background: $cadet-opague-white-rgba;
+  padding: 1.25rem;
+  .stop-word-header {
+    font-family: $subheading-font, $logo-font;
+    color: $cadet-blue;
+    text-align: center;
+  }
+  .stopword-table {
+    font-family: $body-font, sans-serif;
+    font-size: $small-text;
+    background: $cadet-cloud-grey;
+  }
+  .panel {
+    &.panel-default {
+      margin: 2rem;
+      width: 100%;
+      background: $cadet-cloud-grey;
+    }
+  }   
 }
 
 // Distributions

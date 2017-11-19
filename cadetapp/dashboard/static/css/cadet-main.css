@@ -149,6 +149,40 @@ nav #mainNav .navbar.navbar-expand-lg.navbar-dark.fixed-top {
   border-radius: 2px;
   margin-top: -20px; }
 
+.options-container {
+  background: rgba(255, 255, 255, 0.65);
+  margin: 2em auto;
+  border-radius: 1px;
+  padding: 1.25rem;
+  font-family: "quadon", sans-serif;
+  color: #005EB8; }
+  .options-container button {
+    text-align: center;
+    border-radius: 0px;
+    background: transparent;
+    border: 2px solid rgba(0, 94, 184, 0.8);
+    color: rgba(0, 94, 184, 0.8);
+    margin: 1em; }
+  .options-container .btn-block {
+    width: 50%;
+    display: inline; }
+
+.stopword-container {
+  background: rgba(255, 255, 255, 0.65);
+  padding: 1.25rem; }
+  .stopword-container .stop-word-header {
+    font-family: "gentona-bold", "quadon";
+    color: #005EB8;
+    text-align: center; }
+  .stopword-container .stopword-table {
+    font-family: "titling", sans-serif;
+    font-size: 0.85em;
+    background: #dee2e6; }
+  .stopword-container .panel.panel-default {
+    margin: 2rem;
+    width: 100%;
+    background: #dee2e6; }
+
 #instructor-distribution .instructor-distribution-container,
 #instructor-distribution .instructor-comment-container {
   background: rgba(255, 255, 255, 0.85);
