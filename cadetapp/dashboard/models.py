@@ -1,18 +1,18 @@
 from django.db import models
 from django.utils import timezone
 
+# This file will organize the data retrieved from the data layer after it has 
+# been analyzed. Based off of the Data layer team's spec D88, it is 
+# expected that A topic model dictionary and a list of comment objects will 
+# be retrieved. The following code below will take this information and model 
+# it in to a JSON that the charts in distribution_chart/views.py can read.
+class Instructor(models.Model):
+	first_name = models.CharField(max_length=30)
+	last_name = models.CharField(max_length=30)
+
 class Course(models.Model):
-	primary_key = models.IntegerField()
-	department = models.CharField(max_length=50)
-	MODALITY = (
-		('0', 'Online'),
-		('1', 'In Class'),
-	)
-	modality= models.CharField(max_length=1, choices= MODALITY)
-	program = models.CharField(max_length=50)
 	name = models.CharField(max_length=50)
-	section = models.FloatField('format xxx.xxx')
-	year = models.PositiveSmallIntegerField('format xxxx')
+	year = models.PositiveSmallIntegerField()
 	SEMESTERS = (
 		('1', 'Spring'),
 		('2', 'Summer'),
@@ -20,45 +20,51 @@ class Course(models.Model):
 	)
 	semester = models.CharField(max_length=1, choices=SEMESTERS)
 
-class Instructor(models.Model):
-	first_name = models.CharField(max_length=30)
-	last_name = models.CharField(max_length=30)
-	# An instructor can teach many courses, and a course can be 
-	# taught by many instructors
-	courses = models.ManyToManyField(Course)
+#class Results_Topic(models.Model):
+#	topic_label = models.ForeignKey(
+#		Topic.topic_id,
+#		on_delete=models.CASCADE)
+#	comment_sentiment = models.ForeignKey(
+#		Comment.tone,
+#		on_delete=models.CASCADE)
 
-# might need for graphing?
-class Result(models.Model):
-	primary_key = models.IntegerField()
-	query = models.TextField()
-	result = models.TextField()
-	timestamp = models.DateTimeField()
+#class Results_Instructor(models.Model):
+#	name = models.ForeignKey(
+#		Instructor.first_name + " " + Instructor.last_name,
+#		on_delete=models.CASCADE)
+#	comment_count = # of comments
 
-class Stopword(models.Model):
-	primary_key = models.IntegerField()
-	text = models.TextField()
-
-# topics can have many comments
-class Topic(models.Model):
-	topic_id = models.PositiveSmallIntegerField('a number between 1-5')
-
-# classes below created from back-end-database.rst (D81)
-# I believe we need this to store the information sent up through the back-end
 class Comment(models.Model):
+	# Topic of Instructor comment?
+	TYPES = (
+		('0', 'instructor'),
+		('1', 'topic')
+	)
+	type_of_comm = models.CharField(max_length=1, choices=TYPES)
+	# many comments belong to one instructor
+	instructor = models.ForeignKey(
+		Instructor,
+		on_delete=models.CASCADE)
+	# many comments belong to one course
+	course = models.ForeignKey(
+		Course,
+		on_delete=models.CASCADE)
+	# what the comment says
+	text = models.TextField()
+	# what is the sentiment?
 	TONES = (
 		('pos', 'positive'),
 		('neu', 'neutral'),
 		('neg', 'negative')
 	)
 	tone = models.CharField(max_length=3, choices=TONES)
-	text = models.TextField()
-	# many comments belong to one course
-	course = models.ForeignKey(
-		Course,
-		on_delete=models.CASCADE)
-	# many comments belong to one topic
-	topic = models.ForeignKey(
-		Topic,
-		on_delete=models.CASCADE)
-	instructor_id = models.IntegerField()
+	# Topic ID
+	topic_id = models.IntegerField()
 
+class Topic(models.Model):
+	topic_id = models.IntegerField()
+	# many topics belong to one comment
+	comment = models.ForeignKey(
+		Comment,
+		on_delete=models.CASCADE)
+	text = models.TextField()
