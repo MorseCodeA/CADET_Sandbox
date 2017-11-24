@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 # Dashboard model dependencies
-from dashboard.models import Result
+#from dashboard.models import Result
 
 # method 1 of delivering json and instance obj data
 def get_chart_data(request, *args, **kwargs):

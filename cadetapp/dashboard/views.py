@@ -21,7 +21,7 @@ ChartInstructorData
 from documentation.views import DocumentationView
 
 # Models dependencies
-from .models import Result
+#from .models import Result
 
 class DashboardView(TemplateView):
     template_name = 'dashboard/index.html'
