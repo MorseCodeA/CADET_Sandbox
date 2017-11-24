@@ -11,7 +11,6 @@ from dashboard.models import Comment, Instructor, Course, Topic, Result, Stopwor
 # This will then be called by Anh's code to display.
 
 def index(request):
-
     return render(request, 'controller/index.html')
 
 def organizeResults(result):

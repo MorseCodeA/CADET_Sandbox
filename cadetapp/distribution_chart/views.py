@@ -19,30 +19,76 @@ class ChartTopicData(APIView):
     # which will include instance from Results.  Notice the saved data will
     # need to be converted back (again) into JSON format in the final step,
     # since that is compatible with AJAX call for frontend
-    def get(self, request, format = None):
-        
-        # hardcoded for now, until we get the updated data from Results model
-        topic_labels = ["Topic 1", "Topic 2", "Topic 3", "Topic 4",
-                        "Topic 5", "Topic 6"]
-        #comments_count = [33, 23, 12, 27, 18, 40]
+    def get(self, request, format = None):        
+        # hardcoded for now, until we get the updated data from Results model 
         data = {
-            "topic_labels": topic_labels,
-            "comment_sentiments": {
-                "positive": {},
-                "neutral": {},
-                "negative": {},
-            }
+                "Topic 1": {
+                    "positive": "15",
+                    "neutral": "2",
+                    "negative": "12",
+                },
+                "Topic 2": {
+                   "positive": "9",
+                    "neutral": "2",
+                    "negative": "37",
+                },
+                "Topic 3": {
+                    "positive": "8",
+                    "neutral": "2",
+                    "negative": "32",
+                },
+                "Topic 4": {
+                    "positive": "5",
+                    "neutral": "8",
+                    "negative": "20",
+                },
+                "Topic 5": {
+                    "positive": "5",
+                    "neutral": "29",
+                    "negative": "2",
+                },
         }
         return Response(data)
 
+class ChartTopicWordData(APIView):
+    # function return mapping of topic and words associated with that topic
+    def get(self, request, format = None):
+        topic_word_data = {
+            "Topic 1": ["happy, good, fun, yay, smile"],
+            "Topic 2": ["sad, boo, mean, hard, lethal"],
+            "Topic 3": ["happy, good, fun, yay, smile"],
+            "Topic 4": ["happy, good, fun, yay, smile"],
+            "Topic 5": ["happy, good, fun, yay, smile"],
+        }
+        return Response(topic_word_data)
 
 class ChartInstructorData(APIView):
     def get(self, request, format = None):
-        # hardcoded for now, until we get the updated data from Results model
-        instructor_names = ["Joe Smoe", "Louis XIV", "Ludwig Wiggtenstein"]
-        comments_sentiments_dict  = {}
-        data = {
-            "instructor_names": instructor_names,
-            "comments_count": comments_count,
+        instructor_data = {
+                "Instructor Full Name 1": {
+                    "positive": "15",
+                    "neutral": "2",
+                    "negative": "12",
+                },
+                "Instructor Full Name 2": {
+                   "positive": "9",
+                    "neutral": "2",
+                    "negative": "37",
+                },
+                "Instructor Full Name 3": {
+                    "positive": "8",
+                    "neutral": "2",
+                    "negative": "32",
+                },
+                "Instructor Full Name 4": {
+                    "positive": "5",
+                    "neutral": "8",
+                    "negative": "20",
+                },
+                "Instructor Full Name 5": {
+                    "positive": "5",
+                    "neutral": "29",
+                    "negative": "2",
+                },
         }
-        return Response(data)
+        return Response(instructor_data)

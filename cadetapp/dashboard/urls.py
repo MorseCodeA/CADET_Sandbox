@@ -36,6 +36,7 @@ urlpatterns = [
     # by using Django REST Framework
     url(r'^api/chart/topic/data/$', ChartTopicData.as_view()),
     url(r'^api/chart/instructor/data/$', ChartInstructorData.as_view()),
+    
     # also another way to creating an endpoint to serve json object
     url(r'^api/data/$', get_chart_data, name='api-data'),
 ]
