@@ -1,0 +1,134 @@
+{% load staticfiles %}
+<!-- Jack's dependencies -->
+<script src="{% static 'vendor/bootstrap/js/bootstrap337.min.js' %}"></script>
+<script>upload_progress_url = "/dashboard/file_upload/upload_progress"</script>
+<script>
+    $(function () {
+    var dropZoneId = "drop-zone";
+    var mouseOverClass = "mouse-over";
+    var dropZone = $("#" + dropZoneId);
+    var ooleft = dropZone.offset().left;
+    var ooright = dropZone.outerWidth() + ooleft;
+    var ootop = dropZone.offset().top;
+    var oobottom = dropZone.outerHeight() + ootop;
+    var inputFile = dropZone.find("input");
+    document.getElementById(dropZoneId).addEventListener("dragover", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    dropZone.addClass(mouseOverClass);
+    var x = e.pageX;
+    var y = e.pageY;
+    if (!(x < ooleft || x > ooright || y < ootop || y > oobottom)) {
+    inputFile.offset({ top: y - 15, left: x - 100 });
+    } else {
+    inputFile.offset({ top: -400, left: -400 });
+    }
+    }, true);
+    })
+</script>
+<script>
+$(document).ready(function(){
+            $("#open_btn").click(function() {
+            $.FileDialog({multiple: true}).on('files.bs.filedialog', function(ev) {
+                var files = ev.files;
+                var text = "";
+                files.forEach(function(f) {
+                    text += f.name + "<br/>";
+                });
+                $("#output").html(text);
+            }).on('cancel.bs.filedialog', function(ev) {
+                $("#output").html("Cancelled!");
+            });
+        });
+  //Deals with uploader
+  uuid = $('#progressBar').data('progress_bar_uuid');
+
+  // form submission
+  $('form').submit(function(){
+    // Prevent multiple submits
+    if ($.data(this, 'submitted')) return false;
+    // Append X-Progress-ID uuid form action
+    this.action += (this.action.indexOf('?') == -1 ? '?' : '&') + 'X-Progress-ID=' + uuid;
+    // Update progress bar
+    function update_progress_info() {
+      $.getJSON(upload_progress_url, {'X-Progress-ID': uuid}, function(data, status){
+          var progress = parseInt(data.received, 10)/parseInt(data.size, 10)*100;
+          $('#progressBar').attr('value', progress);
+        window.setTimeout(update_progress_info, 200);
+      });
+    }
+    window.setTimeout(update_progress_info, 200);
+    $.data(this, 'submitted', true); // mark form as submitted.
+    return true;
+  });
+});
+</script>
+<script>
+    function Upload(){
+        var x = document.getElementById("id_file");
+        var table = document.getElementById("myTable");
+        for(var i=table.rows.length;i>1;i--) {
+            document.getElementById("myTable").deleteRow(i-1);
+        }
+        if ('files' in x) {
+            if (x.files.length != 0) {
+                for (var i = 0; i < x.files.length;  i++) {
+                    var row = table.insertRow(-1);
+                    var cell1 = row.insertCell(0);
+                    var cell2 = row.insertCell(1);
+                    var cell3 = row.insertCell(2);
+                    var file = x.files[i];
+                    if ('name' in file) {
+                        cell1.innerHTML = file.name;
+                        cell2.innerHTML = (file.size/1048576).toFixed(2)+ " MB";
+                    }
+                }
+            }
+        }
+    }
+</script>
+<script>
+//Function that allows the dropdown button to work
+$(function(){
+    $(".dropdown-menu").on('click', 'li a', function(){
+      $(".btn:first-child").text($(this).text());
+      $(".btn:first-child").val($(this).text());
+   });
+
+});
+</script>
+<script>
+    function fileSubmit(){
+        var file_input = document.getElementById("id_file");
+        var submit_button = document.getElementById("submit_button");
+        var modal_button = document.getElementById("modal_button");
+        var modal_text = document.getElementById("modal_text");
+        var validFileExtensions = [".csv",".xlsx"];
+        var check = true;
+        if( file_input.files.length == 0 ){
+            modal_text.innerHTML = "Please select a file to input!";
+            modal_button.click();
+        } else {
+            for (var i = 0; i < file_input.files.length;  i++) {
+                var file = file_input.files[i];
+                var minor_check = false;
+                sFileName = file.name;
+                for (var j = 0; j < validFileExtensions.length; j++) {
+                    var sCurExtension = validFileExtensions[j];
+                    if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+                        minor_check = true;
+                    }
+                }
+                if (minor_check == false) {
+                    check = false;
+                }
+            }
+            if (check == true) {
+                submit_button.click();
+            } else {
+                modal_text.innerHTML = "Sorry the files selected are invalid. The allowed extensions are: " + validFileExtensions.join(", ");
+                modal_button.click();
+            }
+        }
+    }
+</script>

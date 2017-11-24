@@ -1,4 +1,5 @@
 # CADET_Sandbox
+Python 3.4, Django 1.11
 
 A text repo to put all of our CADET Django code before we push it to Phabricator. 
 
@@ -13,7 +14,7 @@ git clone https://github.com/AshleyMorse/CADET_Sandbox
 cd CADET_Sandbox 
 ```
 
-### 2. Virtual Environment (highly recommended)
+### 2. Virtual Environment (optional, but highly recommended)
 
 A. General virtualenv 
 ```bash 
@@ -52,19 +53,57 @@ source cadetenv/bin/activate
 sudo pip install django --upgrade 
 ```
 
-# install dependencies
-```bash
-pip install -r requirements.txt
-```
-### III. Activate Django App  
+### III. Activate Django App
 
 ```bash
+#install dependencies
+pip install -r requirements.txt
+
 # migrate database, default is sqlite
 python manage.py migrate 
 
-# run server,
-python manage.py runserver  
+# Run this when you first begin
+python manage.py migrate --run-synchdb
+
+# run server
+python manage.py runserver
 ```
+
+#### Common Issues in the Installation Steps  
+
+**Make sure you're using python +3.0**  
+
+You need these libraries installed in order to run our Django Cadet:  
+```
+# notice we install with pip3 not pip
+pip3 install djangorestframework
+
+# node for setting up node modules
+sudo apt-get install npm
+
+# d3 library
+pip3 install django-nvd3
+
+```
+
+### IV. Front-End Development Set Up
+
+This section is for future front-end developers who wishes to modify the HTML,
+CSS, and JS of the project.
+
+We are using Gulp as a taskrunner to autocompile JS and CSS assets.  Two files
+Gulpfile.js and package.json lists all dependencies and configuration.  In
+order to set up gulp to your local environment, you must have node.js set up.
+Run these commands:
+
+```bash
+# node will search for package.json file and install dependencies
+npm init
+# this command finds the Gulpfile.js and run all tasks there, mostly it tells gulp to compile and minify all js and sass files in teh assets directory
+gulp
+
+```
+
 
 
 

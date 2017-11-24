@@ -1,0 +1,76 @@
+{% extends 'dashboard/base-fileupload.html' %}
+{% block content %}
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="/">Dashboard</a>
+    </li>
+    <li class="breadcrumb-item active"> Upload</li>
+</ol>
+<hr>
+<div style="height: 1000px;">
+    <div class="file-uploader-container container">
+        <div class="jumbotron">
+            <div class="container">
+                <h2>Upload A File</h2>
+                <p>Select the files to upload</p>
+                <form method="post" enctype="multipart/form-data" action="?X-Progress-ID=test" autocomplete="off">
+                    {% csrf_token %}
+                    <label class="btn btn-submit">
+                        <button type="button" class="btn btn-success" onclick="document.getElementById('id_file').click()">Browse Files...</button>
+                    </label>
+                    <label class="btn btn-submit">
+                        <button type="button" class="btn btn-primary" onclick="fileSubmit()">Submit</button>
+                    </label>
+                    <button type="submit" id="submit_button" hidden="hidden" value="submit"></button>
+                    <h2>
+                        <progress id="progressBar" data-progress_bar_uuid="test" style="width:100%" value="0" max="100"></progress>
+                    </h2>
+                    <div id="drop-zone">
+                        Drop files here...
+                        <div id="clickHere">
+                            <input type="file" name="file" style="opacity:0;" id="id_file" multiple onchange="Upload()"/>
+                        </div>
+                    </div>
+                </form>
+                <div class="container">
+
+                    <!-- Trigger the modal with a button -->
+                    <button type="button" hidden="hidden" id=modal_button data-toggle="modal" data-target="#myModal"></button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal" role="dialog">
+                        <div class="modal-dialog">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2>File Upload</h2>
+                                </div>
+                                <div class="modal-body">
+                                    <p id="modal_text">ERROR</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h3>File Browser</h3>
+            <div class="table-responsive">
+                <table id= "myTable" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th>File Size</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div><!-- END jumbotron -->
+        </div><!-- END file uploader container  -->
+        {% endblock %}

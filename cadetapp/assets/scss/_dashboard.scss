@@ -1,0 +1,32 @@
+.navbar {
+  background: $cadet-blue !important;
+}
+nav {
+  #mainNav {
+    background: $cadet-slate-white !important;
+    .navbar-brand {
+      font-family: 'quandon';
+      color: $cadet-blue;
+    }
+    a {
+      color: $cadet-blue;
+    }
+    .navbar {
+      &.navbar-expand-lg {
+        &.navbar-dark {
+          .nav-link {
+            color: $cadet-blue;
+          }
+          &.fixed-top {
+            background: $cadet-slate-white !important;
+            color: $cadet-blue;
+          }
+        }
+      }
+    }
+  }
+}
+
+.fixed-top, .bg-cadet {
+  background: $cadet-slate-white !important;
+}

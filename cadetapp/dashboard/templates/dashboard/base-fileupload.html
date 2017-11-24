@@ -1,0 +1,38 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="CADET Test Website, JHU, Fall 2017">
+  <meta name="author" content="Team KAJJA">
+  <title>File Upload </title>
+  <!-- Load Uploader CSS Partial -->
+  {% include 'base/uploader_css.html' %}
+  <script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+</head>
+<body class="fixed-nav sticky-footer" id="page-top">
+  <div class="bg-container">
+    <!-- Navigation-->
+    {% include 'base/navigation.html' %}
+    <div class="content-wrapper">
+    <div class="container-fluid">
+          <!-- call content here -->
+          {% block content %}{% endblock %}
+      </div>
+    </div>
+    <!-- /.container-fluid-->
+    <!-- /.content-wrapper-->
+
+    <!-- Load Footer Partial -->
+    {% include 'base/footer.html' %}
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+    <!-- Load JS scripts -->
+    {% include 'base/js.html' %}
+    {% include 'base/uploader_js.html' %}
+</body>
+</html>
