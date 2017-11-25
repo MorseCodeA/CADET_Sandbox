@@ -42,51 +42,7 @@
         </div>
       </div>
     </div>
-<!-- script chartjs lib -->
-<script>
-  var ctx1 = document.getElementById('topic-dist-chart').getContext('2d');
-  var chart = new Chart(ctx1, {
-    // type of chart we want to create
-    type: 'bar',
-    // data for our dataset
-    data: {
-      labels: ["Topic 1", "Topic 2", "Topic 3", "Topic 4",
-      "Topic 5", "Topic 6"],
-      datasets: [{
-        label: "Positive",
-        backgroundColor: "rgba(0, 141, 142, 0.7)",
-        data: [3,7,13,4,23,2]
-        },
-        {
-        label: "Neutral",
-        backgroundColor: "rgb(155, 155, 155)",
-        data: [4,3,5,1,2,1]
-        },
-        {
-        label: "Negative",
-        backgroundColor: "rgba(224, 60, 49, 0.7)",
-        data: [7,2,6,4,2,18]
-        }]
-    },
-    // Configuration options go here
-    options: {
-      scales: {
-      yAxes: [{
-        scaleLabel: {
-        display: true,
-        labelString: 'Number of Comments'
-        },
-    }],
-      xAxes: [{
-        scaleLabel: {
-        display: true,
-        labelString: 'Topic ID'
-      }
-    }],
-    }
-  });
-</script>
-<!-- test chartjs lib, with ajax call -->
+<!-- chartjs lib, with ajax call -->
 <script>
   function drawTopicDistribution(topicLabel, posArr, neuArr, negArr) {
     var ctx = document.getElementById('topic-dist-chart-ajax').getContext('2d');
