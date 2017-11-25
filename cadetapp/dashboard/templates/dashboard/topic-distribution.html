@@ -101,16 +101,12 @@
 <!-- test chartjs lib, with ajax call -->
 <script>
   var endpoint = '/api/chart/topic/data/'
-  var comments_count = []
-  var labels = [];
   $.ajax({
     method: 'GET',
     url: endpoint,
     success: function(data){
       console.log(data)
-      labels = data.topic_labels
-      comments_count = data.comments_count
-      setChart()
+      //setChart()
     },
     error: function(error_data){
       console.log("--- error ---")

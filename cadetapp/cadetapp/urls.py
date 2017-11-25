@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'dashboard/', include('dashboard.urls')),
     url(r'controller/', include('controller.urls')),
+    url(r'api/', include('distribution_chart.urls')),
 ]
 
 if settings.DEBUG:
