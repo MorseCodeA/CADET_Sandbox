@@ -5,26 +5,16 @@
     <h1 class="main-heading">Topic Distribution </h1>
     <div class="topic-distribution-container container">
       <div class="row">
-        <div class='col-sm-12 col-md-8 col-lg-8' url-endpoint='/api/chart/topic/data/'>
+        <div class='col-sm-12 col-md-8 col-lg-10 col-lg-offset-1' url-endpoint='/api/chart/topic/data/'>
           <h3 class="text-center"> Topic Distribution </h3>
           <canvas id="topic-dist-chart-ajax"></canvas>
-        </div>
-        <div class="col-sm-12 col-md-4 col-lg-4">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h4 class="panel-title">Words to Topic</h4>
-            </div>
-            <div class="panel-body">
-              Panel content
-            </div>
-          </div>
         </div>
       </div>
     </div>
     <div class="topic-comment-container">
       <div class='row'>
         <div class='col-xs-12 col-lg-12'>
-          <h5 class="dist-subtitle">Topic Comments</h5>
+          <h5 class="dist-subtitle">Words to Topics</h5>
           <div class="topic-table-container" data-example-id="hoverable-table">
             <table class="table table-hover">
               <thead>
@@ -150,7 +140,8 @@
     url: endpoint,
     success: function(data){
       for (var i = 0; i < data.topic.length; i++){
-        topic_label_arr.push(data.topic[i].topic_id);
+        topic_label_arr.push("Topic " + data.topic[i].topic_id);
+
         sentiments = data.topic[i].sentiment_count;
         for ( key in sentiments) {
           pos_arr.push(sentiments[key].pos);

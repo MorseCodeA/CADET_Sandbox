@@ -76,7 +76,7 @@ body.fixed-nav {
 
 h1.main-heading {
   color: #dee2e6;
-  font-family: "gentona-bold", sans-serif; }
+  font-family: "gentona-medium", sans-serif; }
 
 .navbar {
   background: #F9F9F9 !important; }
@@ -232,30 +232,42 @@ nav #mainNav .navbar.navbar-expand-lg.navbar-dark.fixed-top {
 
 #topic-distribution .topic-distribution-container,
 #topic-distribution .topic-comment-container {
-  background: rgba(255, 255, 255, 0.85);
-  padding: 20px;
-  margin: 20px; }
+  background: rgba(255, 255, 255, 0.85); }
+
+#topic-distribution .topic-distribution-container {
+  padding-bottom: 1.25em; }
 
 #topic-distribution .dist-subtitle {
   text-align: center;
   font-family: "gentona-bold", sans-serif;
   color: rgba(0, 94, 184, 0.8); }
 
-#topic-distribution .topic-comment-container table thead tr.table-heading {
-  font-size: 0.85em;
-  color: #868e96; }
+#topic-distribution .panel-heading {
+  background: rgba(67, 215, 197, 0.8);
+  text-align: center;
+  color: white; }
 
-#topic-distribution .topic-comment-container table thead tr th {
-  padding: 0.45rem; }
+#topic-distribution .panel-body {
+  background: #dee2e6;
+  padding: 0.75rem 0rem 0.75rem 1.5rem;
+  font-size: 0.85rem;
+  color: #9B9B9B; }
 
-#topic-distribution .topic-comment-container table tbody tr th {
-  color: rgba(67, 215, 197, 0.8);
-  padding: 0.45rem; }
-
-#topic-distribution .topic-comment-container table td {
-  font-size: 0.85em;
-  color: #9B9B9B;
-  padding: 0.45rem; }
+#topic-distribution .topic-comment-container {
+  margin-top: 20px;
+  padding-top: 1em; }
+  #topic-distribution .topic-comment-container table thead tr.table-heading {
+    font-size: 0.85em;
+    color: #868e96; }
+  #topic-distribution .topic-comment-container table thead tr th {
+    padding: 0.45rem; }
+  #topic-distribution .topic-comment-container table tbody tr th {
+    color: rgba(67, 215, 197, 0.8);
+    padding: 0.45rem; }
+  #topic-distribution .topic-comment-container table td {
+    font-size: 0.85em;
+    color: #9B9B9B;
+    padding: 0.45rem; }
 
 #drop-zone {
   width: 100%;
