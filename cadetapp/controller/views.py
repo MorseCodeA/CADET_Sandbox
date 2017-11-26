@@ -62,7 +62,37 @@ def organizeTopicWordResults(topic_list):
 
 	result = [topic_id_list, topic_word_list]
 	return result
-		
+
+
+def organizeInstructorCommentResults(comment_list):
+	inst_name_list = []
+	# find out how many instructors there are
+	for comment in comment_list:
+		name = Instructor.first_name + " " + Instructor.last_name
+		inst_name_list.append(name)
+	
+	# this list has unique values of instructors (ex: [1,2,3,4,5])
+	inst_name_list = list(set(topic_id_list))
+	num_topics = len(topic_id_list)
+
+	# create the tone lists and initlaize it to zero
+	pos_list = [0] * num_topics
+	neu_list = [0] * num_topics
+	neg_list = [0] * num_topics	
+
+	for instructor in inst_name_list:
+		for comment in comment_list:
+			name_model = Instructor.first_name + " " + Instructor.last_name
+			if (name_model == instructor):
+				if (comment.tone == 'pos'):
+					++pos_list[topic_id];
+				elif (comment.tone == 'neu'):
+					++neu_list[topic_id]
+				elif (comment.tone == 'neg'):
+					++neg_list[topic_id]
+
+	result = [topic_id_list, pos_list, neu_list, neg_list]
+	return result 		
 
     # parse json
 #    parsed_json = json.loads(result.GET)
