@@ -1,0 +1,118 @@
+from django.db import models
+import datetime import datetime
+import json
+import requests
+import random
+
+URL_DATA = {
+        'db_url':'https://jsonplaceholder.typicode.com/',
+        'table_instructor':'users/'
+        'table_course':'posts/'
+   }      
+        
+
+class CADETresult(models.Model):
+        dburl=models.CharField(
+                max_length=200,3
+                default='')
+        table=models.CharField(
+                max_length=50,
+                default='default')
+        pkid=models.IntegerField(default=-1)
+        def getbaseurl(self):
+                return 'https://' + self.dburl +'/'
+        def gettableurl(self):
+                return self.getbaseurl() + self.table + '/'
+        def getentryurl(self):
+                return self.gettableurl()+str(self.pkid)
+        def connstatus(self):
+                tableresp=requests.get(self.gettableurl())
+                entryresp=requests.get(self.getentryurl()) 
+                print('Table Status:'+str(tableresp.ok))
+                print('Entry Status:'+str(entryresp.ok))
+                return tableresp.ok & entryresp.ok
+        
+class Course(models.Model):
+        id=models.IntegerField(primary_key=True,unique=True,default=-1)
+        name=models.CharField(
+                max_length=30,
+                default='Fundamentals of Software Engineering')
+        year=models.IntegerField(default=datetime.now().year)
+        program=models.CharField(
+                max_length=30,
+                default='Comp Sci')
+        MODALITY=(
+                (1,'Spring'),
+                (2,'Summer'),
+                (3,'Fall')
+        )
+        modality=models.IntegerField(
+                default=-1,
+                choices=MODALITY,
+                default=MODALITY[1])
+        num_sect=models.IntegerField(default=0)
+
+        def initialize(self,entry=-1):
+                resp=requests.get(
+                        URL_DATA['db_url']
+                        + URL_DATA['table_course']
+                        + str(entry))
+                if resp.ok:
+                        jsonObj=resp.json()
+                        try:
+                                self.id=jsonObj['id']
+                                #self.program=jsonObj['name'].split()[0]
+                                self.modality=jsonObj['name'].split()[1]
+                                self.save()
+                        except KeyError as err:
+                                print('Unknown key: '+ str(err))
+                else:
+                        print("Unable to access table entry")
+
+        
+# Create your models here.
+class Instructor(models.Model):
+        id=models.IntegerField(primary_key=True,unique=True,default=-1)
+        first_name=models.CharField(max_length=30,default='Joel')
+        last_name=models.CharField(max_length=30,default='Coffman')
+        
+        def initialize(self,entry=-1):
+                resp=requests.get(
+                        URL_DATA['db_url']
+                        + URL_DATA['table_instructor']
+                        + str(entry))
+                if resp.ok:
+                        jsonObj=resp.json()
+                        try:
+                                self.id=jsonObj['id']
+                                self.first_name=jsonObj['name'].split()[0]
+                                self.last_name=jsonObj['name'].split()[1]
+                                self.save()
+                        except KeyError as err:
+                                print('Unknown key: '+ str(err))
+                else:
+                        print("Unable to access table entry")
+
+                        
+class Comments(models.Model):
+        anon_id=models.IntegerField(default=-1)
+        course=models.ForeignKey(
+                Course,
+                on_delete=models.CASCADE)
+        instrcutor=models.ForeignKey(
+                Instructor,
+                on_delete=models.CASCADE)
+        c_comm=models.TextField(default='N/A')
+        i_comm=models.TextField(default='N/A')
+        a_comm=models.TextField(default='N/A')
+        timestamp=models.DateTimeField()
+
+        def initialize(self,entry=-1):
+                cadet=CADETresult(table='comments',pkid=entry)
+                resp.requests.get(cadet.getentryurl())
+                if resp.ok:
+                        pass
+
+                
+                       
+                
