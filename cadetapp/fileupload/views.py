@@ -15,12 +15,13 @@ from fileupload.uploadhandler import ProgressBarUploadHandler
 from django.core.cache import cache
 from django.core.files.uploadhandler import TemporaryFileUploadHandler
 
+from fileupload.DataConversion import CSVfiletoJSONobj
+
 
 class UploadView(View):
     def upload_view(request):
         documents = Document.objects.all()
-        return render(request, 'upload.html', {'documents':
-                                                              documents})
+        return render(request, 'upload.html', {'documents': documents})
     def file_upload(request):
         if request.method == 'POST':
             files = request.FILES.getlist('file')
@@ -28,6 +29,14 @@ class UploadView(View):
             if form.is_valid():
                 for a_file in files:
                     Document(file=a_file).save()
+                    JSONinput = CSVfiletoJSONobj
+                    JSONinput._init_(JSONinput)
+                    JSONinput.set_input_path(JSONinput, '/home/hartnerk/CADET_Sandbox/cadetapp/media/downloads/'+str(a_file))
+                    #JSONinput.set_input_path(JSONinput, '/../media/downloads/'+str(a_file))                
+                    JSONinput.set_output_path(JSONinput, '/home/hartnerk/CADET_Sandbox/cadetapp/media/downloads/cadet-test-a.json')
+                    #JSONinput.set_output_path(JSONinput, '../media/downloads/'+str(a_file))
+                     #JSONinput.set_fieldnames(JSONinput, "anon id","Program","Modality","Course Number/ Section ID","Instructor Last Name", "Instructor First Name", "Course comments","Instructor comments","[Additional comments, if available]")
+                    JSONinput.CSVtoJSON_Obj(JSONinput)
                 return redirect('upload.html')
         else:
             form = DocumentForm()

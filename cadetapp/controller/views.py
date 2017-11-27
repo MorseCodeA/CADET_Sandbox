@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 
-from dashboard.models import Comment, Instructor, Course, Topic, Results_Topic
+from dashboard.models import Comment, Instructor, Course, Topic
 
 # The purpose of this file is to take Josh's query from the data layer and 
 # organize the information woth the structure from /dashboard/models.py. 
