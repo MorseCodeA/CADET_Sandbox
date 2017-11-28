@@ -63,7 +63,7 @@ pip install -r requirements.txt
 python manage.py migrate 
 
 # Run this when you first begin
-python manage.py migrate --run-synchdb
+python manage.py migrate --run-syncdb
 
 # run server
 python manage.py runserver
