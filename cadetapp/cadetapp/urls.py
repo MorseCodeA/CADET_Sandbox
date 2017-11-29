@@ -17,11 +17,16 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf.urls.static import static
 from django.conf import settings
+from django.views.generic.base import RedirectView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'dashboard/', include('dashboard.urls')),
     url(r'controller/', include('controller.urls')),
+    url(r'api/', include('distribution_chart.urls')),
+    url(r'documentation/', include('documentation.urls')),
+    #redirect / to dashboard view
+    url(r'^.*$', RedirectView.as_view(url='dashboard/', permanent=False))
 ]
 
 if settings.DEBUG:

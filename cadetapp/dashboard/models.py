@@ -20,20 +20,6 @@ class Course(models.Model):
 	)
 	semester = models.CharField(max_length=1, choices=SEMESTERS)
 
-#class Results_Topic(models.Model):
-#	topic_label = models.ForeignKey(
-#		Topic.topic_id,
-#		on_delete=models.CASCADE)
-#	comment_sentiment = models.ForeignKey(
-#		Comment.tone,
-#		on_delete=models.CASCADE)
-
-#class Results_Instructor(models.Model):
-#	name = models.ForeignKey(
-#		Instructor.first_name + " " + Instructor.last_name,
-#		on_delete=models.CASCADE)
-#	comment_count = # of comments
-
 class Comment(models.Model):
 	# Topic of Instructor comment?
 	TYPES = (

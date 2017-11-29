@@ -2,54 +2,39 @@
 {% load staticfiles %}
 {% block content %}
   <div id="topic-distribution">
-    <h1 class="main-heading"> Overview >> Topic Distribution </h1>
-    <div class="topic-distribution-container">
-      <div class='row'>
-        <div class='col-sm-12' url-endpoint='/api/chart/data/'>
-          <div class='row'>
-            <div class='col-xs-12 col-lg-10 col-lg-offset-1'>
-              <h4 class="dist-subtitle">Topic Distribution</h4>
-              <!-- testing hardcode on js only -->
-              <canvas id="topic-dist-chart"></canvas>
-            </div>
-          </div>
-          <div class='row'>
-            <div class='col-xs-12 col-lg-4' url-endpoint='/api/chart/data/'>
-              topicDistGraph with AJAX
-              <canvas id="topic-dist-chart-ajax"></canvas>
-            </div>
-          </div>
+    <h1 class="main-heading">Topic Distribution </h1>
+    <div class="topic-distribution-container container">
+      <div class="row">
+        <div class='col-sm-12 col-md-8 col-lg-10 col-lg-offset-1' url-endpoint='/api/chart/topic/data/'>
+          <h3 class="text-center"> Topic Distribution </h3>
+          <canvas id="topic-dist-chart-ajax"></canvas>
         </div>
       </div>
     </div>
     <div class="topic-comment-container">
       <div class='row'>
         <div class='col-xs-12 col-lg-12'>
-          <h5 class="dist-subtitle">Topic Comments</h5>
+          <h5 class="dist-subtitle">Words to Topics</h5>
           <div class="topic-table-container" data-example-id="hoverable-table">
             <table class="table table-hover">
               <thead>
                 <tr class="table-heading">
                   <th>Topic ID</th>
-                  <th>Words</th>
-                  <th>More</th>
+                  <th>Words mapped for Topic ID</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <th scope="row">1</th>
                   <td>social, happy, people, friendly, success, science, engineering, challenging, best </td>
-                  <td>See All</td>
                 </tr>
                 <tr>
                   <th scope="row">2</th>
                   <td>great, school, medicine, exceptional, network, competition, curve, formal, boom, bang</td>
-                  <td>See All</td>
                 </tr>
                 <tr>
                   <th scope="row">3</th>
                   <td>deflation, low, tough, crazy, mean, stress, attack, ignore, work, little</td>
-                  <td>See All</td>
                 </tr>
               </tbody>
             </table>
@@ -57,105 +42,73 @@
         </div>
       </div>
     </div>
-<!-- script chartjs lib -->
+<!-- chartjs lib, with ajax call -->
 <script>
-    var ctx1= document.getElementById('topic-dist-chart').getContext('2d');
-    var chart = new Chart(ctx1, {
-    // The type of chart we want to create
-    type: 'bar',
-    // The data for our dataset
-    data: {
-      labels: ["Topic 1", "Topic 2", "Topic 3", "Topic 4",
-      "Topic 5", "Topic 6"],
-      datasets: [{
-        label: "Positive",
-        backgroundColor: "rgba(0, 141, 142, 0.7)",
-        data: [3,7,13,4,23,2]
-        },
-        {
-        label: "Neutral",
-        backgroundColor: "rgb(155, 155, 155)",
-        data: [4,3,5,1,2,1]
-        },
-        {
-        label: "Negative",
-        backgroundColor: "rgba(224, 60, 49, 0.7)",
-        data: [7,2,6,4,2,18]
-        }]
-    },
-    // Configuration options go here
-    options: {
-      scales: {
-      yAxes: [{
-        scaleLabel: {
-        display: true,
-        labelString: 'Number of Comments'
-        },
-    }],
-      xAxes: [{
-        scaleLabel: {
-        display: true,
-        labelString: 'Topic ID'
+  function drawTopicDistribution(topicLabel, posArr, neuArr, negArr) {
+    var ctx = document.getElementById('topic-dist-chart-ajax').getContext('2d');
+    var topicChart = new Chart(ctx, {
+      // The type of chart we want to create
+      type: 'bar',
+      // The data for our dataset
+      data: {
+        labels: topicLabel,
+        datasets: [{
+          label: "Positive",
+          backgroundColor: "rgba(0, 141, 142, 0.7)",
+          data: posArr
+          },
+          {
+          label: "Neutral",
+          backgroundColor: "rgb(155, 155, 155)",
+          data: neuArr
+          },
+          {
+          label: "Negative",
+          backgroundColor: "rgba(224, 60, 49, 0.7)",
+          data: negArr
+          }]
+      },
+      // Configuration options go here
+      options: {
+        scales: {
+        yAxes: [{
+          scaleLabel: {
+          display: true,
+          labelString: 'Number of Comments'
+          },
+      }],
+        xAxes: [{
+          scaleLabel: {
+          display: true,
+          labelString: 'Topic ID'
+        }
+      }],
       }
-    }],
     }
+    });
   }
-});
-</script>
-<!-- test chartjs lib, with ajax call -->
-<script>
   var endpoint = '/api/chart/topic/data/'
-  var comments_count = []
-  var labels = [];
+  var topic_label_arr = []
+  var pos_arr = [], neu_arr = [], neg_arr = []
   $.ajax({
     method: 'GET',
+    dataType: 'json',
     url: endpoint,
     success: function(data){
-      labels = data.topic_labels
-      comments_count = data.comments_count
-      setChart()
+      for (var i = 0; i < data.topic.length; i++){
+        topic_label_arr.push("Topic " + data.topic[i].topic_id);
+
+        sentiments = data.topic[i].sentiment_count;
+        for ( key in sentiments) {
+          pos_arr.push(sentiments[key].pos);
+          neu_arr.push(sentiments[key].neu);
+          neg_arr.push(sentiments[key].neg);
+        }
+      }
+      drawTopicDistribution(topic_label_arr, pos_arr, neu_arr, neg_arr);
     },
     error: function(error_data){
-      console.log("--- error ---")
-      console.log(error_data)
-    }
-  })
-  function setChart(){
-    var ctx2 = document.getElementById("topic-dist-chart-ajax");
-    var myChart = new Chart(ctx2, {
-      type: 'bar',
-      data: {
-      labels: labels,
-      datasets: [{
-        label: 'Number of Comments',
-        data: comments_count,
-        backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(255, 159, 64, 0.2)'
-        ],
-        borderColor: [
-        'rgba(255,99,132,1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)',
-        'rgba(153, 102, 255, 1)',
-        'rgba(255, 159, 64, 1)'
-        ],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero:true
-          }
-        }]
-      }
+      console.log(error_data);
     }
   });
 </script>

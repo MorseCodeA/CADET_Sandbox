@@ -17,7 +17,6 @@ urlpatterns = [
 
     # file upload urls
     url('file_upload/', include('fileupload.urls')),
-
     url('about', DashboardView.about_view, name='about'),
     url('stopword', DashboardView.stopword_view, name='stopword'),
     url('export', DashboardView.export_view, name='export'),
@@ -25,11 +24,12 @@ urlpatterns = [
 
     # documentation urls
     url('documentation', DocumentationView.home, name="doc-home"),
-    
     # better way of setting up endpoint from backend to frontend
     # by using Django REST Framework
     url(r'^api/chart/topic/data/$', ChartTopicData.as_view()),
     url(r'^api/chart/instructor/data/$', ChartInstructorData.as_view()),
     # also another way to creating an endpoint to serve json object
     url(r'^api/data/$', get_chart_data, name='api-data'),
+
 ]
+
