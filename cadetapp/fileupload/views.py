@@ -8,6 +8,10 @@ from django.http import HttpResponse
 from .forms import DocumentForm
 from .models import Document
 from django.conf import settings
+
+from fileupload.DataConversion import CSVfiletoJSONobj
+from django.conf import settings
+
 import os
 
 def upload(request):
@@ -17,12 +21,20 @@ def upload(request):
 
 def file_upload(request):
     messages.info(request, 'Your file has been successfully uploaded!')
+    media_path = settings.MEDIA_ROOT + '/downloads/'
     if request.method == 'POST':
         files = request.FILES.getlist('file')
         form = DocumentForm(request.POST, request.FILES)
         if form.is_valid():
             for a_file in files:
                 Document(file=a_file).save()
+                JSONinput = CSVfiletoJSONobj
+                JSONinput._init_(JSONinput)
+                JSONinput.set_input_path(JSONinput, media_path + str(
+                    a_file))
+                JSONinput.set_output_path(JSONinput, media_path +
+                                          str('cadet-file-to-json.json'))
+                JSONinput.CSVtoJSON_Obj(JSONinput)
                 return redirect('upload/')
     else:
         form = DocumentForm()
@@ -36,8 +48,34 @@ def upload_progress(request):
         progress_id = request.META['X-Progress-ID']
     else:
         progress_id = None
-
     if progress_id:
         cache_key = "%s_%s" % (request.META['REMOTE_ADDR'], progress_id)
         data = cache.get(cache_key)
         return HttpResponse(json.dumps(data))
+
+# Kyle's code backup
+#
+# class UploadView(View):
+#     def upload_view(request):
+#         documents = Document.objects.all()
+#         return render(request, 'upload.html', {'documents': documents})
+#     def file_upload(request):
+#         media_path = settings.MEDIA_ROOT + '/downloads/'
+#         if request.method == 'POST':
+#             files = request.FILES.getlist('file')
+#             form = DocumentForm(request.POST, request.FILES)
+#             if form.is_valid():
+#                 for a_file in files:
+#                     Document(file=a_file).save()
+#                     JSONinput = CSVfiletoJSONobj
+#                     JSONinput._init_(JSONinput)
+#                     JSONinput.set_input_path(JSONinput, media_path + str(
+#                         a_file))
+#
+#                     JSONinput.set_output_path(JSONinput, media_path +
+#                                               str('cadet-file-to-json.json'))
+#                     JSONinput.CSVtoJSON_Obj(JSONinput)
+#                 return redirect('upload.html')
+#         else:
+#             form = DocumentForm()
+#         return render(request, 'dashboard/file_upload.html', {'form': form})
