@@ -15,19 +15,31 @@ from fileupload.uploadhandler import ProgressBarUploadHandler
 from django.core.cache import cache
 from django.core.files.uploadhandler import TemporaryFileUploadHandler
 
+from fileupload.DataConversion import CSVfiletoJSONobj
+
+from django.conf import settings
+
 
 class UploadView(View):
     def upload_view(request):
         documents = Document.objects.all()
-        return render(request, 'upload.html', {'documents':
-                                                              documents})
+        return render(request, 'upload.html', {'documents': documents})
     def file_upload(request):
+        media_path = settings.MEDIA_ROOT + '/downloads/'
         if request.method == 'POST':
             files = request.FILES.getlist('file')
             form = DocumentForm(request.POST, request.FILES)
             if form.is_valid():
                 for a_file in files:
                     Document(file=a_file).save()
+                    JSONinput = CSVfiletoJSONobj
+                    JSONinput._init_(JSONinput)
+                    JSONinput.set_input_path(JSONinput, media_path + str(
+                        a_file))
+
+                    JSONinput.set_output_path(JSONinput, media_path +
+                                              str('cadet-file-to-json.json'))
+                    JSONinput.CSVtoJSON_Obj(JSONinput)
                 return redirect('upload.html')
         else:
             form = DocumentForm()
