@@ -19,7 +19,7 @@ URL_DATA = {
         'res_details_table':'results_details/',
         'res_top_table':'results_topics/',
         'stop_words_table':'stop_words/',
-        'topic_words_table':'topic_words/',
+        'topic_words_table':'todos/',            #'topic_words/',
    }      
         
 class Instructor(models.Model):
@@ -175,8 +175,7 @@ class Comment(models.Model):
                         + str(entry))
                 if resp.ok:                    # Ensures get request returned 200
                         jsonObj=resp.json()    # get JSON obj of table entry
-                        try:
-                                
+                        try:                        
                                 self.id=jsonObj['id']
                                 # Get course FK. If DNE, initialize the course 
                                 courseID=jsonObj['postId']
@@ -195,6 +194,7 @@ class Comment(models.Model):
                                 self.a_comm=jsonObj['body']
                                 #self.timestamp=jsonObj['column_name']
                                 random.seed()
+                                self.anon_id=random.ranint(0,1000)
                                 self.tone=random.randint(-1,1)
                                 self.topic=random.randint(0,100)
                                 self.save()
@@ -203,6 +203,47 @@ class Comment(models.Model):
                                 print('Error: Unknown key: '+str(err))
                 else:                          # Bad return from request
                         print("Unable to access table entry")
-#END class Comment                
-                       
-                
+#END class Comment
+
+
+class Topic_Words(models.Model):
+        """Topic Words is a set of words that constitue a topic.
+        Attributes:
+        id - identifier (PK,integer) in both local and remote databases.
+        topic_id = .
+        word = .
+
+        Functions:
+        self.initialize(entry) - initializes a TopicWord obj and saves it to the local database.
+        """        
+        id=models.IntegerField(primary_key=True,unique=True,default=-1)
+        topic_id=models.IntegerField(default=-1)
+        words=models.CharField(max_length=30,default='kittens')
+
+        def initialize(self,entry=-1):
+                """Loads the current object with the information from course database.
+                 Note: saves the object to the local database for later use.
+
+                Param: entry - id (PK in remote database)
+                Returns: N/A
+                """
+                # May be a better way to build this string, but this works
+                resp=requests.get(
+                        URL_DATA['db_url']
+                        + URL_DATA['topic_words_table']
+                        + str(entry))
+                if resp.ok:                    # Ensures get request returned 200
+                        jsonObj=resp.json()    # get JSON obj of table entry
+                        try:                                
+                                self.id=jsonObj['id']
+                                self.topic_id=jsonObj['userId']
+                                self.words=jsonObj['title']
+                                self.save()
+                        # Attempt to fail gracefully
+                        except KeyError as err:
+                                print('Error: Unknown key: '+str(err))
+                else:                          # Bad return from request
+                        print("Unable to access table entry")
+#END class Topic_Words
+
+
