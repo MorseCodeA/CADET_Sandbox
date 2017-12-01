@@ -11,15 +11,13 @@ These strings are called in the initialize(entry) functions to determines the UR
 URL_DATA = {
         'db_url':'https://jsonplaceholder.typicode.com/',
         'comment_table':'comments/',
-        'comm_dset_table':'comment_dataset/',
         'course_table':'albums/',               #'course/',
-        'datasets_table':'datasets/',
         'instructor_table':'users/',            #'instructors/',
-        'results_table':'results/',
-        'res_details_table':'results_details/',
-        'res_top_table':'results_topics/',
-        'stop_words_table':'stop_words/',
-        'topic_words_table':'todos/',            #'topic_words/',
+        'results_table':'photos/',              #'results/',
+        'res_details_table':'todos/',           #'results_details/',
+        'res_top_table':'posts/',               #'results_topics/',
+        #'stop_words_table':'stop_words/',      #FUTURE GROWTH
+        'topic_words_table':'todos/',           #'topic_words/',
    }      
         
 class Instructor(models.Model):
@@ -194,7 +192,7 @@ class Comment(models.Model):
                                 self.a_comm=jsonObj['body']
                                 #self.timestamp=jsonObj['column_name']
                                 random.seed()
-                                self.anon_id=random.ranint(0,1000)
+                                self.anon_id=random.randint(0,1000)
                                 self.tone=random.randint(-1,1)
                                 self.topic=random.randint(0,100)
                                 self.save()
@@ -204,7 +202,6 @@ class Comment(models.Model):
                 else:                          # Bad return from request
                         print("Unable to access table entry")
 #END class Comment
-
 
 class Topic_Words(models.Model):
         """Topic Words is a set of words that constitue a topic.
@@ -246,4 +243,160 @@ class Topic_Words(models.Model):
                         print("Unable to access table entry")
 #END class Topic_Words
 
+class Results_Details(models.Model):
+        """Results_Details correlates a comment to a topic ID.
+        Attributes:
+        id - identifier (PK,integer) in both local and remote databases.
+        topic_id - topic (FK, integer) related to this result
+        comment_id - comment (FK,integer) realted to this result
+        course_com_sent - .
+        instr_com_sent - .
+        Functions:
+        self.initialize(entry) - initialize a Results_Details obj and save it to the local database.
+        """        
+        id=models.IntegerField(primary_key=True,unique=True,default=-1)
+        topic=models.ForeignKey(
+                Topic_Words,
+                on_delete=models.CASCADE)
+        comment=models.ForeignKey(
+                Comment,
+                on_delete=models.CASCADE)
+        COMMENT_STAT=(
+                (0, 'no comment'),
+                (1, 'comment valid'),
+        )
+        course_comm_sent = models.IntegerField(choices=COMMENT_STAT,default=0)
+        instr_comm_sent = models.IntegerField(choices=COMMENT_STAT,default=0)
 
+        def initialize(self,entry=-1):
+                """Loads the current object with the information from course database.
+                 Note: saves the object to the local database for later use.
+
+                Param: entry - Results Details id (PK in remote database)
+                Returns: N/A
+                """
+                # May be a better way to build this string, but this works
+                resp=requests.get(
+                        URL_DATA['db_url']
+                        + URL_DATA['res_details_table']
+                        + str(entry))
+                if resp.ok:                    # Ensures get request returned 200
+                        jsonObj=resp.json()    # get JSON obj of table entry
+                        try:                        
+                                self.id=jsonObj['id']
+                                # Get course FK. If DNE, initialize the course 
+                                topicID=jsonObj['userId']
+                                if not Topic_Words.objects.filter(id=topicID):
+                                        Topic_Words().initialize(topicID)
+                                self.topic_id=topicID
+                                
+                                # Get instructor FK. If DNE, initialize the instructor
+                                commentID=jsonObj['id']
+                                if not Comment.objects.filter(id=commentID):
+                                        Comment().initialize(commentID)
+                                self.comment_id=commentID
+
+                                random.seed()
+                                self.course_comm_sent=int(jsonObj['completed']=='true')
+                                self.instr_comm_sent=random.randint(0,1)
+                                self.save()
+                        # Attempt to fail gracefully
+                        except KeyError as err:
+                                print('Error: Unknown key: '+str(err))
+                else:                          # Bad return from request
+                        print("Unable to access table entry")
+#END class Results_Details
+
+class Results(models.Model):
+        """Results are the output of the NLTK processing
+        Attributes:
+        id - identifier (PK,integer) in both local and remote databases.
+        num_topics
+        words_per_topic
+        iterations
+        stop_words
+        timestamp
+
+        Functions:
+        self.initialize(entry) - initialize a Results_Details obj and save it to the local database.
+        """        
+        id=models.IntegerField(primary_key=True,unique=True,default=-1)
+        num_topics=models.IntegerField(default=1)
+        words_per_topic=models.IntegerField(default=2)
+        iterations=models.IntegerField(default=3)
+        stop_words=models.IntegerField(default=4)
+        timestamp=models.DateTimeField(auto_now=True)
+
+        def initialize(self,entry=-1):
+                """Loads the current object with the information from course database.
+                 Note: saves the object to the local database for later use.
+
+                Param: entry - Results Details id (PK in remote database)
+                Returns: N/A
+                """
+                # May be a better way to build this string, but this works
+                resp=requests.get(
+                        URL_DATA['db_url']
+                        + URL_DATA['results_table']
+                        + str(entry))
+                if resp.ok:                    # Ensures get request returned 200
+                        jsonObj=resp.json()    # get JSON obj of table entry
+                        try:                        
+                                self.id=jsonObj['id']
+                                # Get course FK. If DNE, initialize the course 
+ 
+                                #self.num_topics=jsonObj['num_topics']
+                                #self.words_per_topic=jsonObj['words_per_topic']
+                                #self.iterations=jsonObj['iterations']
+                                #self.stop_words=jsonObj['stop_words']
+                                #self.num_topics=jsonObj['num_topics']
+                                self.save()
+                        # Attempt to fail gracefully
+                        except KeyError as err:
+                                print('Error: Unknown key: '+str(err))
+                else:                          # Bad return from request
+                        print("Unable to access table entry")
+#END class Results
+
+class Results_Topic(models.Model):
+        """Results_Topics does something, but I do not know what
+        Attributes:
+        id - identifier (PK,integer) in both local and remote databases.
+        results_id - 
+
+        Functions:
+        self.initialize(entry) - initialize a Results_Details obj and save it to the local database.
+        """        
+        id=models.IntegerField(primary_key=True,unique=True,default=-1)
+        results=models.ForeignKey(
+                Results,
+                on_delete=models.CASCADE)
+        
+        def initialize(self,entry=-1):
+                """Loads the current object with the information from course database.
+                 Note: saves the object to the local database for later use.
+
+                Param: entry - Results Details id (PK in remote database)
+                Returns: N/A
+                """
+                # May be a better way to build this string, but this works
+                resp=requests.get(
+                        URL_DATA['db_url']
+                        + URL_DATA['res_top_table']
+                        + str(entry))
+                if resp.ok:                    # Ensures get request returned 200
+                        jsonObj=resp.json()    # get JSON obj of table entry
+                        try:                        
+                                self.id=jsonObj['id']
+                                resultsID=jsonObj['userId']
+                                if not Results.objects.filter(id=resultsID):
+                                        Results().initialize(resultsID)
+                                self.results_id=resultsID
+                                
+                                self.save()
+                        # Attempt to fail gracefully
+                        except KeyError as err:
+                                print('Error: Unknown key: '+str(err))
+                else:                          # Bad return from request
+                        print("Unable to access table entry")
+#END class Results_Details
