@@ -2,8 +2,6 @@
 from django.core.cache import cache
 from django.core.files.uploadhandler import TemporaryFileUploadHandler
 
-# copied from http://djangosnippets.org/snippets/678/
-
 class ProgressBarUploadHandler(TemporaryFileUploadHandler):
     """
     Cache system for TemporaryFileUploadHandler
@@ -44,10 +42,4 @@ class ProgressBarUploadHandler(TemporaryFileUploadHandler):
         pass
 
     def upload_complete(self):
-        # deprecated in favor of setting an expiry time a-la-nginx
-        # setting an expiry time fixes the race condition in which the last
-        # progress request happens after the upload has finished meaning the
-        # bar never gets to 100%
         pass
-        #if self.cache_key:
-        #    cache.delete(self.cache_key)

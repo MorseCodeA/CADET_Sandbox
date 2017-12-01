@@ -9,7 +9,6 @@
           <div class='row'>
             <div class='col-xs-12 col-lg-12'>
               <h4 class="dist-subtitle">Instructor Distribution</h4>
-              <!-- testing hardcode on js only -->
               <canvas id="instructor-dist-chart"></canvas>
             </div>
           </div>
@@ -20,27 +19,27 @@
     		  <div class="panel-heading">Instructors</div>
     		  <div class="panel-body" style="max-height: 120px;overflow-y: scroll;">
     		    <!-- Table -->
-    		  <table class="instructor-side-table">
-    		  	<tbody> 
-    		  		<tr> 
-    		  			<td>Birdy Birdface</td> 
-    		  		</tr> 
-    		  		<tr> 
-    		  			<td>Mark Otto</td> 
-    		  		</tr> 
-    		  		<tr> 
-    		  			<td>Jacob Thornton</td> 
-    		  		</tr> 
-    		  		<tr> 
-    		  			<td>Larry the Bird</td> 
-    		  		</tr> 
-    		  		<tr> 
-    		  			<td>Luther Rex</td> 
-    		  		</tr> 
-    		  			<td>Mr. Beans</td> 
-    		  		</tr> 
-    		  	</tbody> 
-    		  </table>
+      		  <table class="instructor-side-table">
+      		  	<tbody> 
+      		  		<tr> 
+      		  			<td>Birdy Birdface</td> 
+      		  		</tr> 
+      		  		<tr> 
+      		  			<td>Mark Otto</td> 
+      		  		</tr> 
+      		  		<tr> 
+      		  			<td>Jacob Thornton</td> 
+      		  		</tr> 
+      		  		<tr> 
+      		  			<td>Larry the Bird</td> 
+      		  		</tr> 
+      		  		<tr> 
+      		  			<td>Luther Rex</td> 
+      		  		</tr> 
+      		  			<td>Mr. Beans</td> 
+      		  		</tr> 
+      		  	</tbody> 
+      		  </table>
     		  </div>
     		</div>
     	</div>
@@ -84,28 +83,28 @@
 </div>
 <!-- script chartjs lib -->
 <script>
-    var ctx1= document.getElementById('instructor-dist-chart').getContext('2d');
-    var chart = new Chart(ctx1, {
+function drawInstructorDist(instructorLabel, posArr, neuArr, negArr) {
+  var ctx = document.getElementById('instructor-dist-chart').getContext('2d');
+  var instructorChart = new Chart(ctx, {
     // The type of chart we want to create
     type: 'bar',
     // The data for our dataset
     data: {
-      labels: ["Name 1", "Name 2", "Name 3", "Name 4",
-      "Name 5", "Name 6"],
+      labels: instructorLabel,
       datasets: [{
         label: "Positive",
         backgroundColor: "rgba(0, 141, 142, 0.7)",
-        data: [3,7,13,4,23,2]
+        data: posArr
         },
         {
         label: "Neutral",
         backgroundColor: "rgb(155, 155, 155)",
-        data: [4,3,5,1,2,1]
+        data: neuArr
         },
         {
         label: "Negative",
         backgroundColor: "rgba(224, 60, 49, 0.7)",
-        data: [7,2,6,4,2,18]
+        data: negArr
         }]
     },
     // Configuration options go here
@@ -120,11 +119,36 @@
       xAxes: [{
         scaleLabel: {
         display: true,
-        labelString: 'Instructor Name'
+        labelString: 'Instructor Full Name'
       }
     }],
     }
   }
-});
+  });
+}
+var endpoint = '/api/chart/instructor/data/'
+  var instructor_name = []
+  var pos_arr = [], neu_arr = [], neg_arr = []
+  $.ajax({
+    method: 'GET',
+    dataType: 'json',
+    url: endpoint,
+    success: function(data){
+      for (var i = 0; i < data.instructor.length; i++){
+        console.log("~~~ inside for loop ---")
+        instructor_name.push(data.instructor[i].instructor_name);
+        sentiments = data.instructor[i].sentiment_count;
+        for ( key in sentiments) {
+          pos_arr.push(sentiments[key].pos);
+          neu_arr.push(sentiments[key].neu);
+          neg_arr.push(sentiments[key].neg);
+        }
+      }
+      drawInstructorDist(instructor_name, pos_arr, neu_arr, neg_arr);
+    },
+    error: function(error_data){
+      console.log(error_data);
+    }
+  });
 </script>
 {% endblock %}

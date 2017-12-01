@@ -10,8 +10,6 @@ from django.urls import reverse
 # Upload dependencies
 from fileupload.forms import DocumentForm
 from fileupload.models import Document
-# Importing custom upload handler class
-from fileupload.uploadhandler import ProgressBarUploadHandler
 
 # Chart dependencies
 from distribution_chart.views import ChartTopicData, \

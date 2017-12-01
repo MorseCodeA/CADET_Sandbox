@@ -1,19 +1,34 @@
 {% extends 'dashboard/base-fileupload.html' %}
+{% load staticfiles %}
 {% block content %}
-        <div class="file-upload-container container">
-            <h1> Upload Page </h1>
-            <p> Success! You file is uploaded!</p>
-            <ul>
-                {% for doc in documents %}
-                  <li>
-                    <a href="{{ doc.url }}">
-                        <!-- view not returning name, need to fix model -->
-                        {{ doc.name}}</a>
-                    <small>Uploaded at: {{ doc.uploaded_at }}</small>
-                  </li>
-                {% endfor %}
-            </ul>
+<div class="options-container container">
+    <h2 class="text-center"> Upload Options </h2>
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button"
+                data-toggle="dropdown">Select CSV file<span class="caret"></span></button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+            {% for file in file_list %}
+            <li><a href="#">{{file}}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-xs-2">
+            <input class="form-control" id="ex1" type="text" placeholder="Number of Comments">
         </div>
+        <p></p>
+        <div class="col-xs-3">
+            <input class="form-control" id="ex2" type="text" placeholder="Number of Topics">
+        </div>
+        <p></p>
+        <div class="col-xs-4">
+            <input class="form-control" id="ex3" type="text" placeholder="Number of Iterations">
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-success" >Submit</button>
+</div>
 {% endblock %}
 
 

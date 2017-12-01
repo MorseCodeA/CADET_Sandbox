@@ -49,8 +49,7 @@ body.fixed-nav {
 
 h1.main-heading {
   color: $cadet-cloud-grey;
-  font-family: $subheading-font, sans-serif;
-
+  font-family: $light-subheading-font, sans-serif;
 }
 .navbar {
   background: $cadet-slate-white !important;
@@ -196,7 +195,6 @@ nav {
     }
   }   
 }
-
 // Distributions
 #instructor-distribution {
   .instructor-distribution-container, 
@@ -275,15 +273,29 @@ nav {
   .topic-distribution-container, 
   .topic-comment-container {
     background: rgba(255,255,255,0.85); 
-    padding: 20px;
-    margin: 20px;
+  }
+  .topic-distribution-container {
+    padding-bottom: 1.25em;
   }
   .dist-subtitle {
     text-align: center;
     font-family: $subheading-font, sans-serif;
     color: $cadet-blue-rgba;
   }
+  .panel-heading {
+        background: $cadet-teal-rgba;
+        text-align: center;
+        color: white;
+    }
+    .panel-body {
+        background: $cadet-cloud-grey;
+        padding: 0.75rem 0rem 0.75rem 1.5rem;
+        font-size: 0.85rem;
+        color: $cadet-txt-grey;
+  }
   .topic-comment-container {
+    margin-top: 20px;
+    padding-top: 1em;
     table {
       thead {
         tr {

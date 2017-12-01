@@ -59,7 +59,7 @@ MIDDLEWARE = [
 
 FILE_UPLOAD_HANDLERS = (
     #Use custom upload handler
-    "dashboard.uploadhandler.ProgressBarUploadHandler",
+    "fileupload.uploadhandler.ProgressBarUploadHandler",
     "django.core.files.uploadhandler.MemoryFileUploadHandler",
     "django.core.files.uploadhandler.TemporaryFileUploadHandler",
 )
