@@ -14,4 +14,6 @@ numpy==1.13.3
 numpydoc==0.7.0
 panda==0.3.1
 pandas==0.20.3
-djangorestframework-3.7.3
+djangorestframework==3.7.3
+pipenv==8.3.2
+requests==2.9.1
