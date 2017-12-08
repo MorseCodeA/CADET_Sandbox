@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'controller/', include('controller.urls')),
     url(r'api/', include('distribution_chart.urls')),
     url(r'documentation/', include('documentation.urls')),
+    url(r'results/', include('results.urls')),
     #redirect / to dashboard view
     url(r'^.*$', RedirectView.as_view(url='dashboard/', permanent=False))
 ]
