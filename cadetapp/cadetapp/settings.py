@@ -16,7 +16,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -27,7 +26,6 @@ SECRET_KEY = 'h&1ro2g+^oq=e57iv&^^d#*k80&5zw07%h9ng1p_)%jy6jx(5s'
 DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'cadetsandbox.pythonanywhere.com']
-
 
 # Application definition
 
@@ -138,3 +136,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 #Create the Media directory where all the files are stored
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+GLOBAL_SETTINGS = {'BACKEND_URL':'https://jsonplaceholder.typicode.com/'}
