@@ -15,12 +15,22 @@ class Meta_File_Info(models.Model):
         document_id - the document that the results are sourced from
         number_words_per_topic - - number of words used in a topic
         """
-        id=models.IntegerField(primary_key=True,unique=True,default=-1)
+        id = models.AutoField(primary_key=True)
         number_topics = models.IntegerField(default=0)
         number_iterations = models.IntegerField(default=0)
         document_id = models.IntegerField(default=0)
         number_words_per_topic = models.IntegerField(default=0)
 # END class Meta_File_Info
+
+class Comments(models.Model):
+        """
+
+        """
+        id = models.AutoField(primary_key=True)
+        positive = models.TextField()
+        neutral = models.TextField()
+        negative = models.TextField()
+############################################################################
 
 class Instructor(models.Model):
         """Instructor is an individual.
