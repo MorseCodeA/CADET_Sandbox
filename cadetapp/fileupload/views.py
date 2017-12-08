@@ -9,6 +9,7 @@ from .forms import DocumentForm, JsonForm
 from .models import Document
 from django.conf import settings
 from .DataConversion import CSVfiletoJSONobj
+from .PushJSON import DataPush
 import os
 
 def option_view(request):
@@ -19,11 +20,17 @@ def option_view(request):
             comments = form.cleaned_data['comments']
             topics = form.cleaned_data['topics']
             iterations = form.cleaned_data['iterations']
-            JSONinput = CSVfiletoJSONobj
-            JSONinput._init_(JSONinput)
-            JSONinput.set_input_path(JSONinput, form.cleaned_data['files'])
-            JSONinput.set_output_path(JSONinput, media_path + str('cadet-file-to-json.json'))
-            JSONinput.CSVtoJSON_Obj(JSONinput)
+            JSONinput = CSVfiletoJSONobj()
+            JSONinput._init_()
+            JSONinput.set_input_path(form.cleaned_data['files'])
+            JSONinput.set_output_path(media_path + str('cadet-file-to-json.json'))
+            JSONinput.CSVtoJSON_Obj()
+            messages.info(request, 'The JSON file has been successfully created!')
+
+            PushDataToDataTeam = DataPush()
+            PushDataToDataTeam._init_()
+            PushDataToDataTeam.PushJSONObject(comments, topics, iterations, media_path + str('cadet-file-to-json.json'))
+
             messages.info(request, 'The JSON file has been successfully created!')
             return redirect(request.path_info)
     else:
