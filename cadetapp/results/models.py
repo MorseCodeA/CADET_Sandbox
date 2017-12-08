@@ -30,6 +30,10 @@ class Comments(models.Model):
         positive = models.TextField()
         neutral = models.TextField()
         negative = models.TextField()
+
+class Results_Set(models.Model):
+        id=models.IntegerField(primary_key=True,unique=True,default=-1)
+        jsonObjs=models.TextField()
 ############################################################################
 
 class Instructor(models.Model):
