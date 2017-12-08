@@ -3,7 +3,25 @@ from datetime import datetime
 import json
 import requests
 import random
+
+
+class Meta_File_Info(models.Model):
+        """Meta_File_Info provides data about the parameters to NLTK process.
         
+        Attributes:
+        id - identifier (PK,integer) in both local and remote databases.
+        number_topics - number of topics in the result
+        number_iterations - number of iterations over data by NLTK
+        document_id - the document that the results are sourced from
+        number_words_per_topic - - number of words used in a topic
+        """
+        id=models.IntegerField(primary_key=True,unique=True,default=-1)
+        number_topics = models.IntegerField(default=0)
+        number_iterations = models.IntegerField(default=0)
+        document_id = models.IntegerField(default=0)
+        number_words_per_topic = models.IntegerField(default=0)
+# END class Meta_File_Info
+
 class Instructor(models.Model):
         """Instructor is an individual.
         Attributes:
