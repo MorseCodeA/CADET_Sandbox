@@ -5,7 +5,7 @@ import os
 #----------------------------------------------------------------------
 
 class CSVfiletoJSONobj:
-		#("anon id","Program","Modality","Course Number/ Section ID","Instructor Last Name", "Instructor First Name", "Course comments","Instructor comments","[Additional comments, if available]")
+	#("anon id","Program","Modality","Course Number/ Section ID","Instructor Last Name", "Instructor First Name", "Course comments","Instructor comments","[Additional comments, if available]")
 	
 	def _init_(self):
 		self.inputpath = 'string'
@@ -31,16 +31,17 @@ class CSVfiletoJSONobj:
 		self.fieldnames.append(fields)
 		
 
-	def CSVtoJSON_Obj(self):	
-
+	def CSVtoJSON_Obj(self):
 		csvfile = open(self.inputpath, 'r')
 		jsonfile = open(self.outputpath, 'w')
 		reader = csv.DictReader(csvfile, self.fieldnames)
-
 		next(reader)
 		next(reader)
+		json_list = {}
+		totalrows = 0
 		for row in reader:
-			json.dump(row, jsonfile)
-			jsonfile.write('\n')
+			json_list[totalrows] = row
+			totalrows += 1
+		json.dump(json_list, jsonfile)
 
 

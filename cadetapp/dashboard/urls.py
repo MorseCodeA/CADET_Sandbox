@@ -16,6 +16,7 @@ urlpatterns = [
         name='instructor-distribution'),
 
     # file upload urls
+    # fix file_upload error bc of missing dash
     url('file_upload/', include('fileupload.urls')),
     url('about', DashboardView.about_view, name='about'),
     url('stopword', DashboardView.stopword_view, name='stopword'),
