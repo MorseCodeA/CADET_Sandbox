@@ -21,33 +21,7 @@ class ChartTopicData(APIView):
     # Stub data for now, later instantiate instances from Ashley's models
 
     def get(self, request, format=None):
-        # this is the structure of my expected nested json result object
-        # currently it is hard coded, but later I expect to grab Results_Topic instance 
-        # data = {}
-        # data["topic"] = []
-        
-        # get data from data layer
-#        comment_list = []
-#        # organize data and compute comment tones
-#        topic_id_list = organizeTopicCommentResults(comment_list)[0]
-#        pos_list = organizeTopicCommentResults(comment_list)[1]
-#        neu_list = organizeTopicCommentResults(comment_list)[2]
-#        neg_list = organizeTopicCommentResults(comment_list)[3] 
-#        
-#        data = {"topic": []}
-#        for t in topic_id_list:
-#            data.update({
-#                "topic_id": t,
-#                "sentiment_count": [
-#                    {
-#                    "pos": pos_list[t],
-#                    "neu": neu_list[t],
-#                    "neg": neg_list[t]
-#                    }
-#                ]
-#            })
-           
-        topics_word_list = computeTopicResults()[0]
+        # this is the structure of my expected nested json result object        
         pos_list = computeTopicResults()[1]
         neu_list = computeTopicResults()[2]
         neg_list = computeTopicResults()[3]  
@@ -70,127 +44,60 @@ class ChartTopicData(APIView):
 class ChartTopicWordData(APIView):
     # function return mapping of topic and words associated with that topic
     def get(self, request, format=None):
-        # getting last five topic obj
-        # topic_obj = Topic.objects.all().order_by('-id')[:5]
-        # topic_word_data {}
-        # topic_word_data["topic"] = {}
-        # iterate and push the topic data to the same formal as bellow
+        topic_word_list = computeTopicResults()[0]
+
+        length = len(topic_word_list)
+        data = {'topic':[]}
+        for x in range(length):
+            data['topic'].append({
+            "topic_id": x+1,
+            "words": topic_word_list[x]
+            })
         
-        # get data from data layer
-#        topic_list = []
-#        # organize data and compute comment tones
-#        topic_id_list = organizeTopicWordResults(topic_list)[0]
-#        topic_word_list = organizeTopicCommentResults(topic_list)[1]
-#        
-#        topic_word_data = {"topic": []}
-#        for t in topic_id_list:
-#            data.update({
-#                "topic_id": t,
-#                "words": topic_word_list[t]
-#            })
-        
-        topic_word_data = {
-          "topic": [
-            {
-              "topic_id": "1",
-              "words": "happy, good, fun, yay, smile"
-            },
-            {
-              "topic_id": "2",
-              "words": "sad, boo, mean, hard, lethal"
-            },
-            {
-              "topic_id": "3",
-              "words": "hub, hubba, buh, duh, huh"
-            },
-            {
-              "topic_id": "4",
-              "words": "foo, baz, exe, why, zee"
-            },
-            {
-              "topic_id": "5",
-              "words": "red, white, blue, yellow, green"
-            }
-          ]
-        }
-        return Response(topic_word_data)
+#        topic_word_data = {
+#          "topic": [
+#            {
+#              "topic_id": "1",
+#              "words": "happy, good, fun, yay, smile"
+#            },
+#            {
+#              "topic_id": "2",
+#              "words": "sad, boo, mean, hard, lethal"
+#            },
+#            {
+#              "topic_id": "3",
+#              "words": "hub, hubba, buh, duh, huh"
+#            },
+#            {
+#              "topic_id": "4",
+#              "words": "foo, baz, exe, why, zee"
+#            },
+#            {
+#              "topic_id": "5",
+#              "words": "red, white, blue, yellow, green"
+#            }
+#          ]
+#        }
+        return Response(data)
 
 class ChartInstructorData(APIView):
     def get(self, request, format=None):
-        # get data from data layer
-#        inst_name_list = []
-#        # organize data and compute comment tones
-#        topic_id_list = organizeInstructorCommentResults(inst_name_list)[0]
-#        pos_list = organizeInstructorCommentResults(inst_name_list)[1]
-#        neu_list = organizeInstructorCommentResults(inst_name_list)[2]
-#        neg_list = organizeInstructorCommentResults(inst_name_list)[3] 
-#        
-#        data = {"instructor": []}
-#        for t in topic_id_list:
-#            data.update({
-#                "instructor_name": t,
-#                "sentiment_count": [
-#                    {
-#                    "pos": pos_list[t],
-#                    "neu": neu_list[t],
-#                    "neg": neg_list[t]
-#                    }
-#                ]
-#            })
+        inst_name_list = computeInstructorResults()[0]
+        pos_list = computeInstructorResults()[1]
+        neu_list = computeInstructorResults()[2]
+        neg_list = computeInstructorResults()[3]  
         
-    
-        instructor_data = {
-          "instructor": [
-            {
-              "instructor_name": "joe smoe",
-              "sentiment_count": [
-                {
-                  "pos": "28",
-                  "neu": "8",
-                  "neg": "2"
-                }
-              ]
-            },
-            {
-              "instructor_name": "nathalie fozz",
-              "sentiment_count": [
-                {
-                  "pos": "15",
-                  "neu": "3",
-                  "neg": "7"
-                }
-              ]
-            },
-            {
-              "instructor_name": "beavis butthead",
-              "sentiment_count": [
-                {
-                  "pos": "38",
-                  "neu": "8",
-                  "neg": "2"
-                }
-              ]
-            },
-            {
-              "instructor_name": "boaty boatface",
-              "sentiment_count": [
-                {
-                  "pos": "19",
-                  "neu": "2",
-                  "neg": "8"
-                }
-              ]
-            },
-            {
-              "instructor_name": "numbly doo",
-              "sentiment_count": [
-                {
-                  "pos": "7",
-                  "neu": "8",
-                  "neg": "20"
-                }
-              ]
-            }
-          ]
-        }
-        return Response(instructor_data)
+        length = len(pos_list)
+        data = {'instructor':[]}
+        for x in range(length):
+            data['instructor'].append({
+            "instructor_name": inst_name_list[x],
+                "sentiment_count": [
+                    {
+                    "pos": pos_list[x],
+                    "neu": neu_list[x],
+                    "neg": neg_list[x]
+                    }
+                ]
+            })
+        return Response(data)

@@ -28,3 +28,25 @@ def computeTopicResults():
 	    
 	result = [topic_word_list, pos_list, neu_list, neg_list]
 	return result
+	
+def computeInstructorResults():
+    last_result = Results_Set.objects.all().order_by('-id')[0]
+    result_JSON = last_result.jsonObjs
+    
+    inst_JSON = result_JSON[0]['results']['instructor_stats']
+    num_of_inst = len(inst_JSON)
+	
+    inst_name_list = []
+    pos_list = []
+    neu_list = []
+    neg_list = []
+	
+    for x in range(num_of_inst):
+	    inst_name_list.append(inst_JSON[x]['instructor_first_name'] + " " +\
+	    inst_JSON[x]['instructor_last_name'])
+	    pos_list.append(len(inst_JSON[x]['comments']['positive']))
+	    neu_list.append(len(inst_JSON[x]['comments']['neutral']))
+	    neg_list.append(len(inst_JSON[x]['comments']['negative']))
+	    
+    result = [inst_name_list, pos_list, neu_list, neg_list]
+    return result
