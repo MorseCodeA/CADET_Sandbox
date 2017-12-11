@@ -19,7 +19,7 @@
     		  <div class="panel-heading">Instructors</div>
     		  <div class="panel-body" style="max-height: 120px;overflow-y: scroll;">
     		    <!-- Table -->
-      		  <table class="instructor-side-table">
+      		  <!-- <table class="instructor-side-table">
       		  	<tbody> 
       		  		<tr> 
       		  			<td>Birdy Birdface</td> 
@@ -39,7 +39,7 @@
       		  			<td>Mr. Beans</td> 
       		  		</tr> 
       		  	</tbody> 
-      		  </table>
+      		  </table> -->
     		  </div>
     		</div>
     	</div>
@@ -48,7 +48,7 @@
     <div class="instructor-comment-container">
       <div class='row'>
         <div class='col-xs-12 col-lg-12'>
-          <h5 class="dist-subtitle">Instructor Comments</h5>
+          <h5 class="dist-subtitle">Comments</h5>
           <div class="instructor-table-container" data-example-id="hoverable-table">
             <table class="table table-hover">
               <thead>
@@ -115,11 +115,17 @@ function drawInstructorDist(instructorLabel, posArr, neuArr, negArr) {
         display: true,
         labelString: 'Number of Comments'
         },
+        ticks: {
+            beginAtZero: true   // minimum value will be 0.
+        }
     }],
       xAxes: [{
         scaleLabel: {
         display: true,
-        labelString: 'Instructor Full Name'
+        labelString: 'Instructor Full Name',
+        ticks: {
+            beginAtZero: true   // minimum value will be 0.
+        }
       }
     }],
     }

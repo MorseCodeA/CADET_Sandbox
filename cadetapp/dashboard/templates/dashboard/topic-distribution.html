@@ -11,7 +11,7 @@
         </div>
       </div>
     </div>
-    <div class="topic-comment-container">
+   <!--  <div class="topic-comment-container">
       <div class='row'>
         <div class='col-xs-12 col-lg-12'>
           <h5 class="dist-subtitle">Words to Topics</h5>
@@ -41,7 +41,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 <!-- chartjs lib, with ajax call -->
 <script>
   function drawTopicDistribution(topicLabel, posArr, neuArr, negArr) {
@@ -76,11 +76,17 @@
           display: true,
           labelString: 'Number of Comments'
           },
+          ticks: {
+            beginAtZero: true   // minimum value will be 0.
+          }
       }],
         xAxes: [{
           scaleLabel: {
           display: true,
-          labelString: 'Topic ID'
+          labelString: 'Topic ID',
+          ticks: {
+            beginAtZero: true   // minimum value will be 0.
+          }
         }
       }],
       }
