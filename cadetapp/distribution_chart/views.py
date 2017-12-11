@@ -47,62 +47,24 @@ class ChartTopicData(APIView):
 #                ]
 #            })
            
-            
-                
-        data = {
-          "topic": [
-            {
-              "topic_id": "1",
-              "sentiment_count": [
-                {
-                  "pos": "15",
-                  "neu": "5",
-                  "neg": "14"
-                }
-              ]
-            },
-            {
-              "topic_id": "2",
-              "sentiment_count": [
-                {
-                  "pos": "11",
-                  "neu": "19",
-                  "neg": "3"
-                }
-              ]
-            },
-            {
-              "topic_id": "3",
-              "sentiment_count": [
-                {
-                  "pos": "13",
-                  "neu": "6",
-                  "neg": "11"
-                }
-              ]
-            },
-            {
-              "topic_id": "4",
-              "sentiment_count": [
-                {
-                  "pos": "19",
-                  "neu": "2",
-                  "neg": "8"
-                }
-              ]
-            },
-            {
-              "topic_id": "5",
-              "sentiment_count": [
-                {
-                  "pos": "7",
-                  "neu": "9",
-                  "neg": "15"
-                }
-              ]
-            }
-          ]
-        }
+        topics_word_list = computeTopicResults()[0]
+        pos_list = computeTopicResults()[1]
+        neu_list = computeTopicResults()[2]
+        neg_list = computeTopicResults()[3]  
+        
+        length = len(pos_list)
+        data = {'topic':[]}
+        for x in range(length):
+            data['topic'].append({
+            "topic_id": x+1,
+                "sentiment_count": [
+                    {
+                    "pos": pos_list[x],
+                    "neu": neu_list[x],
+                    "neg": neg_list[x]
+                    }
+                ]
+            })
         return Response(data)
 
 class ChartTopicWordData(APIView):
