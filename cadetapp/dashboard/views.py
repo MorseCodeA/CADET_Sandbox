@@ -18,14 +18,10 @@ ChartInstructorData
 # Documentation depenciences
 from documentation.views import DocumentationView
 
-# Models dependencies
-#from .models import Result
-
 class DashboardView(TemplateView):
     template_name = 'dashboard/index.html'
 
     def index(request):
-        # later will call instances from Ashley's models,
         # which contains comments and topics
         # main dashboard located at http://example/dashboard
         return render(request, 'dashboard/index.html')

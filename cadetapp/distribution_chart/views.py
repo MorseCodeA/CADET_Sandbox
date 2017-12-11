@@ -2,10 +2,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from controller.views import *
 
-# Dashboard model dependencies
-#from dashboard.models import Result
-
-
 # method 1 of delivering json and instance obj data
 def get_chart_data(request, *args, **kwargs):
     data = {
@@ -14,20 +10,19 @@ def get_chart_data(request, *args, **kwargs):
     }
     return JsonResponse(data)
 
-# refactored class-based way of delivering json withr django rest framework
+# Manipulate the topic chart
 class ChartTopicData(APIView):
-    # here is the class that converts data from our Django-backend.
-    # the models have already been updated with results from the Flask-backend
-    # Stub data for now, later instantiate instances from Ashley's models
-
+    # Populate the topic chart with the number of positive, neutral, and 
+    # negative comments per topic. Data is recieved from results/views.py
     def get(self, request, format=None):
-        # this is the structure of my expected nested json result object        
+        # retrieve results from results/views.py      
         pos_list = computeTopicResults()[1]
         neu_list = computeTopicResults()[2]
         neg_list = computeTopicResults()[3]  
         
         length = len(pos_list)
         data = {'topic':[]}
+        # populate chart
         for x in range(length):
             data['topic'].append({
             "topic_id": x+1,
@@ -40,14 +35,19 @@ class ChartTopicData(APIView):
                 ]
             })
         return Response(data)
+# END class ChartTopicData
 
+# Manipulate the topic word panel below topic chart
 class ChartTopicWordData(APIView):
-    # function return mapping of topic and words associated with that topic
+    # Populate the panel below the topic chart with the list of words per 
+    # topic. Data is recieved from results/views.py
     def get(self, request, format=None):
+        # retrieve data from results/views.py
         topic_word_list = computeTopicResults()[0]
 
         length = len(topic_word_list)
         data = {'topic':[]}
+        # populate word list panel below topic chart
         for x in range(length):
             data['topic'].append({
             "topic_id": x+1,
@@ -79,9 +79,14 @@ class ChartTopicWordData(APIView):
 #          ]
 #        }
         return Response(data)
+# END class ChartTopicWordData
 
+# Manipulate the instrctor chart
 class ChartInstructorData(APIView):
+    # Populate the instructor chart with the number of positive, neutral, and 
+    # negative comments per instructor. Data is recieved from results/views.py
     def get(self, request, format=None):
+        # retieve data from results/views.py
         inst_name_list = computeInstructorResults()[0]
         pos_list = computeInstructorResults()[1]
         neu_list = computeInstructorResults()[2]
@@ -89,6 +94,7 @@ class ChartInstructorData(APIView):
         
         length = len(pos_list)
         data = {'instructor':[]}
+        # populate instructor chart
         for x in range(length):
             data['instructor'].append({
             "instructor_name": inst_name_list[x],
@@ -101,3 +107,4 @@ class ChartInstructorData(APIView):
                 ]
             })
         return Response(data)
+# END class ChartInstructorData

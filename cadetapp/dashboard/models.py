@@ -1,11 +1,19 @@
 from django.db import models
 from django.utils import timezone
 
+##################################################
+####              Latest Update               ####
+##################################################
+# Due to time constraints and complexity, this file's intended use was not 
+# actualized. Originally, this file or results/models.py was intended to be 
+# the file where data from the back end would be orgalized by classes and 
+# functions. Since the front end expects a JSON from the back end, it was 
+# easier to take the JSON, feed it into one model in results/models.py, and 
+# parse it to retrieve data, rather than parsing it and fitting it in the 
+# models below or in results/models.py.
+
 # This file will organize the data retrieved from the data layer after it has 
-# been analyzed. Based off of the Data layer team's spec D88, it is 
-# expected that A topic model dictionary and a list of comment objects will 
-# be retrieved. The following code below will take this information and model 
-# it in to a JSON that the charts in distribution_chart/views.py can read.
+# been analyzed. 
 #class Instructor(models.Model):
 #	first_name = models.CharField(max_length=30)
 #	last_name = models.CharField(max_length=30)

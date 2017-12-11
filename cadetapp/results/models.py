@@ -4,23 +4,40 @@ import json, jsonfield
 import requests
 import random
 
+# The model that stores the data from data layer in the form of an id and 
+# JSON object. Will be used by controller/views.py to reteieve data.
+class Results_Set(models.Model):
+        id=models.IntegerField(primary_key=True,unique=True,default=-1)
+        jsonObjs=jsonfield.JSONField(null=True,blank=True)
+# END class Results_Set
 
-class Meta_File_Info(models.Model):
-        """Meta_File_Info provides data about the parameters to NLTK process.
-        
-        Attributes:
-        id - identifier (PK,integer) in both local and remote databases.
-        number_topics - number of topics in the result
-        number_iterations - number of iterations over data by NLTK
-        document_id - the document that the results are sourced from
-        number_words_per_topic - - number of words used in a topic
-        """
-        id = models.AutoField(primary_key=True)
-        number_topics = models.IntegerField(default=0)
-        number_iterations = models.IntegerField(default=0)
-        document_id = models.IntegerField(default=0)
-        number_words_per_topic = models.IntegerField(default=0)
-# END class Meta_File_Info
+##################################################
+####              Latest Update               ####
+##################################################
+# Due to time constraints and complexity, this file's intended use was not 
+# actualized. Originally, this file or dashboard/models.py was intended to be 
+# the file where data from the back end would be orgalized by classes and 
+# functions. Since the front end expects a JSON from the back end, it was 
+# easier to take the JSON, feed it into one model in dashboard/models.py, and 
+# parse it to retrieve data, rather than parsing it and fitting it in the 
+# models below or in dashboard/models.py.
+
+#class Meta_File_Info(models.Model):
+#        """Meta_File_Info provides data about the parameters to NLTK process.
+#        
+#        Attributes:
+#        id - identifier (PK,integer) in both local and remote databases.
+#        number_topics - number of topics in the result
+#        number_iterations - number of iterations over data by NLTK
+#        document_id - the document that the results are sourced from
+#        number_words_per_topic - - number of words used in a topic
+#        """
+#        id = models.AutoField(primary_key=True)
+#        number_topics = models.IntegerField(default=0)
+#        number_iterations = models.IntegerField(default=0)
+#        document_id = models.IntegerField(default=0)
+#        number_words_per_topic = models.IntegerField(default=0)
+## END class Meta_File_Info
 
 #class Comments(models.Model):
 #        """
@@ -30,11 +47,6 @@ class Meta_File_Info(models.Model):
 #        positive = models.TextField()
 #        neutral = models.TextField()
 #        negative = models.TextField()
-
-class Results_Set(models.Model):
-        id=models.IntegerField(primary_key=True,unique=True,default=-1)
-        jsonObjs=jsonfield.JSONField(null=True,blank=True)
-############################################################################
 
 #class Instructor(models.Model):
 #        """Instructor is an individual.

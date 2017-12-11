@@ -8,7 +8,10 @@ from results.models import Results_Set
 # The purpose of this file is to take Results_Set that stores information 
 # from the data layer in results/views.py and compute the information to 
 # display in the topic and instructor chart in distribution_chart/views.py.
+
+# Parse JSON result for instrctor chart
 def computeTopicResults():
+    # retrieve JSON
 	last_result = Results_Set.objects.all().order_by('-id')[0]
 	result_JSON = last_result.jsonObjs
 	
@@ -28,8 +31,11 @@ def computeTopicResults():
 	    
 	result = [topic_word_list, pos_list, neu_list, neg_list]
 	return result
-	
+# END function computeTopicResults
+
+# Parse JSON result for instructor chart	
 def computeInstructorResults():
+    # retrieve JSON
     last_result = Results_Set.objects.all().order_by('-id')[0]
     result_JSON = last_result.jsonObjs
     
@@ -50,3 +56,4 @@ def computeInstructorResults():
 	    
     result = [inst_name_list, pos_list, neu_list, neg_list]
     return result
+# END function computeInstructorResults

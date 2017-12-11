@@ -6,11 +6,18 @@ import json, polling, random as rng, requests
 def index(request):
     return HttpResponse("Hello, world. You're at the results index.")
 
+# retrive data from either the database created by back end or alternativly, 
+# if that is unavailable, through a URL that contains a randomly generated 
+# JSON in a specific template
+##########################################################################
+#### Template expected from database ####
+
 def retrieve(request,result_id):
     from django.conf import settings
-    USE_STUB=True
+    USE_STUB=False
     
     url = settings.GLOBAL_SETTINGS['BACKEND_URL']+'api/json/get/EkoKhyvZN'
+    # Alternative site for example JSONs
     #url = settings.GLOBAL_SETTINGS['BACKEND_URL']+'users/%s/' % result_id
     response = 'URL: ' +url+' | Resp OK = '
     
@@ -63,6 +70,7 @@ def retrieve(request,result_id):
 #            resultset.jsonObjs = json.dumps(fakedResult)
 #        else: 
 #            resultset.jsonObjs = json.dumps(resp.json())
+            
         resultset.save()
         response = response + 'OK'
     except polling.MaxCallException:
@@ -71,6 +79,7 @@ def retrieve(request,result_id):
     return HttpResponse(response)
 # END def retrieve()
 
+# Should this be removed below?
 def instructorData(result_id):
     USE_STUB=True
     
@@ -84,4 +93,4 @@ def instructorData(result_id):
         
     except Results_Set.DoesNotExist:
         retrieve(result_id)
-        
+# END function instructorData

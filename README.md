@@ -21,9 +21,11 @@ A. General virtualenv
 # run virtualenv with python3, you can name your environment whatever. This example, we call it *cadetenv*.  
 python -m venv cadetenv   
 ```  
-If running virtual env command gives you an error, you might either have anaconda installed, which you need to follow [this setup](https://uoa-eresearch.github.io/eresearch-cookbook/recipe/2014/11/20/conda/).  
+If running virtual env command gives you an error, you might either have 
+anaconda installed, which you need to follow [this setup](https://uoa-eresearch.github.io/eresearch-cookbook/recipe/2014/11/20/conda/).  
 
-Mac and Ubuntu users might also run into installation error if pyenv is broken [broken pyenv](https://stackoverflow.com/questions/26215790/venv-doesnt-create-activate-script-python3) so add this modifier to the same command:   
+Mac and Ubuntu users might also run into installation error if pyenv is broken [broken pyenv](https://stackoverflow.com/questions/26215790/venv-doesnt-create-activate-script-python3) 
+so add this modifier to the same command:   
 ```bash
 python -m venv cadetenv --without-pip 
 ```
@@ -35,7 +37,8 @@ conda create -n my-dev python=3.4
 source activate my-dev
 ```
 
-The set up will automatically add pip and django packages.  Skip Step II: Django Installation.
+The set up will automatically add pip and django packages.  
+Skip Step II: Django Installation.
 
 ## II. Set Up: Django Installation  
 
@@ -99,7 +102,8 @@ Run these commands:
 ```bash
 # node will search for package.json file and install dependencies
 npm init
-# this command finds the Gulpfile.js and run all tasks there, mostly it tells gulp to compile and minify all js and sass files in teh assets directory
+# this command finds the Gulpfile.js and run all tasks there, mostly it tells 
+# gulp to compile and minify all js and sass files in teh assets directory
 gulp
 
 ```
