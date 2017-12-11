@@ -137,5 +137,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-
-GLOBAL_SETTINGS = {'BACKEND_URL':'https://jsonplaceholder.typicode.com/'}
+GLOBAL_SETTINGS = {'BACKEND_URL': 'https://next.json-generator.com/'}
+#GLOBAL_SETTINGS = {'BACKEND_URL':'https://jsonplaceholder.typicode.com/'}

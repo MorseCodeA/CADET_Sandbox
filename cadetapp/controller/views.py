@@ -3,6 +3,7 @@ import json
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
+from results.models import *
 
 #from dashboard.models import Comment, Instructor, Course, Topic
 
@@ -14,8 +15,8 @@ from django.urls import reverse
 # array of comment objects. A topic object has the word and topic_ID, and
 # a comment object will have the tone, which I can use to count the pos,
 # neu, and neg values.
-def organizeTopicCommentResults(comment_list):
-	topic_id_list = []
+def computeTopicResults():
+	
 	# find out how many topic_ids there are
 	for comment in comment_list:
 		topic_id_list.append(comment.topic_id)
