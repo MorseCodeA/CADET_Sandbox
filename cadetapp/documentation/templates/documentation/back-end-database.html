@@ -1,140 +1,139 @@
 {% extends 'dashboard/base.html' %}
 {% block content %}
-        <div class="documentation-wrapper-container container">
-            <h2> CADET Back-End Database </h2>
-            <div class="container">
-               
-<!-- This work is licensed under a Creative Commons 3.0 Unported License.
-
-http://creativecommons.org/licenses/by/3.0/legalcode -->
-<p>Course Assessment using Data Exploration of Text (CADET) is a tool which uses
-natural language processing to analyze student course feedback.  The automated
-tool is able to process large datasets, categorize comments by sentiment and
-topic as well as course and instructor.</p>
-<p>CADET requires a back-end database to store submitted data for later analysis
-and retrieval.  Through implementation of a database, source data files will
-not need to be re-uploaded and re-analyzed in order to be viewed a second
-time or by a second person reviewing the same data.</p>
-<div class="section" id="problem-description">
-<h1>Problem Description</h1>
-<p>The current implementation of CADET has no memory of previous data sets.  As
-such, data must be re-analyzed each time it is to be reviewed.  Also, all data
-for a particular analysis case must be processed at the same time in order to
-review any particular set of data.</p>
-<div class="section" id="requirements">
-<h2>Requirements</h2>
-<ul class="simple">
-<li>Functional Requirements:<ul>
-<li>The back-end database will provide a simple and intuitive structure for
-storing and retrieving data in order to assist with the overall behavior
-and usability of the CADET system.</li>
-<li>The database should be responsive and properly indexed in order to
-provide result sets quickly.<ul>
-<li>Lack of indexing within large datasets could force the database to
-perform mutliple full-table scans when attempting to query for a
-particular set of data filtered by un-indexed columns.</li>
-</ul>
-</li>
-<li>The database should also facilitate prevention of duplicate raw data in
-case an end-user attempts to upload/ingest a file that has already been
-processed.<ul>
-<li>Allowing duplicate data could potentially skew results of the analysis
-and produce inaccurate results; ostesibly corrupting the data.</li>
-</ul>
-</li>
-<li>The database will add to the overall flexibility of the system, and
-specificially the available data and interactions with the front-end as
-presented to the end-user.<ul>
-<li>Providing the ability to analyze across single-file datasets allows for
-a more broad scope analysis of datasets over time.</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Quality Requirements:<ul>
-<li>The database should facilitate and not impede the natural language
-processing functions of the CADET application.</li>
-<li>Introducing a database into the project will allow for future ehancement
-of capabilities based on the ability to combine and correlate disparate
-sets of raw data.</li>
-</ul>
-</li>
-</ul>
-</div>
-<div class="section" id="use-cases">
-<h2>Use Cases</h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Data Ingestion:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-<p>Primary Actor: All other modules within the data-layer code base requiring
-interaction with the database.  Specifically, each API inserting data to the
-database or retrieving data from the database.</p>
-<p>Goal: New data, received from the presentation layer, is ingested into the
-database for later analysis.</p>
-<p>Pre-Conditions:</p>
-<ul class="simple">
-<li>Database is up, open, and available</li>
-<li>Data to be ingested does not already exist in the database</li>
-</ul>
-<p>Post-Conditions:</p>
-<ul class="simple">
-<li>Data successfully ingested, organized, and indexed</li>
-</ul>
-<p>Exceptions:</p>
-<ul class="simple">
-<li>If specific data already exists in the database, an appropriate message
-should be returned.</li>
-</ul>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name" colspan="2">Report Retrieval:</th></tr>
-<tr class="field"><td>&nbsp;</td><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-<p>Primary Actor: Another module within the data-layer code base</p>
-<p>Goal: Retrieve analysis data set from database given a specific set of criteria</p>
-<p>Pre-Conditions:</p>
-<ul class="simple">
-<li>Database is up, open, and available</li>
-</ul>
-<p>Post-Conditions:</p>
-<ul class="simple">
-<li>Existing result set is returned</li>
-</ul>
-<p>Exceptions:</p>
-<ul class="simple">
-<li>If result set does not exist, appropriate message will be returned</li>
-<li>If result set exists, but is stale, appropriate message will be returned</li>
-</ul>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Data Query:</th><td class="field-body"></td>
-</tr>
-</tbody>
+	<div class="documentation-wrapper-container container">
+		<h2> CADET Back-End Database </h2>
+		<div class="container">
+			
+			<!-- This work is licensed under a Creative Commons 3.0 Unported License.
+			http://creativecommons.org/licenses/by/3.0/legalcode -->
+			<p>Course Assessment using Data Exploration of Text (CADET) is a tool which uses
+				natural language processing to analyze student course feedback.  The automated
+				tool is able to process large datasets, categorize comments by sentiment and
+			topic as well as course and instructor.</p>
+			<p>CADET requires a back-end database to store submitted data for later analysis
+				and retrieval.  Through implementation of a database, source data files will
+				not need to be re-uploaded and re-analyzed in order to be viewed a second
+			time or by a second person reviewing the same data.</p>
+			<div class="section" id="problem-description">
+				<h1>Problem Description</h1>
+				<p>The current implementation of CADET has no memory of previous data sets.  As
+					such, data must be re-analyzed each time it is to be reviewed.  Also, all data
+					for a particular analysis case must be processed at the same time in order to
+				review any particular set of data.</p>
+				<div class="section" id="requirements">
+					<h2>Requirements</h2>
+					<ul class="simple">
+						<li>Functional Requirements:<ul>
+							<li>The back-end database will provide a simple and intuitive structure for
+								storing and retrieving data in order to assist with the overall behavior
+							and usability of the CADET system.</li>
+							<li>The database should be responsive and properly indexed in order to
+								provide result sets quickly.<ul>
+									<li>Lack of indexing within large datasets could force the database to
+										perform mutliple full-table scans when attempting to query for a
+									particular set of data filtered by un-indexed columns.</li>
+								</ul>
+							</li>
+							<li>The database should also facilitate prevention of duplicate raw data in
+								case an end-user attempts to upload/ingest a file that has already been
+								processed.<ul>
+									<li>Allowing duplicate data could potentially skew results of the analysis
+									and produce inaccurate results; ostesibly corrupting the data.</li>
+								</ul>
+							</li>
+							<li>The database will add to the overall flexibility of the system, and
+								specificially the available data and interactions with the front-end as
+								presented to the end-user.<ul>
+									<li>Providing the ability to analyze across single-file datasets allows for
+									a more broad scope analysis of datasets over time.</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					<li>Quality Requirements:<ul>
+						<li>The database should facilitate and not impede the natural language
+						processing functions of the CADET application.</li>
+						<li>Introducing a database into the project will allow for future ehancement
+							of capabilities based on the ability to combine and correlate disparate
+						sets of raw data.</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		<div class="section" id="use-cases">
+			<h2>Use Cases</h2>
+			<table class="docutils field-list" frame="void" rules="none">
+				<col class="field-name" />
+				<col class="field-body" />
+				<tbody valign="top">
+					<tr class="field"><th class="field-name">Data Ingestion:</th><td class="field-body"></td>
+				</tr>
+			</tbody>
+		</table>
+		<p>Primary Actor: All other modules within the data-layer code base requiring
+			interaction with the database.  Specifically, each API inserting data to the
+		database or retrieving data from the database.</p>
+		<p>Goal: New data, received from the presentation layer, is ingested into the
+		database for later analysis.</p>
+		<p>Pre-Conditions:</p>
+		<ul class="simple">
+			<li>Database is up, open, and available</li>
+			<li>Data to be ingested does not already exist in the database</li>
+		</ul>
+		<p>Post-Conditions:</p>
+		<ul class="simple">
+			<li>Data successfully ingested, organized, and indexed</li>
+		</ul>
+		<p>Exceptions:</p>
+		<ul class="simple">
+			<li>If specific data already exists in the database, an appropriate message
+			should be returned.</li>
+		</ul>
+		<table class="docutils field-list" frame="void" rules="none">
+			<col class="field-name" />
+			<col class="field-body" />
+			<tbody valign="top">
+				<tr class="field"><th class="field-name" colspan="2">Report Retrieval:</th></tr>
+				<tr class="field"><td>&nbsp;</td><td class="field-body"></td>
+			</tr>
+		</tbody>
+	</table>
+	<p>Primary Actor: Another module within the data-layer code base</p>
+	<p>Goal: Retrieve analysis data set from database given a specific set of criteria</p>
+	<p>Pre-Conditions:</p>
+	<ul class="simple">
+		<li>Database is up, open, and available</li>
+	</ul>
+	<p>Post-Conditions:</p>
+	<ul class="simple">
+		<li>Existing result set is returned</li>
+	</ul>
+	<p>Exceptions:</p>
+	<ul class="simple">
+		<li>If result set does not exist, appropriate message will be returned</li>
+		<li>If result set exists, but is stale, appropriate message will be returned</li>
+	</ul>
+	<table class="docutils field-list" frame="void" rules="none">
+		<col class="field-name" />
+		<col class="field-body" />
+		<tbody valign="top">
+			<tr class="field"><th class="field-name">Data Query:</th><td class="field-body"></td>
+		</tr>
+	</tbody>
 </table>
 <p>Primary Actor: Another module within the data-layer code base</p>
 <p>Goal: Retrieve data, or information about available data, based on query</p>
 <p>Pre-Conditions:</p>
 <ul class="simple">
-<li>Database is up, open, and available</li>
-<li>Data (comments) is properly associated to meta-data (courses/instructors)</li>
+	<li>Database is up, open, and available</li>
+	<li>Data (comments) is properly associated to meta-data (courses/instructors)</li>
 </ul>
 <p>Post-Conditions:</p>
 <ul class="simple">
-<li>Requested result set returned<ul>
-<li>Return list of instructors or courses as requested</li>
-<li>Return comments associated to specific instructor, course, or both</li>
-</ul>
+	<li>Requested result set returned<ul>
+		<li>Return list of instructors or courses as requested</li>
+		<li>Return comments associated to specific instructor, course, or both</li>
+	</ul>
 </li>
 </ul>
 <p>Exceptions:</p>
@@ -412,6 +411,6 @@ filters)</li>
 </table>
 </div>
 </div>
-            </div>
-        </div>
+</div>
+</div>
 {% endblock %}
