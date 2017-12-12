@@ -141,6 +141,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Website for generating JSONs to a specified template
-GLOBAL_SETTINGS = {'BACKEND_URL': 'https://next.json-generator.com/'}
+GLOBAL_SETTINGS = {'BACKEND_URL': 'http://www.json-generator.com'}
 # Another optional website for viewing example JSONs
 #GLOBAL_SETTINGS = {'BACKEND_URL':'https://jsonplaceholder.typicode.com/'}

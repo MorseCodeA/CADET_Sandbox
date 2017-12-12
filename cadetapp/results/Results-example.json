@@ -1,0 +1,280 @@
+[
+  {
+    "result_id": 10,
+    "meta_file_info": {
+      "user_selected_number_topics": 7,
+      "user_selected_number_iterations": 30,
+      "document_id_number": 1,
+      "user_selected_words_per_topic": 5
+    },
+    "results": {
+      "topics_stats": [
+        {
+          "words": [
+            "fugiat",
+            "velit",
+            "adipisicing",
+            "quis",
+            "proident",
+            "et"
+          ],
+          "comments": {
+            "positive": [
+              "cupidatat"
+            ],
+            "neutral": [
+              "aliquip",
+              "sunt",
+              "Lorem",
+              "pariatur",
+              "proident"
+            ],
+            "negative": [
+              "culpa"
+            ]
+          }
+        },
+        {
+          "words": [
+            "eu",
+            "esse",
+            "excepteur",
+            "veniam",
+            "commodo",
+            "ullamco"
+          ],
+          "comments": {
+            "positive": [
+              "ex",
+              "do"
+            ],
+            "neutral": [
+              "dolor",
+              "Lorem",
+              "adipisicing",
+              "nostrud"
+            ],
+            "negative": [
+              "mollit",
+              "aliquip",
+              "commodo",
+              "do"
+            ]
+          }
+        },
+        {
+          "words": [
+            "veniam",
+            "deserunt",
+            "exercitation",
+            "in",
+            "nisi",
+            "Lorem"
+          ],
+          "comments": {
+            "positive": [
+              "ullamco"
+            ],
+            "neutral": [
+              "laboris",
+              "dolor",
+              "elit",
+              "id",
+              "ullamco"
+            ],
+            "negative": [
+              "laborum",
+              "qui",
+              "consequat",
+              "quis",
+              "ipsum"
+            ]
+          }
+        },
+        {
+          "words": [
+            "et",
+            "velit",
+            "nulla",
+            "sint",
+            "deserunt",
+            "in"
+          ],
+          "comments": {
+            "positive": [
+              "ullamco",
+              "cupidatat"
+            ],
+            "neutral": [
+              "ea",
+              "culpa",
+              "proident",
+              "aliqua"
+            ],
+            "negative": [
+              "pariatur",
+              "minim",
+              "qui",
+              "fugiat"
+            ]
+          }
+        },
+        {
+          "words": [
+            "esse",
+            "aute",
+            "consequat",
+            "excepteur",
+            "dolor",
+            "tempor"
+          ],
+          "comments": {
+            "positive": [
+              "ex",
+              "deserunt"
+            ],
+            "neutral": [
+              "pariatur",
+              "consequat",
+              "sit",
+              "cillum",
+              "sint",
+              "eu"
+            ],
+            "negative": [
+              "ad",
+              "reprehenderit"
+            ]
+          }
+        }
+      ],
+      "instructor_stats": [
+        {
+          "instructor_first_name": "Debbie",
+          "instructor_last_name": "Burke",
+          "course_num_sect_id": 47,
+          "comments": {
+            "positive": [
+              "eiusmod",
+              "ad",
+              "proident"
+            ],
+            "neutral": [
+              "culpa"
+            ],
+            "negative": [
+              "elit",
+              "occaecat",
+              "nulla",
+              "non"
+            ]
+          }
+        },
+        {
+          "instructor_first_name": "Santiago",
+          "instructor_last_name": "Kaufman",
+          "course_num_sect_id": 44,
+          "comments": {
+            "positive": [
+              "qui",
+              "reprehenderit",
+              "in",
+              "do",
+              "proident"
+            ],
+            "neutral": [
+              "deserunt",
+              "aliqua",
+              "est",
+              "est"
+            ],
+            "negative": [
+              "consequat",
+              "minim",
+              "est",
+              "exercitation",
+              "sint"
+            ]
+          }
+        },
+        {
+          "instructor_first_name": "Savannah",
+          "instructor_last_name": "Burnett",
+          "course_num_sect_id": 85,
+          "comments": {
+            "positive": [
+              "sit",
+              "cupidatat",
+              "officia",
+              "commodo",
+              "fugiat",
+              "velit"
+            ],
+            "neutral": [
+              "sit",
+              "aute",
+              "dolore"
+            ],
+            "negative": [
+              "irure",
+              "id",
+              "deserunt",
+              "laborum",
+              "irure",
+              "fugiat"
+            ]
+          }
+        },
+        {
+          "instructor_first_name": "Booth",
+          "instructor_last_name": "Macias",
+          "course_num_sect_id": 29,
+          "comments": {
+            "positive": [
+              "duis",
+              "elit",
+              "aute",
+              "sunt",
+              "sit",
+              "fugiat"
+            ],
+            "neutral": [
+              "eu",
+              "pariatur",
+              "id"
+            ],
+            "negative": [
+              "eu",
+              "reprehenderit"
+            ]
+          }
+        },
+        {
+          "instructor_first_name": "Wilda",
+          "instructor_last_name": "Watkins",
+          "course_num_sect_id": 38,
+          "comments": {
+            "positive": [
+              "do",
+              "ut",
+              "dolor"
+            ],
+            "neutral": [
+              "laborum"
+            ],
+            "negative": [
+              "pariatur",
+              "adipisicing",
+              "dolor",
+              "eu",
+              "fugiat",
+              "ut"
+            ]
+          }
+        }
+      ]
+    }
+  }
+]
+
+

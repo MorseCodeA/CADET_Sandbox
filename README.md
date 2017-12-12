@@ -1,8 +1,7 @@
-# CADET_Sandbox
+#### CADET Front End Developer Guide ####
 Python 3.4, Django 1.11
 
-A text repo to put all of our CADET Django code before we push it to
-Phabricator.
+A guide to help developers install and run the front end of CADET.
 
 ## I. Set Up: Project Installation 
 
@@ -11,16 +10,16 @@ Phabricator.
 - make sure you use virtualenv    
 
 ```bash
-git clone https://github.com/AshleyMorse/CADET_Sandbox  
-cd CADET_Sandbox 
+git clone ssh://git@web4.jhuep.com:2222/diffusion/CADET/cadet.git  
+cd cadet/src/front-end
 ```
 
-### 2. Virtual Environment (optional, but highly recommended)
+# A. Virtual Environment (optional, but highly recommended)
 
 A. General virtualenv 
 ```bash 
 # run virtualenv with python3, you can name your environment whatever. This
-example, we call it *cadetenv*.
+# example, we call it *cadetenv*.
 python -m venv cadetenv   
 ```  
 If running virtual env command gives you an error, you might either have 
@@ -75,7 +74,12 @@ python manage.py migrate --run-syncdb
 
 # run server
 python manage.py runserver
-```
+
+# run to ensure that results URL is working
+127.0.0.1:8000/results/test
+
+# website homepage
+127.0.0.1:8000/dashboard
 
 #### Common Issues in the Installation Steps  
 
@@ -91,6 +95,12 @@ sudo apt-get install npm
 
 # d3 library
 pip3 install django-nvd3
+
+# JSONField libary
+pip3 install jsonfield
+
+# Polling library
+pip3 install polling
 
 ```
 
