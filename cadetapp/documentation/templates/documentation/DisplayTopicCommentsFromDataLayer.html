@@ -1,0 +1,572 @@
+{% extends 'dashboard/base.html' %}
+{% block content %}
+        <div class="documentation-wrapper-container container">
+            <h2> Dashboard - Display topic comments from data layer </h2>
+            <div class="container">
+
+
+<!-- This work is licensed under a Creative Commons 3.0 Unported License.
+
+http://creativecommons.org/licenses/by/3.0/legalcode -->
+<p>Our team is implementing a database for the Course Assessment using Data
+Exploration of Text (CADET) project. Datasets containing course assessment
+comments and metadata will be able to be stored for future use. Users will no
+longer need to re-upload files each time they wish to analyze a particular set
+of data.</p>
+<p>This feature will request the program to run a sentiment analysis report for a
+particular, unprocessed dataset given as a parameter (Dataset ID). This
+operation will be performed via calls to a <a class="citation-reference" href="#restful" id="id1">[RESTful]</a> API described in
+specification <a class="citation-reference" href="#d82" id="id2">[D82]</a>. Other parameters include: number of topics, words per
+topic, and number of iterations. The datasets being passed into the sentiment
+analysis module will be retrieved from the database using the ID of the
+dataset. The results of the analysis will be stored in the database. If a
+query contains the same paramaters as one previously stored in the database,
+the results of the previous analysis will immediately be returned.</p>
+<div class="section" id="problem-description">
+<h1>Problem Description</h1>
+<p>Previously, files containing comments were uploaded and were directly
+transmitted to the comment analysis module. Here, they are processed and the
+results are reported back to the user. Because a database is being
+implemented, the analysis module can no longer receive data in this way. The
+datasets must now be retrieved from the database and passed to the analysis
+module, and a new interface is needed to support this change.</p>
+<div class="section" id="requirements">
+<h2>Requirements</h2>
+<ul class="simple">
+<li>Retrieve a specified dataset from the database</li>
+<li>Return and cache results of sentiment analysis</li>
+<li>If a specified dataset is not found, return a &quot;404 Not Found&quot; error with a
+description of the invalid request</li>
+<li>If an exception occurs during the analysis, return a &quot;500 Server Error&quot;</li>
+<li>Retrieve and return cached results if the analysis has been done in the past</li>
+<li>Same output data as current implementation</li>
+</ul>
+</div>
+<div class="section" id="use-cases">
+<h2>Use Cases</h2>
+<ul class="simple">
+<li>The user requests a report on a specified course from a specific year. The
+data is located in the database. A report request is called and the dataset is
+analyzed. The processed data is passed on to be presented to the user. The
+data is also stored in the database for future use.</li>
+<li>The user wishes to see a report for a previously processed dataset, but did
+not save the results. The previous report is cached in the database. The user
+again requests the report and is immediately returned the results without the
+need to re-process the dataset.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="proposed-change">
+<h1>Proposed Change</h1>
+<p>This feature is the bridge between the newly implemented database and the
+current analysis module. A separate table of the database will contain sets of
+specified comments. This table will have an auto-incremented integer serving as
+the ID for each dataset.</p>
+<p>This feature will take the following parameters:</p>
+<ul class="simple">
+<li>Dataset ID:         The ID of the stored set of comments</li>
+<li><dl class="first docutils">
+<dt>Number of Topics:   The number of topics (each topic is a set of related</dt>
+<dd>words found in comments) specified by the user</dd>
+</dl>
+</li>
+<li>Words per Topic:    The number of related words in a single topic</li>
+<li><dl class="first docutils">
+<dt>Iterations:         The number of iterations of <a class="citation-reference" href="#lda" id="id3">[LDA]</a> process (for topic</dt>
+<dd>analysis)</dd>
+</dl>
+</li>
+</ul>
+<p>If the Dataset ID is not found in the database, a &quot;404 Not Found&quot; error will
+be returned. Before an unnecessary analysis is performed, this feature will
+check if there is a cached result of this report by comparing the parameters
+passed in this call to those stored in the cached results.</p>
+<p>If this report has not been produced before, the dataset table will be
+accessed, and the comments in the specified set will be passed through the
+analysis module using the rest of the parameters provided in the call. The
+sentiment of each comment is set by the analysis module. Each comment is
+determined to be positive, negative, or neutral. If any error occurs during
+the processing, a &quot;500 Server Error&quot; will be returned.</p>
+<p>A list of JSON objects will be returned to the user and will also be cached in
+the database. The Work Items section covers the format of the results.</p>
+<div class="section" id="alternatives">
+<h2>Alternatives</h2>
+<p>An alternative would be to stay with the status quo. In this case, a database
+would not be used. The comments would instead be stored locally.</p>
+<p>The planned implementation provides the ability to cache results and, thanks
+to the metadata being stored, lays the groundwork for more complex queries in
+the future. Future additions could allow the filtering of comments included in
+datasets by using the metadata being stored.</p>
+</div>
+</div>
+<div class="section" id="testing">
+<h1>Testing</h1>
+<p>Testing will involve attempting to access valid and invalid datasets. The
+Proposed Changes section describes the expected result of attempting to access
+an invalid dataset. Valid accesses should produce the same results as the
+current implementation of the project. The results will be tested against
+this.</p>
+</div>
+<div class="section" id="documentation">
+<h1>Documentation</h1>
+<p>The documentation should describe the parameters being passed into the
+function and the format of the returned objects. Inline comments will be used
+to describe the actions being taken. These will appear in block comment form
+above the function. Smaller comments will be used to explain more complex
+operations that may not be wholly self-documented.</p>
+<p>Information about the HTTP status codes should be included in the
+documentation covering the whole API for this project. This documentation
+should also include how to request reports and the expected return value.</p>
+</div>
+<div class="section" id="implementation">
+<h1>Implementation</h1>
+<div class="section" id="work-items">
+<h2>Work Items</h2>
+<ul>
+<li><p class="first">Access Database</p>
+<p>The Dataset ID will be used to fetch the comments to be processed. The
+cached results will be accessed to check if a report for this dataset,
+with matching parameters, has been run previously.</p>
+</li>
+<li><p class="first">Format Data</p>
+<p>The data will need to be re-formatted to match the current input expected
+by the analysis module.</p>
+</li>
+<li><p class="first">Sentiment Analysis</p>
+<p>This phase will remain the same as the current implementation.</p>
+</li>
+<li><p class="first">Format Results</p>
+<p>The results of the analysis will also need to be re-formatted. The results
+will contain:</p>
+<blockquote>
+<ul class="simple">
+<li>Topic Model Dictionary</li>
+<li>List of Comment Objects</li>
+</ul>
+</blockquote>
+<p>The Topic Model will be a dictionary that uses the Topic ID stored in the
+comment object as a key that matches a comment to a list of related words.
+This list of words is known as a topic.</p>
+<p>The comment objects will contain these fields:</p>
+<blockquote>
+<ul class="simple">
+<li>Comment</li>
+<li>Comment ID</li>
+<li>Comment Type</li>
+<li>Course</li>
+<li>Instructor First Name</li>
+<li>Instructor Last Name</li>
+<li>Sentiment of Comment</li>
+<li>Topic ID</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first">Return and Cache Results</p>
+<p>The results will be store in the database, waiting to be retrieved by the
+presentation layer team. The analysis cache will contain the following for
+each report:</p>
+<blockquote>
+<ul class="simple">
+<li>Number of Topics</li>
+<li>Words Per Topic</li>
+<li>Iterations</li>
+<li>Result Set</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="references">
+<h1>References</h1>
+<table class="docutils citation" frame="void" id="restful" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[RESTful]</a></td><td>&quot;Representational State Transfer,&quot; Sept 2017. online:
+<a class="reference external" href="https://en.wikipedia.org/wiki/Representational_state_transfer">https://en.wikipedia.org/wiki/Representational_state_transfer</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="d82" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[D82]</a></td><td>Jason Porter, &quot;Metadata Retrieval,&quot; Sept 2017. online:
+<a class="reference external" href="https://web4.jhuep.com/D82">https://web4.jhuep.com/D82</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="lda" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[LDA]</a></td><td>&quot;Latent Dirichlet allocation,&quot; Sept 2017. online:
+<a class="reference external" href="https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation">https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation</a></td></tr>
+</tbody>
+</table>
+<!-- This work is licensed under a Creative Commons 3.0 Unported License.
+
+http://creativecommons.org/licenses/by/3.0/legalcode -->
+<p>The CADET project will aim to port the existing desktop user interface to a web
+application.  This will require two teams; one to focus on using Django to
+transition to a web based user interface and a second back end team which will
+focus on data processing/storage using Natural Language Tools (NLT). The web
+portal will allow users to upload end of semester comments in order to
+make the sorting / viewing and analysis faster and more intuitive for the user.
+One identified feature necessary to achieve the stated goal is the display
+topic comments from data layer feature outlined in the title.  This feature
+is the important middle man involved in receiving processed data from the data
+layer team and making it intuitively available for the interface.  Specifically
+from the processed student comment file making the topic groups and associated
+comments accessible for display to the user.</p>
+<div class="section" id="problem-description">
+<h1>Problem Description</h1>
+<p>At the end of each semester John Hopkins University distributes surveys to
+students in order to gain an understanding of instructor performance.  These
+surveys are also shared with the professors in order to help give feedback for
+the instructors to act on.  The problem is in the quantity of comments which
+can become too large for a single professor to effectively utilize. In order to
+meet this, a need for CADET was developed.  The program uses the Natural
+Language Toolkit (NLT) in order to sort comments by word clusters and by
+sentiment.  These groupings allow an instructor to parse through smaller groups
+of like data in order to better understand and process the comments they are
+receiving. Making this desktop interface available as a web application
+addresses a current issue with the lack of accessibility faculty currently have
+to this functionality. As addressed, porting this application to a web
+interface will require two teams; front and back end teams.  It is important to
+consider the implementation of the key features in order to ensure
+functionality is maintained.  One key function identified which will be
+affected by the separation of the back end and front end is the ability to take
+the processed data and present the information to the User Interface (UI) for
+intuitive and fast retrieval in order to support in the implementation to view
+comments.</p>
+<div class="section" id="requirements">
+<h2>Requirements</h2>
+<p>The display topic comments feature will take the Data Layer Team output, a JSON
+object, as an input and will present to the dashboard a class object in order
+to easily pull specific information properly.  The JSON file will include the
+original CSV information, reformatted, and include NLTK analysis; additionally
+the retuned object will have an associated Primary Key in order to reference
+the database. On the front end a user will see this information reflected in a
+graph.  The NLTK analysis will use natural language processing to pull out
+identifying terms and categories for comments. Each category will have a set of
+identifying words which is dependent on the users desired number of groupings.
+These categories and associated sentiment analysis will be displayed to the
+user. The user will have the ability to select a group of these identifiers
+which will direct to a display of the comments associated with the selection.
+This web portal will be used across multiple browsers to include Chrome and
+Firefox.</p>
+</div>
+<div class="section" id="use-case-a">
+<h2>Use Case A:</h2>
+<p>Who:  Course instructor.
+Actors' goals:  Professor hopes to view comments in order to see what students
+noted about her/his class and hopes to look at some of the specific comments
+students left.
+Preconditions:  Professor has student comments file on computer for accessing,
+and will upload the file in the proper file format to the web interface
+before using the Dashboard - Display topic across comments.  The user will also
+select the number of topics to be grouped, the number of student comments per-
+topics and number of iterations.
+Main functions: Upon hitting the enter button the user will be brought to a
+main screen where there will be topic buttons based on the number of desired
+topics.  Each button will be associated with one of the determined word
+clusters.  By clicking on one of the word clusters that group of associated
+comments will be displayed.
+Variations: The professor could want to select multiple word grouping and the
+application could highlight the appropriate out of the full list but instead we
+have chosen to only allow one selection at a time and display only the
+comment associated with that selection.</p>
+</div>
+<div class="section" id="use-case-b">
+<h2>Use Case B:</h2>
+<p>Who:  Department Head.
+Actors' Goals:  The Department Head would like to look at an instructor's
+performance over the course of a semester.
+Preconditions:  The Department Head has comment file for an instructor on
+computer for accessing, and will upload in the proper file format to the web
+interface before using the Dashboard - Display topic across comment. The user
+will also select the number of topics to be grouped, the number of comments
+per topics and number of iterations.
+Main functions: Upon hitting the enter button the user will be brought to a
+main screen where there will be topic buttons based on the number of desired
+topics.  Each button will be associated with one of the determined word
+clusters.  The Department Head cares less about the individual teacher's
+comments but prefers the overall sentiment graphs.  In order to do this the
+user then must look on the left side of the screen where there is a navigation
+bar that will enable the user to switch to the Dashboard - Display common
+sentiments extracted from data layer.
+Variations: The Department Head could accidently exit out of the system in
+which case he would navigate back to the URL where he would have to start from
+the beginning of the preconditions.  This is the best way to handle this
+variation as there should be no way to let other see what the Department Head
+was looking at last and the process to view the result is painless.</p>
+</div>
+</div>
+<div class="section" id="proposed-change">
+<h1>Proposed Change</h1>
+<p>This feature will feed the UI Dashboard - &quot;Display topic comments from data
+layer&quot;.  It will present to the UI designer the information in the format
+required to display for the user.  In order for this integration to be useful
+the features designer must be plugged in with the overall UI development and be
+prepared to support the UI designer in this portion of the dashboard. The dash
+board will utilize buttons with associated display word clusters, when selected
+these buttons will cause the frame to fill with the associated comments. In
+order to maintain a frame that fits the page a scroll bar will be used in the
+frame to view all comments.  Above the frame there will be the ability to
+switch to the Dashboard - Display common sentiments extracted from data layer.</p>
+<div class="section" id="alternatives">
+<h2>Alternatives</h2>
+<p>An alternative way to approach this would be to display the list of comments
+and to color code them based on the groupings. However, in order to keep in
+line with the desktop interface and in or to organize the comment in an
+accessible manner based on the volume of comments it will not make sense to
+implement in this way.</p>
+</div>
+</div>
+<div class="section" id="testing">
+<h1>Testing</h1>
+<p>Unit Test: Ensure information received from data layer process is consistent
+with displayed values.
+Integration Test: Informal user test will be done to discover unknown fringe
+cases.</p>
+</div>
+<div class="section" id="documentation">
+<h1>Documentation</h1>
+<p>In-line comments will be included in the source code in order to enable
+understanding of the program for current usability and future developing team.
+Additionally, there will be source code comments included in order to outline
+the way the program should expect to receive data from the data layer team in
+order to understand the expectation and to outline if there are problems.</p>
+</div>
+<div class="section" id="implementation">
+<h1>Implementation</h1>
+<div class="section" id="work-items">
+<h2>Work Items</h2>
+<p>1. Design Phase - Outline the format in which data will be received from data
+layer team.
+2. Design Phase - Outline the format in which the UI will receive data.
+3. Implementation Phase - Successful receipt of data from data team.
+4. Implementation Phase - Set models for processed data in Django project
+appropriately.
+5. Implementation Phase - Working &quot;Pull&quot; method in order to pull and package UI
+specified data.
+6. Feature Testing Phase - Test plan for each feature written and executed.
+7. Project Integration - Integrate into project.</p>
+</div>
+</div>
+<div class="section" id="references">
+<h1>References</h1>
+<table class="docutils citation" frame="void" id="introducingjson" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[IntroducingJSON]</td><td><a class="reference external" href="http://www.json.org/">http://www.json.org/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="meetdjango" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[MeetDjango]</td><td><a class="reference external" href="https://www.djangoproject.com/">https://www.djangoproject.com/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="naturallanguagetoolkit" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[NaturalLanguageToolkit]</td><td><a class="reference external" href="http://www.nltk.org/">http://www.nltk.org/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="restfulapitutorial" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[RESTfulAPITutorial]</td><td><a class="reference external" href="https://restfulapi.net/">https://restfulapi.net/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="restructuredtextmarkupspecification" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[reStructuredTextMarkupSpecification]</td><td>goo.gl/jsKeit</td></tr>
+</tbody>
+</table>
+<!-- This work is licensed under a Creative Commons 3.0 Unported License.
+
+http://creativecommons.org/licenses/by/3.0/legalcode -->
+<p>The CADET project will aim to port the existing desktop user interface to a web
+application.  This will require two teams; one to focus on using Django to
+transition to a web based user interface and a second back end team which will
+focus on data processing/storage using Natural Language Tools (NLT). The web
+portal will allow users to upload end of semester comments in order to
+make the sorting / viewing and analysis faster and more intuitive for the user.
+One identified feature necessary to achieve the stated goal is the display
+topic comments from data layer feature outlined in the title.  This feature
+is the important middle man involved in receiving processed data from the data
+layer team and making it intuitively available for the interface.  Specifically
+from the processed student comment file making the topic groups and associated
+comments accessible for display to the user.</p>
+<div class="section" id="problem-description">
+<h1>Problem Description</h1>
+<p>At the end of each semester John Hopkins University distributes surveys to
+students in order to gain an understanding of instructor performance.  These
+surveys are also shared with the professors in order to help give feedback for
+the instructors to act on.  The problem is in the quantity of comments which
+can become too large for a single professor to effectively utilize. In order to
+meet this, a need for CADET was developed.  The program uses the Natural
+Language Toolkit (NLT) in order to sort comments by word clusters and by
+sentiment.  These groupings allow an instructor to parse through smaller groups
+of like data in order to better understand and process the comments they are
+receiving. Making this desktop interface available as a web application
+addresses a current issue with the lack of accessibility faculty currently have
+to this functionality. As addressed, porting this application to a web
+interface will require two teams; front and back end teams.  It is important to
+consider the implementation of the key features in order to ensure
+functionality is maintained.  One key function identified which will be
+affected by the separation of the back end and front end is the ability to take
+the processed data and present the information to the User Interface (UI) for
+intuitive and fast retrieval in order to support in the implementation to view
+comments.</p>
+<div class="section" id="requirements">
+<h2>Requirements</h2>
+<p>The display topic comments feature will take the Data Layer Team output, a JSON
+object, as an input and will present to the dashboard a class object in order
+to easily pull specific information properly.  The JSON file will include the
+original CSV information, reformatted, and include NLTK analysis; additionally
+the retuned object will have an associated Primary Key in order to reference
+the database. On the front end a user will see this information reflected in a
+graph.  The NLTK analysis will use natural language processing to pull out
+identifying terms and categories for comments. Each category will have a set of
+identifying words which is dependent on the users desired number of groupings.
+These categories and associated sentiment analysis will be displayed to the
+user. The user will have the ability to select a group of these identifiers
+which will direct to a display of the comments associated with the selection.
+This web portal will be used across multiple browsers to include Chrome and
+Firefox.</p>
+</div>
+<div class="section" id="use-case-a">
+<h2>Use Case A:</h2>
+<p>Who:  Course instructor.
+Actors' goals:  Professor hopes to view comments in order to see what students
+noted about her/his class and hopes to look at some of the specific comments
+students left.
+Preconditions:  Professor has student comments file on computer for accessing,
+and will upload the file in the proper file format to the web interface
+before using the Dashboard - Display topic across comments.  The user will also
+select the number of topics to be grouped, the number of student comments per-
+topics and number of iterations.
+Main functions: Upon hitting the enter button the user will be brought to a
+main screen where there will be topic buttons based on the number of desired
+topics.  Each button will be associated with one of the determined word
+clusters.  By clicking on one of the word clusters that group of associated
+comments will be displayed.
+Variations: The professor could want to select multiple word grouping and the
+application could highlight the appropriate out of the full list but instead we
+have chosen to only allow one selection at a time and display only the
+comment associated with that selection.</p>
+</div>
+<div class="section" id="use-case-b">
+<h2>Use Case B:</h2>
+<p>Who:  Department Head.
+Actors' Goals:  The Department Head would like to look at an instructor's
+performance over the course of a semester.
+Preconditions:  The Department Head has comment file for an instructor on
+computer for accessing, and will upload in the proper file format to the web
+interface before using the Dashboard - Display topic across comment. The user
+will also select the number of topics to be grouped, the number of comments
+per topics and number of iterations.
+Main functions: Upon hitting the enter button the user will be brought to a
+main screen where there will be topic buttons based on the number of desired
+topics.  Each button will be associated with one of the determined word
+clusters.  The Department Head cares less about the individual teacher's
+comments but prefers the overall sentiment graphs.  In order to do this the
+user then must look on the left side of the screen where there is a navigation
+bar that will enable the user to switch to the Dashboard - Display common
+sentiments extracted from data layer.
+Variations: The Department Head could accidently exit out of the system in
+which case he would navigate back to the URL where he would have to start from
+the beginning of the preconditions.  This is the best way to handle this
+variation as there should be no way to let other see what the Department Head
+was looking at last and the process to view the result is painless.</p>
+</div>
+</div>
+<div class="section" id="proposed-change">
+<h1>Proposed Change</h1>
+<p>This feature will feed the UI Dashboard - &quot;Display topic comments from data
+layer&quot;.  It will present to the UI designer the information in the format
+required to display for the user.  In order for this integration to be useful
+the features designer must be plugged in with the overall UI development and be
+prepared to support the UI designer in this portion of the dashboard. The dash
+board will utilize buttons with associated display word clusters, when selected
+these buttons will cause the frame to fill with the associated comments. In
+order to maintain a frame that fits the page a scroll bar will be used in the
+frame to view all comments.  Above the frame there will be the ability to
+switch to the Dashboard - Display common sentiments extracted from data layer.</p>
+<div class="section" id="alternatives">
+<h2>Alternatives</h2>
+<p>An alternative way to approach this would be to display the list of comments
+and to color code them based on the groupings. However, in order to keep in
+line with the desktop interface and in or to organize the comment in an
+accessible manner based on the volume of comments it will not make sense to
+implement in this way.</p>
+</div>
+</div>
+<div class="section" id="testing">
+<h1>Testing</h1>
+<p>Unit Test: Ensure information received from data layer process is consistent
+with displayed values.
+Integration Test: Informal user test will be done to discover unknown fringe
+cases.</p>
+</div>
+<div class="section" id="documentation">
+<h1>Documentation</h1>
+<p>In-line comments will be included in the source code in order to enable
+understanding of the program for current usability and future developing team.
+Additionally, there will be source code comments included in order to outline
+the way the program should expect to receive data from the data layer team in
+order to understand the expectation and to outline if there are problems.</p>
+</div>
+<div class="section" id="implementation">
+<h1>Implementation</h1>
+<div class="section" id="work-items">
+<h2>Work Items</h2>
+<p>1. Design Phase - Outline the format in which data will be received from data
+layer team.
+2. Design Phase - Outline the format in which the UI will receive data.
+3. Implementation Phase - Successful receipt of data from data team.
+4. Implementation Phase - Set models for processed data in Django project
+appropriately.
+5. Implementation Phase - Working &quot;Pull&quot; method in order to pull and package UI
+specified data.
+6. Feature Testing Phase - Test plan for each feature written and executed.
+7. Project Integration - Integrate into project.</p>
+</div>
+</div>
+<div class="section" id="references">
+<h1>References</h1>
+<table class="docutils citation" frame="void" id="introducingjson" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[IntroducingJSON]</td><td><a class="reference external" href="http://www.json.org/">http://www.json.org/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="meetdjango" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[MeetDjango]</td><td><a class="reference external" href="https://www.djangoproject.com/">https://www.djangoproject.com/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="naturallanguagetoolkit" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[NaturalLanguageToolkit]</td><td><a class="reference external" href="http://www.nltk.org/">http://www.nltk.org/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="restfulapitutorial" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[RESTfulAPITutorial]</td><td><a class="reference external" href="https://restfulapi.net/">https://restfulapi.net/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="restructuredtextmarkupspecification" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[reStructuredTextMarkupSpecification]</td><td>goo.gl/jsKeit</td></tr>
+</tbody>
+</table>
+	      
+            </div>
+        </div>
+{% endblock %}

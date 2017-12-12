@@ -1,0 +1,210 @@
+{% extends 'dashboard/base.html' %}
+{% block content %}
+        <div class="documentation-wrapper-container container">
+            <h2> Metadata Retrieval </h2>
+            <div class="container">
+
+
+<!-- This work is licensed under a Creative Commons 3.0 Unported License.
+
+http://creativecommons.org/licenses/by/3.0/legalcode -->
+<p>While using the CADET backend API, it would be useful to acquire specific
+details of the data existing within the CADET backend database. Data in the
+database is constituted of pre- and post-processed data. Retrieving this data,
+a subset of this data, or information about this data (collectively metadata)
+without re-processing the dataset through the Natural Language Processing
+(NLP) tools is a necessity.</p>
+<p>The CADET data layer will implement several methods of accessing metadata
+stored in the backend database. Existing pre-processed data and results from
+NLP tools stored in the database are likely to be comparatively large in size.
+This metadata will be available to gather more information about the existing
+data, and to help decide which data to request from the database before
+requesting a large, unneeded blob of data. Access to this metadata will be
+available in the form of GET requests made to the CADET backend API.</p>
+<div class="section" id="problem-description">
+<h1>Problem Description</h1>
+<p>Pre-processed data, in the form of comments submitted to the CADET system, and
+the results of the Natural Language Processing (NLP) tools, stored immediately
+in the CADET backend database, are likely to be large chunks of uncompressed
+text. In order to reduce the amount of data transmitted between the CADET
+backend API and the user, the CADET backend API shall implement a process of
+retrieving metadata about the existing datasets populating the database. This
+metadata can be used to more effectively find information of interest existing
+within the CADET backend database.</p>
+<p>Some examples:</p>
+<ul class="simple">
+<li>Getting the number of comments in a specified dataset</li>
+<li>Getting the range of semesters of a specified dataset</li>
+<li>Retrieving the current Topic Option ID from the NLP tool</li>
+</ul>
+<div class="section" id="requirements">
+<h2>Requirements</h2>
+<ul class="simple">
+<li>Properly formed tables with read/write access to the database</li>
+<li>Valid data being input into database tables</li>
+<li>Method of accessing database tables</li>
+<li>Web framework with the ability to define custom functions</li>
+</ul>
+</div>
+<div class="section" id="use-cases">
+<h2>Use Cases</h2>
+<ul class="simple">
+<li>The user requests the results of the Natural Language Processing (NLP) tools
+on a specific dataset after the dataset is processed and stored in a table.
+The user requests these results via a GET request to the appropriate URL
+corresponding to the table and ID of the results. The results get sent back
+to the user via a HTTP response with a <a class="citation-reference" href="#json" id="id1">[JSON]</a> object describing the
+results.</li>
+<li>The user requests metadata of a dataset stored in a table prior to
+processing or metadata of a result after processing. The user requests the
+metadata via a GET request via to the appropriate URL corresponding to the
+table and ID of the requested metadata. The metadata gets sent back to the
+user via a HTTP response with a JSON object describing the metadata.</li>
+<li>The user requests data or metadata through a GET request to a URL
+corresponding to data that does not exist. The user will receive a HTTP
+response with a JSON object containing an error field and an appropriate
+error code. The user should check for errors after receiving any response
+from the CADET backend API.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="proposed-change">
+<h1>Proposed Change</h1>
+<p>The CADET data layer is being implemented in <a class="citation-reference" href="#flask" id="id2">[Flask]</a>, a lightweight web
+framework, with a <a class="citation-reference" href="#restful" id="id3">[RESTful]</a> API. Implementing functions for GET requests to
+several URLs is relatively straightforward in Flask. Flask provides decorators
+to link functions as request handlers. These custom request handlers will
+retrieve the requested information from the database and wrap them neatly in a
+JSON object to be returned to the requester via an HTTP response.</p>
+<p>The URL to access resources (via a RESTful GET request) would be in one of the
+following formats:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.example.com/CADETProc">http://www.example.com/CADETProc</a>/&lt;table&gt;</li>
+<li><a class="reference external" href="http://www.example.com/CADETProc">http://www.example.com/CADETProc</a>/&lt;table&gt;/fields</li>
+<li><a class="reference external" href="http://www.example.com/CADETProc">http://www.example.com/CADETProc</a>/&lt;table&gt;/&lt;id&gt;</li>
+<li><a class="reference external" href="http://www.example.com/CADETProc">http://www.example.com/CADETProc</a>/&lt;table&gt;/&lt;id&gt;/&lt;field&gt;</li>
+</ul>
+<p>Details on how these URLs are used are covered below in the &quot;Implementation&quot;
+section.</p>
+<div class="section" id="alternatives">
+<h2>Alternatives</h2>
+<p>Other options include not storing the dataset in a database. This limits a
+users workflow to one dataset at a time. With the inclusion of a database a
+user can work on multiple datasets concurrently. The inclusion of a database
+necessitates the need to pull data from the database and send it to the user.</p>
+<p>Another alternative is to implement the solution utilizing the Django web
+framework instead of Flask. Django is a full suite of web tools, including a
+built-in ORM for database management. Django is a poor fit for this project
+because it is not as modular as Flask and has unneeded functionality,
+resulting in larger overhead, for a simple &quot;store and process&quot; server.</p>
+</div>
+</div>
+<div class="section" id="testing">
+<h1>Testing</h1>
+<p>Test plans for this feature include making connections to both valid and
+invalid resources (tables or elements in the tables) in the database. Expected
+results are discussed in the Proposed Changes section.</p>
+<p>Connections can be made through a multitude of methods however scripting via
+<a class="citation-reference" href="#curl" id="id4">[curl]</a> will be sufficient for testing this feature. Multiple requests can be
+sent individually through curl with manual validation of the output/returned
+object.</p>
+</div>
+<div class="section" id="documentation">
+<h1>Documentation</h1>
+<p>Inline comments should be used to describe the action being taken in the
+functions handling the request. These comments shall be in a block comment
+above the function and include separate comments explaining lines of code that
+do not self-document. If there is a need to update the functions handling the
+requests, the inline comments should be the first thing to reference.</p>
+<p>There needs to be user documentation for these requests. This documentation
+should include how to request the data, how to look up more data, and the
+expected return value for each request type. This might be handled in the
+documentation covering the whole API for this project.</p>
+</div>
+<div class="section" id="implementation">
+<h1>Implementation</h1>
+<div class="section" id="work-items">
+<h2>Work Items</h2>
+<ul class="simple">
+<li>Implementation - this feature can be implemented using several functions
+handling the requests. A function that can handle each &quot;class&quot; of requests,
+mentioned in the Proposed Changes section, can be made, and linked via the
+Flask decorators.</li>
+<li>The URL to access resources (via a RESTful GET request) would be in one of
+the following formats:<ul>
+<li><a class="reference external" href="http://www.example.com/CADETProc">http://www.example.com/CADETProc</a>/&lt;table&gt;</li>
+<li><a class="reference external" href="http://www.example.com/CADETProc">http://www.example.com/CADETProc</a>/&lt;table&gt;/fields</li>
+<li><a class="reference external" href="http://www.example.com/CADETProc">http://www.example.com/CADETProc</a>/&lt;table&gt;/&lt;id&gt;</li>
+<li><a class="reference external" href="http://www.example.com/CADETProc">http://www.example.com/CADETProc</a>/&lt;table&gt;/&lt;id&gt;/&lt;field&gt;</li>
+</ul>
+</li>
+<li>To access a table in the CADET backend database and retrieve the elements in
+the table, a GET request can be made to the first of the above example URLs.
+The request will be handled via a function with a Flask decorator capturing
+the request, which will then return the elements existing in the table to
+the user. As an example, a GET request made to &quot;/CADETProc/comments&quot; shall
+return a list of all the comment IDs that exist in the database table
+&quot;comments&quot;. When the specified table does not exist, a &quot;404 Not Found&quot; error
+shall be returned to the user.</li>
+<li>To retrieve a list of columns, or fields, that exist within a specified
+table, a GET request can be made to the second example URL above. This
+allows a user to request specific fields of the elements in the specified
+table. As an example, a GET request made to &quot;/CADETProc/comments/fields&quot;
+shall return a list of all the columns, or fields, that exist within the
+&quot;comments&quot; table, such as &quot;comment&quot;, &quot;date&quot;, etc. When the specified table
+does not exist, a &quot;404 Not Found&quot; error shall be returned to the user. When
+the table has no columns, an empty list shall be returned to the user.</li>
+<li>To retrieve a specific element from a table in the CADET backend database, a
+GET request can be made to the third example URL listed above. This will
+return an element defined by the ID requested. As an example, a GET request
+to &quot;/CADETProc/comments/4&quot; shall return the element with ID 4 existing in
+the table &quot;comments&quot;. When the specified table does not exist, a &quot;404 Not
+Found&quot; error shall be returned to the user. When the specified ID does not
+exist in the table, a &quot;404 Not Found&quot; error shall be returned to the user.</li>
+<li>To retrieve a specific field from a specified element of a table in the
+CADET backend database, a GET request can be made to the last example URL
+above. The request will return the specified field from the specified
+element. As an example, a GET request to &quot;/CADETProc/comments/4/date&quot; shall
+return the &quot;date&quot; field from the element with ID 4 existing in the table
+&quot;comments&quot;. When the specified table does not exist, a &quot;404 Not Found&quot; error
+shall be returned to the user. When the specified ID does not exist in the
+table, a &quot;404 Not Found&quot; error shall be returned to the user. When the table
+or element does not have the specified field, a &quot;404 Not Found&quot; error shall
+be returned to the user.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="references">
+<h1>References</h1>
+<table class="docutils citation" frame="void" id="flask" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[Flask]</a></td><td>Armin Ronacher, &quot;Welcome | Flask (A Python Microframework),&quot; Sept 2017.
+online: <a class="reference external" href="http://flask.pocoo.org/">http://flask.pocoo.org/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="json" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[JSON]</a></td><td>&quot;JSON,&quot; Sept 2017.
+online: <a class="reference external" href="http://www.json.org/">http://www.json.org/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="restful" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[RESTful]</a></td><td>&quot;Representational State Transfer,&quot;
+online: <a class="reference external" href="https://en.wikipedia.org/wiki/Representational_state_transfer">https://en.wikipedia.org/wiki/Representational_state_transfer</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="curl" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[curl]</a></td><td>Daniel Stenberg &quot;curl,&quot; Sept 2017.
+online: <a class="reference external" href="https://curl.haxx.se/">https://curl.haxx.se/</a></td></tr>
+</tbody>
+</table>
+	      
+            </div>
+        </div>
+{% endblock %}

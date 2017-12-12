@@ -1,0 +1,417 @@
+{% extends 'dashboard/base.html' %}
+{% block content %}
+        <div class="documentation-wrapper-container container">
+            <h2> CADET Back-End Database </h2>
+            <div class="container">
+               
+<!-- This work is licensed under a Creative Commons 3.0 Unported License.
+
+http://creativecommons.org/licenses/by/3.0/legalcode -->
+<p>Course Assessment using Data Exploration of Text (CADET) is a tool which uses
+natural language processing to analyze student course feedback.  The automated
+tool is able to process large datasets, categorize comments by sentiment and
+topic as well as course and instructor.</p>
+<p>CADET requires a back-end database to store submitted data for later analysis
+and retrieval.  Through implementation of a database, source data files will
+not need to be re-uploaded and re-analyzed in order to be viewed a second
+time or by a second person reviewing the same data.</p>
+<div class="section" id="problem-description">
+<h1>Problem Description</h1>
+<p>The current implementation of CADET has no memory of previous data sets.  As
+such, data must be re-analyzed each time it is to be reviewed.  Also, all data
+for a particular analysis case must be processed at the same time in order to
+review any particular set of data.</p>
+<div class="section" id="requirements">
+<h2>Requirements</h2>
+<ul class="simple">
+<li>Functional Requirements:<ul>
+<li>The back-end database will provide a simple and intuitive structure for
+storing and retrieving data in order to assist with the overall behavior
+and usability of the CADET system.</li>
+<li>The database should be responsive and properly indexed in order to
+provide result sets quickly.<ul>
+<li>Lack of indexing within large datasets could force the database to
+perform mutliple full-table scans when attempting to query for a
+particular set of data filtered by un-indexed columns.</li>
+</ul>
+</li>
+<li>The database should also facilitate prevention of duplicate raw data in
+case an end-user attempts to upload/ingest a file that has already been
+processed.<ul>
+<li>Allowing duplicate data could potentially skew results of the analysis
+and produce inaccurate results; ostesibly corrupting the data.</li>
+</ul>
+</li>
+<li>The database will add to the overall flexibility of the system, and
+specificially the available data and interactions with the front-end as
+presented to the end-user.<ul>
+<li>Providing the ability to analyze across single-file datasets allows for
+a more broad scope analysis of datasets over time.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Quality Requirements:<ul>
+<li>The database should facilitate and not impede the natural language
+processing functions of the CADET application.</li>
+<li>Introducing a database into the project will allow for future ehancement
+of capabilities based on the ability to combine and correlate disparate
+sets of raw data.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="use-cases">
+<h2>Use Cases</h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Data Ingestion:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>Primary Actor: All other modules within the data-layer code base requiring
+interaction with the database.  Specifically, each API inserting data to the
+database or retrieving data from the database.</p>
+<p>Goal: New data, received from the presentation layer, is ingested into the
+database for later analysis.</p>
+<p>Pre-Conditions:</p>
+<ul class="simple">
+<li>Database is up, open, and available</li>
+<li>Data to be ingested does not already exist in the database</li>
+</ul>
+<p>Post-Conditions:</p>
+<ul class="simple">
+<li>Data successfully ingested, organized, and indexed</li>
+</ul>
+<p>Exceptions:</p>
+<ul class="simple">
+<li>If specific data already exists in the database, an appropriate message
+should be returned.</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">Report Retrieval:</th></tr>
+<tr class="field"><td>&nbsp;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>Primary Actor: Another module within the data-layer code base</p>
+<p>Goal: Retrieve analysis data set from database given a specific set of criteria</p>
+<p>Pre-Conditions:</p>
+<ul class="simple">
+<li>Database is up, open, and available</li>
+</ul>
+<p>Post-Conditions:</p>
+<ul class="simple">
+<li>Existing result set is returned</li>
+</ul>
+<p>Exceptions:</p>
+<ul class="simple">
+<li>If result set does not exist, appropriate message will be returned</li>
+<li>If result set exists, but is stale, appropriate message will be returned</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Data Query:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>Primary Actor: Another module within the data-layer code base</p>
+<p>Goal: Retrieve data, or information about available data, based on query</p>
+<p>Pre-Conditions:</p>
+<ul class="simple">
+<li>Database is up, open, and available</li>
+<li>Data (comments) is properly associated to meta-data (courses/instructors)</li>
+</ul>
+<p>Post-Conditions:</p>
+<ul class="simple">
+<li>Requested result set returned<ul>
+<li>Return list of instructors or courses as requested</li>
+<li>Return comments associated to specific instructor, course, or both</li>
+</ul>
+</li>
+</ul>
+<p>Exceptions:</p>
+<ul class="simple">
+<li>If data does not exist in the combination requested, return error</li>
+</ul>
+</div>
+</div>
+<div class="section" id="proposed-change">
+<h1>Proposed Change</h1>
+<p>Initial design of the database will include five tables as described below.  A
+new class will be implemented to provide a layer of abstraction between the
+database and other modules required to interact with the data.  <a class="citation-reference" href="#sqlalchemy" id="id1">[SQLAlchemy]</a>
+will be used to interact with the underlying <a class="citation-reference" href="#sqlite" id="id2">[SQLite]</a> database, which
+provides an extra layer of abstraction as well as future capability to move to
+a more robust Relational Database Management System (RDBMS).</p>
+<p>Constraints defined within the data definition of the database tables will
+enforce data rules, such as relationships to foreign keys or that a specific
+column contains unique data, throughout the table. Since the RDBMS will
+enforce these constraints, it will then be necessary to verify that the
+constraints will not be violated prior to data insertion, or else the database
+will throw an error that will subsequently need to be handled.</p>
+<p>Instructors will uniquely identify each instructor for which the database
+contains data (comments).</p>
+<ul class="simple">
+<li>Instructors<ul>
+<li>Primary Key</li>
+<li>First Name</li>
+<li>Last Name</li>
+</ul>
+</li>
+</ul>
+<p>Courses will uniquely identify each course for which the database contains
+data (comments).</p>
+<ul class="simple">
+<li>Courses<ul>
+<li>Primary Key</li>
+<li>Department</li>
+<li>Program</li>
+<li>Course</li>
+<li>Section</li>
+<li>Year</li>
+<li>Semester [1,2,3]</li>
+</ul>
+</li>
+</ul>
+<p>The &quot;comments&quot; table will hold the raw data and associate to the metadata once
+received from the front-end and parsed.  A primary, auto-increment, integer
+key will be defined as a matter of convention.  A comment field will be
+required as this is specifically the data we are tasked to store and
+process.  Optional metadata fields will be provided for:</p>
+<ul class="simple">
+<li>Comments<ul>
+<li>Primary Key</li>
+<li>anonimized user id</li>
+<li>Comment</li>
+<li>Course (foreign key: Courses.id)</li>
+<li>Instructor (foreign key: Instructors.id)</li>
+<li>Instructor or Course (boolean to identify the target of comment)</li>
+<li>timestamp (date/time of initial ingestion of data)</li>
+</ul>
+</li>
+</ul>
+<p>Stop words will retain a unique list of stop words.</p>
+<ul class="simple">
+<li>Stop Words<ul>
+<li>Primary Key</li>
+<li>Stop Word (unique constraint)</li>
+</ul>
+</li>
+</ul>
+<p>The &quot;datasets&quot; table will keep track of which datasets (unique combinations
+of comments) have been imported.</p>
+<ul class="simple">
+<li>Datasets<ul>
+<li>Primary Key</li>
+<li>Create Date</li>
+</ul>
+</li>
+</ul>
+<p>A &quot;Comment Dataset&quot; table will keep track of which comments are associated
+to which datasets; a potential many-to-many relationship:</p>
+<ul class="simple">
+<li>Comment Dataset<ul>
+<li>Primary Key</li>
+<li>Comment ID (foreign key: Comments.id)</li>
+<li>Dataset ID (foreign key: Datasets.id)</li>
+</ul>
+</li>
+</ul>
+<p>Results cache will store both the query (criteria) and results of any analysis
+performed by the Natural Language Processing engine.</p>
+<ul class="simple">
+<li>Results Cache<ul>
+<li>Primary Key</li>
+<li>Number of Topics</li>
+<li>Words per Topic</li>
+<li>Iterations</li>
+<li>Stop Words</li>
+<li>timestamp (date/time of analysis)</li>
+</ul>
+</li>
+</ul>
+<p>The &quot;Result Topics&quot; table will maintain the associated topics for a particular
+result set:</p>
+<ul class="simple">
+<li>Result Topics<ul>
+<li>Primary Key</li>
+<li>Result ID (foreign key: Result Cache.id)</li>
+<li>Topic</li>
+</ul>
+</li>
+</ul>
+<p>The &quot;Result Details&quot; table will maintain the comments and associated
+sentiments for a particular dataset:</p>
+<ul class="simple">
+<li>Result Details<ul>
+<li>Primary key</li>
+<li>Result ID (foreign key: Result Cache.id)</li>
+<li>Comment ID (foreign key: Comment.id)</li>
+<li>Sentiment (positive, negative, or neutral)</li>
+</ul>
+</li>
+</ul>
+<p>The &quot;Topic Words&quot; table associates the specific words identified, per topic,
+by the analysis process:</p>
+<ul class="simple">
+<li>Topic Words<ul>
+<li>Primary Key</li>
+<li>Topic ID (foreign key: Result Topic.id)</li>
+<li>Word</li>
+</ul>
+</li>
+</ul>
+<div class="section" id="alternatives">
+<h2>Alternatives</h2>
+<p>The current implementation does not store data from one analysis run to the
+next, which means that data must be re-analyzed in order to be reviewed again
+at a later date or by another person.  Given the intensive processing that
+must be accomplished to analyze a single data-set, 10 minutes based on one
+report, maintaining this status quo is not appropriate for a server-based,
+multi-user web-based application.</p>
+<p>Another alternative could be to store data files and result sets on the
+filesystem.  The current system does this with the &quot;stop words&quot; list, and the
+filesystem may be an appropriate place for a simple list that simply needs to
+be read over and over again without changing.  What becomes prohibitively
+challenging, when storing flat files on the filesystem, is the lack of meta-
+data and the inability to perform complex queries.  Correlating disparate
+or co-mingled data-sets would be incredibly challenging and memory-intensive
+if all files had to be read and scrutinized each time a query was received
+from the presentation-layer.  A database is naturally suited to perform such
+activities.</p>
+</div>
+</div>
+<div class="section" id="testing">
+<h1>Testing</h1>
+<p>Testing should include verification of column constraints and proper handling
+if those constraints are violated (such as a column with a &quot;unique&quot; index).
+This can be tested by attempting to ingest the same file (and values) more
+than once.</p>
+<p>Testing should verify that input is properly validated and sanitized prior
+to insertion in order to prevent potential SQL injection or other undesired
+behavior. This can be tested by ingesting data containing SQL in an attempt
+to manipulate data outside the scope of the data being ingested.</p>
+<p>Code should check and enforce field size constraints to avoid undesired
+behavior.  Undesired behavior could be statement failure, or silently
+truncating the inserted data (depending on database configuration).  This can
+be tested by inserting very large segments of data.</p>
+<p>Code will be reviewed by other members of the CADET team, as well as the
+documentation team, for consistency and accuracy.</p>
+</div>
+<div class="section" id="documentation">
+<h1>Documentation</h1>
+<p>End-users do not need to be aware of the internal structures of the database.
+Similarly, the presentation-layer does not need to be concerned with the
+specific design of the database either, except with regard to the capabilities
+it is able to provide, since there will be several layers of abstraction in
+between.  Documentation will primarily consist of descriptions of the
+entities, data types, and associated constraints.  Programmers documentation
+will describe the methods defined in the class, to include input parameters
+and output parameters.</p>
+</div>
+<div class="section" id="implementation">
+<h1>Implementation</h1>
+<div class="section" id="work-items">
+<h2>Work Items</h2>
+<p>The database and tables will need to be created, along with user credentials
+provided to the person implementing the data connector.</p>
+<p>The connector, which will establish the connection to the database, will be
+defined once and called when necessary to interact with the database.</p>
+<p>Functions should be written to provide a layer of abstraction for specific
+interactions with the database.  By centralizing and abstracting the calls to
+the database, other modules (and developers) do not have to be intimately
+familiar with the database design and constraints.</p>
+<p>When data cannot be inserted because it violates some defined data constraint,
+or cannot be retrieved because it does not exist, then an appropriate failure
+response should be returned instead.  An overall database failure will also
+result in a boolean 'false' returned.</p>
+<ul class="simple">
+<li>InsertComment<ul>
+<li>input param: associative array of elements to insert</li>
+<li>return value: true</li>
+<li>failure response: false (indicating constraint violation)</li>
+</ul>
+</li>
+<li>InsertComments<ul>
+<li>input param: 2D associative array of elements to insert</li>
+<li>return value: number of rows inserted on success</li>
+<li>failure response: false (indicating constraint violation)</li>
+</ul>
+</li>
+<li>InsertAnalysis<ul>
+<li>input param: associative array of elements</li>
+<li>return value: true</li>
+<li>failure response: false (indicating constraint violation)</li>
+</ul>
+</li>
+<li>InsertStopWord<ul>
+<li>input param: string</li>
+<li>return value: true on success or already exists</li>
+<li>failure response: false (indicating constraint violation)</li>
+</ul>
+</li>
+<li>RetrieveComments<ul>
+<li>input param: associative array of query parameters</li>
+<li>return value: 2D array of comments</li>
+<li>failure response: not applicable (empty array returned if nothing matches
+filters)</li>
+</ul>
+</li>
+<li>RetrieveProfessors<ul>
+<li>input param: optional course, year, semester filters</li>
+<li>return value: array of distinct professor names in database</li>
+<li>failure response: not applicable (empty array returned if nothing matches
+filters)</li>
+</ul>
+</li>
+<li>RetrieveCourses<ul>
+<li>input param: optional course, year, semester filters</li>
+<li>return value: array of distinct courses</li>
+<li>failure response: not applicable (empty array returned if nothing matches
+filters)</li>
+</ul>
+</li>
+<li>RetrieveAnalysis<ul>
+<li>input param: analysis parameters</li>
+<li>return value: analysis result on success</li>
+<li>failure response: false (analysis result does not exist in the database)</li>
+</ul>
+</li>
+<li>RetrieveStopWords<ul>
+<li>input param: none</li>
+<li>return value: array of stop words in database</li>
+<li>failure response: not applicable</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="references">
+<h1>References</h1>
+<table class="docutils citation" frame="void" id="sqlalchemy" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[SQLAlchemy]</a></td><td>The Python SQL Toolkit and Object Relational Mapper. Online:
+<a class="reference external" href="https://www.sqlalchemy.org/">https://www.sqlalchemy.org/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="sqlite" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[SQLite]</a></td><td>SQL database engine.  Online:
+<a class="reference external" href="https://www.sqlite.org/">https://www.sqlite.org/</a></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+            </div>
+        </div>
+{% endblock %}
