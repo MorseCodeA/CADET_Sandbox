@@ -12,7 +12,8 @@ class DocumentationView(TemplateView):
     def data_analysis(request):
         return render(request, 'documentation/data-analysis.html')
     def DisplayTopicCommentsFromDataLayer(request):
-        return render(request, 'documentation/DisplayTopicCommentsFromDataLayer.html')
+        return render(request,
+        'documentation/DisplayTopicCommentsFromDataLayer.html')
     def enforce_code_standards(request):
         return render(request, 'documentation/enforce_code_standards.html')
     def enforce_test_before_commit(request):
@@ -24,10 +25,13 @@ class DocumentationView(TemplateView):
     def metadata_retrieval(request):
         return render(request, 'documentation/metadata-retrieval.html')
     def presentation_later_interface_for_data_results(request):
-        return render(request, 'documentation/presentation-layer-interface-for-data-results.html')
+        return render(request,
+        'documentation/presentation-layer-interface-for-data-results.html')
     def refactor_front_end_code(request):
         return render(request, 'documentation/refactor_front_end_code.html')
     def web_dev_docs(request):
         return render(request, 'documentation/web-dev-docs.html')
     def web_tutorial(request):
         return render(request, 'documentation/web-tutorial.html')
+
+    
