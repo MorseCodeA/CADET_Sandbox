@@ -110,7 +110,8 @@ nav #mainNav .navbar.navbar-expand-lg.navbar-dark.fixed-top {
   background-color: #F9F9F9 !important; }
 
 .bg-container {
-  background: url("../img/cadet-bg.jpg") no-repeat center center;
+  background: url("../img/cadet-bg.jpg") no-repeat;
+  background-image: url("../img/cadet-bg.jpg") no-repeat;
   background-size: cover; }
 
 .content-wrapper {
@@ -259,8 +260,9 @@ documentation-api-container.container {
   color: #9B9B9B; }
 
 #topic-distribution .topic-comment-container {
-  margin-top: 20px;
-  padding-top: 1em; }
+  margin-top: 1.25em;
+  padding-top: 1em;
+  margin-bottom: 3.5em; }
   #topic-distribution .topic-comment-container table thead tr.table-heading {
     font-size: 0.85em;
     color: #868e96; }

@@ -94,13 +94,13 @@
     });
   }
   var endpoint = '/api/chart/topic/data/'
-  var topic_label_arr = []
-  var pos_arr = [], neu_arr = [], neg_arr = []
   $.ajax({
     method: 'GET',
     dataType: 'json',
     url: endpoint,
     success: function(data){
+      var topic_label_arr = [];
+      var pos_arr = [], neu_arr = [], neg_arr = []
       for (var i = 0; i < data.topic.length; i++){
         topic_label_arr.push("Topic " + data.topic[i].topic_id);
 
@@ -112,6 +112,25 @@
         }
       }
       drawTopicDistribution(topic_label_arr, pos_arr, neu_arr, neg_arr);
+    },
+    error: function(error_data){
+      console.log(error_data);
+    }
+  });
+
+  $.ajax({
+    method: 'GET',
+    dataType: 'json',
+    url: '/api/chart/topic/word/all',
+    success: function(data){
+      var topicIdLabelArr = []
+      var wordsArr = []
+      for (var i = 0; i < data.topic.length; i++){
+        topicIdLabelArr.push("Topic " + data.topic[i].topic_id);
+        words = push(data.topic[i].words); 
+      }
+      console.log("topicIdLabelArr: " + topicIdLabelArr);
+      console.log("words: " + words);
     },
     error: function(error_data){
       console.log(error_data);
