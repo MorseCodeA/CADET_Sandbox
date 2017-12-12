@@ -5,7 +5,7 @@
 	<h1 class="main-heading"> Instructor Distribution </h1>
     <div class="instructor-distribution-container">
       <div class='row'>
-        <div class='col-sm-12 col-lg-8' url-endpoint='/api/chart/data/'>
+        <div class='col-sm-12 col-lg-9' url-endpoint='/api/chart/data/'>
           <div class='row'>
             <div class='col-xs-12 col-lg-12'>
               <h4 class="dist-subtitle">Instructor Distribution</h4>
@@ -13,33 +13,17 @@
             </div>
           </div>
         </div>
-    	<div class='instructor-side-bar col-sm-12 col-lg-4'>
+    	<div class='instructor-side-bar col-sm-12 col-lg-3'>
     		<div class="panel panel-default">
     		  <!-- Default panel contents -->
     		  <div class="panel-heading">Instructors</div>
-    		  <div class="panel-body" style="max-height: 120px;overflow-y: scroll;">
-    		    <!-- Table -->
-      		  <!-- <table class="instructor-side-table">
+    		  <div class="panel-body" style="max-height: 220px;overflow-y: scroll;">
+      		  <table class="instructor-side-table">
       		  	<tbody> 
       		  		<tr> 
-      		  			<td>Birdy Birdface</td> 
-      		  		</tr> 
-      		  		<tr> 
-      		  			<td>Mark Otto</td> 
-      		  		</tr> 
-      		  		<tr> 
-      		  			<td>Jacob Thornton</td> 
-      		  		</tr> 
-      		  		<tr> 
-      		  			<td>Larry the Bird</td> 
-      		  		</tr> 
-      		  		<tr> 
-      		  			<td>Luther Rex</td> 
-      		  		</tr> 
-      		  			<td>Mr. Beans</td> 
+      		  			<td>No data</td> 
       		  		</tr> 
       		  	</tbody> 
-      		  </table> -->
     		  </div>
     		</div>
     	</div>
@@ -59,7 +43,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
+                <!-- <tr>
                   <th scope="row">602.423</th>
                   <td>A lot more social and happy than I thought it would
                     be. Instructor are willing to help you out, and she's very
@@ -137,6 +121,7 @@ function drawInstructorDist(instructorLabel, posArr, neuArr, negArr) {
   }
   });
 }
+
 var endpoint = '/api/chart/instructor/data/'
   var instructor_name = []
   var pos_arr = [], neu_arr = [], neg_arr = []
@@ -155,11 +140,26 @@ var endpoint = '/api/chart/instructor/data/'
           neg_arr.push(sentiments[key].neg);
         }
       }
+      // call chart function to draw the bar graph
       drawInstructorDist(instructor_name, pos_arr, neu_arr, neg_arr);
+
+      //call updateInstructorNameHTML() to add instructor labels on right sidebar
+      updateInstructorNameHTML(instructor_name);
     },
     error: function(error_data){
       console.log(error_data);
     }
   });
+
+function updateInstructorNameHTML(names) {
+  htmlInstructorBox = $('#instructor-distribution .instructor-distribution-container .panel-body');
+  updateHTML = [];
+  names.forEach(function(n) {
+    //console.log("name: " + n);
+    updateHTML.push('<tr><td>' + n + '</td></tr>');
+  });
+  htmlInstructorBox.html(updateHTML);
+};
 </script>
+
 {% endblock %}
