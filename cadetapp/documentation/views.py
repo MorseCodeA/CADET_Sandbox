@@ -24,7 +24,7 @@ class DocumentationView(TemplateView):
         return render(request, 'documentation/instructor-topic-dashboard.html')
     def metadata_retrieval(request):
         return render(request, 'documentation/metadata-retrieval.html')
-    def presentation_layer_interface_for_data_results(request):
+    def presentation_layer_interface_data_results(request):
         return render(request,
         'documentation/presentation-layer-interface-for-data-results.html')
     def refactor_front_end_code(request):
@@ -32,4 +32,4 @@ class DocumentationView(TemplateView):
     def web_dev_docs(request):
         return render(request, 'documentation/web-dev-docs.html')
     def web_tutorial(request):
-        return render(request, 'documentation/web-tutorial.html')
+        return render(request, '/documentation/web-tutorial.html')
