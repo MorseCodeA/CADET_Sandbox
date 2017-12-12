@@ -3,32 +3,9 @@
 #              instructor results to the viewer.
 # Classes:     ChartTopicData, ChartTopicWordData, and ChartInstructorData
 #
-# proposed JSON structure for controller.views:
-#   For ChartTopicWordData Class
-#    topic_word_data = {
-#          "topic": [
-#            {
-#              "topic_id": "1",
-#              "words": "happy, good, fun, yay, smile"
-#            },
-#            {
-#              "topic_id": "2",
-#              "words": "sad, boo, mean, hard, lethal"
-#            },
-#            {
-#              "topic_id": "3",
-#              "words": "hub, hubba, buh, duh, huh"
-#            },
-#            {
-#              "topic_id": "4",
-#              "words": "foo, baz, exe, why, zee"
-#            },
-#            {
-#              "topic_id": "5",
-#              "words": "red, white, blue, yellow, green"
-#            }
-#          ]
-#        }
+# proposed JSON structure for controller.views is in the 
+# distribution_chart/.sample_expected_json.py path
+#
 #-----------------------------------------------------------------------------
 
 from rest_framework.response import Response
