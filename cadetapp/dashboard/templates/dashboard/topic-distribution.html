@@ -26,15 +26,7 @@
               <tbody>
                 <tr>
                   <th scope="row">1</th>
-                  <td>social, happy, people, friendly, success, science, engineering, challenging, best </td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>great, school, medicine, exceptional, network, competition, curve, formal, boom, bang</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>deflation, low, tough, crazy, mean, stress, attack, ignore, work, little</td>
+                  <td>engineering, challenging, best </td> 
                 </tr>
               </tbody>
             </table>
@@ -93,17 +85,18 @@
     }
     });
   }
+  // you can view this json at http://localhost:8000/api/chart/topic/data/
   var endpoint = '/api/chart/topic/data/'
   $.ajax({
     method: 'GET',
     dataType: 'json',
     url: endpoint,
     success: function(data){
+      // if the response is a succes, then trigger the code below
       var topic_label_arr = [];
       var pos_arr = [], neu_arr = [], neg_arr = []
       for (var i = 0; i < data.topic.length; i++){
         topic_label_arr.push("Topic " + data.topic[i].topic_id);
-
         sentiments = data.topic[i].sentiment_count;
         for ( key in sentiments) {
           pos_arr.push(sentiments[key].pos);
@@ -111,31 +104,58 @@
           neg_arr.push(sentiments[key].neg);
         }
       }
+      // save the parsed arrays with label, and sentiments as inputs
+      // to call this function to draw the chart
       drawTopicDistribution(topic_label_arr, pos_arr, neu_arr, neg_arr);
+
+      // fire second ajax call to parse topic-word mapping
+      parseTopicWordJSON();
+      
     },
     error: function(error_data){
-      console.log(error_data);
+      console.log("Topic Word Mapping Error: " + error_data);
     }
   });
 
-  $.ajax({
-    method: 'GET',
-    dataType: 'json',
-    url: '/api/chart/topic/word/all',
-    success: function(data){
-      var topicIdLabelArr = []
-      var wordsArr = []
-      for (var i = 0; i < data.topic.length; i++){
-        topicIdLabelArr.push("Topic " + data.topic[i].topic_id);
-        words = push(data.topic[i].words); 
+  function parseTopicWordJSON() {
+    // after grabbing chart, fire another AJAX call to grab Topic-to-Word JSON
+    // in another request
+    $.ajax({
+      method: 'GET',
+      dataType: 'json',
+      url: '/api/chart/topic/word/all/',
+      success: function(data_topic_word){
+
+        var topicIdLabelArr = []
+        var wordsArr= []
+        console.log("inside parseTopicWordJSON");
+        console.log(data_topic_word);
+
+        for (var i = 0; i < data_topic_word.topic.length; i++){
+          topicIdLabelArr.push(data_topic_word.topic[i].topic_id);
+          wordsArr.push(data_topic_word.topic[i].words); 
+        }
+        // fire function to update TopicWord parsed data to HTML template
+        writeTopicWordToHTML(topicIdLabelArr, wordsArr);
+      },
+      error: function(error_data){
+        console.log("Topic Chart Error: " + error_data);
       }
-      console.log("topicIdLabelArr: " + topicIdLabelArr);
-      console.log("words: " + words);
-    },
-    error: function(error_data){
-      console.log(error_data);
+    });
+  }
+
+  function writeTopicWordToHTML(arrID, wArr) {
+    rowHTML = $('#topic-distribution .topic-comment-container table tbody');
+    var updateHTML = [];
+    var len = arrID.length;
+    for (var i = 0; i < len; i++){
+      // console.log('inside for loop');
+      // console.log('arr id' + arrID[i]);
+      updateHTML.push('<tr><th scope="row">' + arrID[i] + '</th><td>' + wArr[i] + '</td></tr>'); 
     }
-  });
+    rowHTML.html(updateHTML);
+  }
+
 </script>
 </div>
 {% endblock %}
