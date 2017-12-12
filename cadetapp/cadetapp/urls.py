@@ -26,7 +26,10 @@ urlpatterns = [
     url(r'api/', include('distribution_chart.urls')),
     url(r'documentation/', include('documentation.urls')),
     url(r'results/', include('results.urls')),
-    #redirect / to dashboard view
+
+    #redirect all invalid request from browser to dashboard home page,
+    # in the future this should be taken out. for now, it is so there is no
+    # need for a 404 page if the user uses an invalid link
     url(r'^.*$', RedirectView.as_view(url='dashboard/', permanent=False))
 ]
 

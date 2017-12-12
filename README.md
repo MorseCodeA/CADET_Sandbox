@@ -1,7 +1,8 @@
 # CADET_Sandbox
 Python 3.4, Django 1.11
 
-A text repo to put all of our CADET Django code before we push it to Phabricator. 
+A text repo to put all of our CADET Django code before we push it to
+Phabricator.
 
 ## I. Set Up: Project Installation 
 
@@ -18,14 +19,18 @@ cd CADET_Sandbox
 
 A. General virtualenv 
 ```bash 
-# run virtualenv with python3, you can name your environment whatever. This example, we call it *cadetenv*.  
+# run virtualenv with python3, you can name your environment whatever. This
+example, we call it *cadetenv*.
 python -m venv cadetenv   
 ```  
 If running virtual env command gives you an error, you might either have 
-anaconda installed, which you need to follow [this setup](https://uoa-eresearch.github.io/eresearch-cookbook/recipe/2014/11/20/conda/).  
+anaconda installed, which you need to follow[this setup:]
+(https://uoa-eresearch
+.github.io/eresearch-cookbook/recipe/2014/11/20/conda/).
 
-Mac and Ubuntu users might also run into installation error if pyenv is broken [broken pyenv](https://stackoverflow.com/questions/26215790/venv-doesnt-create-activate-script-python3) 
-so add this modifier to the same command:   
+Mac and Ubuntu users might also run into installation error if pyenv is
+broken, then add this modifier to the same command:
+
 ```bash
 python -m venv cadetenv --without-pip 
 ```

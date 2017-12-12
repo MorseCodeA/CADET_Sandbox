@@ -1,6 +1,3 @@
-from pkg_resources import parse_version
-import django
-from django.conf.urls import url
 from django.conf.urls import url, include
 from .views import DashboardView, DocumentationView
 from distribution_chart.views import get_chart_data, \
