@@ -5,12 +5,11 @@ import os
 #----------------------------------------------------------------------
 
 class CSVfiletoJSONobj:
-	#("anon id","Program","Modality","Course Number/ Section ID","Instructor Last Name", "Instructor First Name", "Course comments","Instructor comments","[Additional comments, if available]")
 	
 	def _init_(self):
 		self.inputpath = 'string'
 		self.outputpath = 'string'
-		self.fieldnames = ("anon id","Program","Modality","Course Number/ Section ID","Instructor Last Name", "Instructor First Name", "Course comments","Instructor comments","[Additional comments, if available]")
+		self.fieldnames = ("anon_id","program","modality","course_num_sect_id","instructor_last_name", "instructor_first__name", "course_comments","instructor_comments","additional_comments")
 
 	def get_input_path(self):
 		return self.inputpath
@@ -37,11 +36,9 @@ class CSVfiletoJSONobj:
 		reader = csv.DictReader(csvfile, self.fieldnames)
 		next(reader)
 		next(reader)
-		json_list = {}
-		totalrows = 0
+		json_list = []
 		for row in reader:
-			json_list[totalrows] = row
-			totalrows += 1
+			json_list.append(row)
 		json.dump(json_list, jsonfile)
 
 
