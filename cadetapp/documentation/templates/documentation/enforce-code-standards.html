@@ -1,0 +1,442 @@
+{% extends 'dashboard/base.html' %}
+{% block content %}
+        <div class="documentation-wrapper-container container">
+            <h2> Automatically Enforce Code Standards and Quality </h2>
+            <div class="container">
+
+
+<!-- This work is licensed under a Creative Commons 3.0 Unported License.
+
+http://creativecommons.org/licenses/by/3.0/legalcode -->
+<p>Our team is implementing a database for the Course Assessment using Data
+Exploration of Text (CADET) project. Datasets containing course assessment
+comments and metadata will be able to be stored for future use. Users will no
+longer need to re-upload files each time they wish to analyze a particular set
+of data.</p>
+<p>This feature will request the program to run a sentiment analysis report for a
+particular, unprocessed dataset given as a parameter (Dataset ID). This
+operation will be performed via calls to a <a class="citation-reference" href="#restful" id="id1">[RESTful]</a> API described in
+specification <a class="citation-reference" href="#d82" id="id2">[D82]</a>. Other parameters include: number of topics, words per
+topic, and number of iterations. The datasets being passed into the sentiment
+analysis module will be retrieved from the database using the ID of the
+dataset. The results of the analysis will be stored in the database. If a
+query contains the same paramaters as one previously stored in the database,
+the results of the previous analysis will immediately be returned.</p>
+<div class="section" id="problem-description">
+<h1>Problem Description</h1>
+<p>Previously, files containing comments were uploaded and were directly
+transmitted to the comment analysis module. Here, they are processed and the
+results are reported back to the user. Because a database is being
+implemented, the analysis module can no longer receive data in this way. The
+datasets must now be retrieved from the database and passed to the analysis
+module, and a new interface is needed to support this change.</p>
+<div class="section" id="requirements">
+<h2>Requirements</h2>
+<ul class="simple">
+<li>Retrieve a specified dataset from the database</li>
+<li>Return and cache results of sentiment analysis</li>
+<li>If a specified dataset is not found, return a &quot;404 Not Found&quot; error with a
+description of the invalid request</li>
+<li>If an exception occurs during the analysis, return a &quot;500 Server Error&quot;</li>
+<li>Retrieve and return cached results if the analysis has been done in the past</li>
+<li>Same output data as current implementation</li>
+</ul>
+</div>
+<div class="section" id="use-cases">
+<h2>Use Cases</h2>
+<ul class="simple">
+<li>The user requests a report on a specified course from a specific year. The
+data is located in the database. A report request is called and the dataset is
+analyzed. The processed data is passed on to be presented to the user. The
+data is also stored in the database for future use.</li>
+<li>The user wishes to see a report for a previously processed dataset, but did
+not save the results. The previous report is cached in the database. The user
+again requests the report and is immediately returned the results without the
+need to re-process the dataset.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="proposed-change">
+<h1>Proposed Change</h1>
+<p>This feature is the bridge between the newly implemented database and the
+current analysis module. A separate table of the database will contain sets of
+specified comments. This table will have an auto-incremented integer serving as
+the ID for each dataset.</p>
+<p>This feature will take the following parameters:</p>
+<ul class="simple">
+<li>Dataset ID:         The ID of the stored set of comments</li>
+<li><dl class="first docutils">
+<dt>Number of Topics:   The number of topics (each topic is a set of related</dt>
+<dd>words found in comments) specified by the user</dd>
+</dl>
+</li>
+<li>Words per Topic:    The number of related words in a single topic</li>
+<li><dl class="first docutils">
+<dt>Iterations:         The number of iterations of <a class="citation-reference" href="#lda" id="id3">[LDA]</a> process (for topic</dt>
+<dd>analysis)</dd>
+</dl>
+</li>
+</ul>
+<p>If the Dataset ID is not found in the database, a &quot;404 Not Found&quot; error will
+be returned. Before an unnecessary analysis is performed, this feature will
+check if there is a cached result of this report by comparing the parameters
+passed in this call to those stored in the cached results.</p>
+<p>If this report has not been produced before, the dataset table will be
+accessed, and the comments in the specified set will be passed through the
+analysis module using the rest of the parameters provided in the call. The
+sentiment of each comment is set by the analysis module. Each comment is
+determined to be positive, negative, or neutral. If any error occurs during
+the processing, a &quot;500 Server Error&quot; will be returned.</p>
+<p>A list of JSON objects will be returned to the user and will also be cached in
+the database. The Work Items section covers the format of the results.</p>
+<div class="section" id="alternatives">
+<h2>Alternatives</h2>
+<p>An alternative would be to stay with the status quo. In this case, a database
+would not be used. The comments would instead be stored locally.</p>
+<p>The planned implementation provides the ability to cache results and, thanks
+to the metadata being stored, lays the groundwork for more complex queries in
+the future. Future additions could allow the filtering of comments included in
+datasets by using the metadata being stored.</p>
+</div>
+</div>
+<div class="section" id="testing">
+<h1>Testing</h1>
+<p>Testing will involve attempting to access valid and invalid datasets. The
+Proposed Changes section describes the expected result of attempting to access
+an invalid dataset. Valid accesses should produce the same results as the
+current implementation of the project. The results will be tested against
+this.</p>
+</div>
+<div class="section" id="documentation">
+<h1>Documentation</h1>
+<p>The documentation should describe the parameters being passed into the
+function and the format of the returned objects. Inline comments will be used
+to describe the actions being taken. These will appear in block comment form
+above the function. Smaller comments will be used to explain more complex
+operations that may not be wholly self-documented.</p>
+<p>Information about the HTTP status codes should be included in the
+documentation covering the whole API for this project. This documentation
+should also include how to request reports and the expected return value.</p>
+</div>
+<div class="section" id="implementation">
+<h1>Implementation</h1>
+<div class="section" id="work-items">
+<h2>Work Items</h2>
+<ul>
+<li><p class="first">Access Database</p>
+<p>The Dataset ID will be used to fetch the comments to be processed. The
+cached results will be accessed to check if a report for this dataset,
+with matching parameters, has been run previously.</p>
+</li>
+<li><p class="first">Format Data</p>
+<p>The data will need to be re-formatted to match the current input expected
+by the analysis module.</p>
+</li>
+<li><p class="first">Sentiment Analysis</p>
+<p>This phase will remain the same as the current implementation.</p>
+</li>
+<li><p class="first">Format Results</p>
+<p>The results of the analysis will also need to be re-formatted. The results
+will contain:</p>
+<blockquote>
+<ul class="simple">
+<li>Topic Model Dictionary</li>
+<li>List of Comment Objects</li>
+</ul>
+</blockquote>
+<p>The Topic Model will be a dictionary that uses the Topic ID stored in the
+comment object as a key that matches a comment to a list of related words.
+This list of words is known as a topic.</p>
+<p>The comment objects will contain these fields:</p>
+<blockquote>
+<ul class="simple">
+<li>Comment</li>
+<li>Comment ID</li>
+<li>Comment Type</li>
+<li>Course</li>
+<li>Instructor First Name</li>
+<li>Instructor Last Name</li>
+<li>Sentiment of Comment</li>
+<li>Topic ID</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first">Return and Cache Results</p>
+<p>The results will be store in the database, waiting to be retrieved by the
+presentation layer team. The analysis cache will contain the following for
+each report:</p>
+<blockquote>
+<ul class="simple">
+<li>Number of Topics</li>
+<li>Words Per Topic</li>
+<li>Iterations</li>
+<li>Result Set</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="references">
+<h1>References</h1>
+<table class="docutils citation" frame="void" id="restful" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[RESTful]</a></td><td>&quot;Representational State Transfer,&quot; Sept 2017. online:
+<a class="reference external" href="https://en.wikipedia.org/wiki/Representational_state_transfer">https://en.wikipedia.org/wiki/Representational_state_transfer</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="d82" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[D82]</a></td><td>Jason Porter, &quot;Metadata Retrieval,&quot; Sept 2017. online:
+<a class="reference external" href="https://web4.jhuep.com/D82">https://web4.jhuep.com/D82</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="lda" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[LDA]</a></td><td>&quot;Latent Dirichlet allocation,&quot; Sept 2017. online:
+<a class="reference external" href="https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation">https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation</a></td></tr>
+</tbody>
+</table>
+<!-- This work is licensed under a Creative Commons 3.0 Unported License.
+
+http://creativecommons.org/licenses/by/3.0/legalcode -->
+<p>Static code analysis needs to be added to the project's review process
+to help with code quality and to provide a guideline for coding standards
+for the team. The integration of code linting during the commit process
+will help reduce the scope of code reviews thereby making them more
+effective as a whole. By performing the linting automatically on every
+commit, this allows the developers to focus on the substance of the
+commit rather than the form and structure.</p>
+<div class="section" id="problem-description">
+<h1>Problem Description</h1>
+<p>As multiple developers write and interact with a code base, the absence
+of a unified style will lead to code that is difficult to maintain and
+understand. In addition, the absence of an agreed-upon style will lead to
+developers wasting time during code reviews to debate stylistic nuances
+of the code rather than the content. The appropraite solution for enforcing
+style guidelines is to incorporate it with the default commit process used
+by the team. Since Arcanist already provides options for pre-commit hooks,
+Arcanist needs to be configured to leverage third party linting tools to
+enforce code standards automatically. [ArcDiffDoc]</p>
+<div class="section" id="requirements">
+<h2>Requirements</h2>
+<blockquote>
+<ul class="simple">
+<li>The solution shall automatically run linting processes before a commit
+can be submitted for review.</li>
+<li>The solution shall be integrated with the existing <tt class="docutils literal">arc diff</tt> commit
+process</li>
+<li>The linters shall be properly configured to enforce coding standards
+at an appropriate level</li>
+<li>The linters shall have a documented configuration file explaining each
+of the settings</li>
+<li>The linters shall enforce documentation standards as well as code
+standards</li>
+<li>An installation guide shall be provided for developers to use when
+configuring their development environment</li>
+</ul>
+</blockquote>
+</div>
+<div class="section" id="use-cases">
+<h2>Use Cases</h2>
+<p>Name: Code Linting Automatically Executed</p>
+<dl class="docutils">
+<dt>Actors:</dt>
+<dd><ul class="first last simple">
+<li><dl class="first docutils">
+<dt>Developer</dt>
+<dd>Uses the static analysis tool to improve code quality</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Arcanist</dt>
+<dd>Allows developer to automatically run analysis tools before
+commit</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Linting Framework</dt>
+<dd>Software that performs static analysis of developer's code</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt>Preconditions:</dt>
+<dd><ul class="first last simple">
+<li>The developer has properly installed Arcanist</li>
+<li>The developer has properly installed and configured git</li>
+<li>The developer has written code that needs to be comitted</li>
+<li>The developer has installed the appropriate linting software</li>
+</ul>
+</dd>
+<dt>Error Flow:</dt>
+<dd>After the developer has finished writing code, the developer runs the
+command <tt class="docutils literal">arc diff</tt> to kick off the process of submitting code for review.
+During the diff process, Arcanist automatically executes a series of
+commands to lint the developer's code before submission. The linting
+process generates a series of warnings and errors due to formatting
+concerns within the code. Arcanist takes these errors and presents them
+to the user for correction. Arcanist stops the commit process until the
+developer addresses the errors.</dd>
+<dt>Post Conditions:</dt>
+<dd><ul class="first last simple">
+<li>The code has not been submitted</li>
+<li>The developer has print out of areas where his code needs to be
+refactored</li>
+</ul>
+</dd>
+<dt>Clean Flow:</dt>
+<dd>After the developer has finished writing the code, the developer runs
+the command <tt class="docutils literal">arc diff</tt> to kick off the process of submitting the code for
+review. During the diff process, Arcanist automatically executes a series
+of commands to lint the developer's code before submission. The linting
+process finds no style conflicts within the code and returns a success
+value. Arcanist then allows the diff process to continue. The code is
+successfully submitted for review.</dd>
+<dt>Post Conditions:</dt>
+<dd><ul class="first last simple">
+<li>The code has been submitted</li>
+<li>The developer is presented with an indication that the code did not have
+any style violations</li>
+</ul>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="proposed-change">
+<h1>Proposed Change</h1>
+<p>Arcanist's commit process is to be reconfigured to include the use of
+automatic linting processes. The linting process is to be configured to
+execute Python and JavaScript linting processes.</p>
+<p>The following linters shall be configured to execute automatically for
+all modified Python files:</p>
+<ul>
+<li><p class="first">autopep8</p>
+<ul class="simple">
+<li>This linter shall be configured to leverage its auto correct behavior
+which will immediately correct any small style concerns without
+developer intervention</li>
+<li>This linter shall be configured to appropriately enforce pep8 standards
+as well as team designated standards without becoming burdensome</li>
+</ul>
+</li>
+<li><p class="first">pydocstyle</p>
+<blockquote>
+<ul class="simple">
+<li>This linter shall be configured to enforce a unified Python
+documentation style.</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<p>The jshint shall be configured to execute automatically for
+all modified JavaScript files:</p>
+<p>All linting configurations shall be properly documented to identify which
+settings correspond to which desired behaviors. Configurations shall include
+both error and warning settings. Autocorrect behavior shall be implemented
+where available. The emphasis will be on correcting common syntax errors,
+reducing cyclomatic complexity, and conforming to python standard
+code behaviors, particularly those that are unique to the language</p>
+<p>The automatic linting feature will work hand-in-hand with the automated
+testing feature to comprise the entirety of the pre-commit documentation
+and quality evaluation process. The unit testing and linting components
+are already independently handled by Arcanist, so the integration process
+will be seamless.</p>
+<div class="section" id="alternatives">
+<h2>Alternatives</h2>
+<p>There are multiple third party linting options available for both Python
+and JavaScript. A more thorough list of options exists in the
+'awesome-static-analysis' repository on GitHub <a class="citation-reference" href="#staticanalysislist" id="id1">[StaticAnalysisList]</a>.
+Autopep8, pydocstyle, and jshint were selected for their widespread
+adoption and efficiency. Other options can be substituted if found to be
+of superior quality, but the options selected represent a sufficient set
+of static analysis tools.</p>
+</div>
+</div>
+<div class="section" id="testing">
+<h1>Testing</h1>
+<p>To properly test the configurations of the linters, Arcanist's linting
+command will be executed outside of the commit process to verify that the
+linters are working on their own</p>
+<p>To test the pre-commit hook, a poorly formatted code file will be submitted
+for review in order to trigger the automatic linting process</p>
+</div>
+<div class="section" id="documentation">
+<h1>Documentation</h1>
+<p>Each configuration setting shall be accompanied by inline documentations
+identifying what the specific setting addresses and why it is necessary</p>
+<p>Installation instructions shall be created for distribution to the
+developers to assist with the installation process</p>
+</div>
+<div class="section" id="implementation">
+<h1>Implementation</h1>
+<div class="section" id="work-items">
+<h2>Work Items</h2>
+<blockquote>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt>configure autopep8 linter with autocorrect</dt>
+<dd><ul class="first last">
+<li>Validate that autopep8 is properly configured</li>
+<li>Add pre-commit check for Python files</li>
+<li>Validate pre-commit check</li>
+<li>Draft installation documentation and configuration notes</li>
+<li>Deploy configured autopep8 to be used immediately for Data and
+UI teams</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>configure pydocstyle linter</dt>
+<dd><ul class="first last">
+<li>Validate the pydocstyle is properly configured</li>
+<li>Add pre-commit check for Python files</li>
+<li>Validate pre-commit check</li>
+<li>Draft installation documentation and configuration notes</li>
+<li>Deploy configured pydocstyle to be used immediately for Data and
+UI teams</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>configure jshint linter</dt>
+<dd><ul class="first last">
+<li>Validate the jshint linter is properly configured</li>
+<li>Add pre-commit check for JavaScript files</li>
+<li>Validate pre-commit check</li>
+<li>Draft installation documentation and configuration notes</li>
+<li>Deploy configured jshint to be used immediately for UI team</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>consolidate documentation. Update dev tools repository as necessary</li>
+</ul>
+</blockquote>
+</div>
+</div>
+<div class="section" id="references">
+<h1>References</h1>
+<table class="docutils citation" frame="void" id="arcdiffdoc" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[ArcDiffDoc]</td><td>Arcanist Documentation. Online:
+<a class="reference external" href="https://secure.phabricator.com/book/phabricator/article/arcanist_lint/">https://secure.phabricator.com/book/phabricator/article/arcanist_lint/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="staticanalysislist" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[StaticAnalysisList]</a></td><td>List of Static Analysis tools Online:
+<a class="reference external" href="https://github.com/mre/awesome-static-analysis">https://github.com/mre/awesome-static-analysis</a></td></tr>
+</tbody>
+</table>
+	      
+            </div>
+        </div>
+{% endblock %}

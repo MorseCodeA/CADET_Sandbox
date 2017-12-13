@@ -4,7 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1,
+  shrink-to-fit=no">
   <meta name="description" content="CADET Test Website, JHU, Fall 2017">
   <meta name="author" content="Team KAJJA">
   <title>CADET Dashboard - V1 </title>
@@ -17,16 +18,15 @@
     {% include 'base/navigation.html' %}
     <div class="content-wrapper">
       <div class="container-fluid">
-        <!-- Breadcrumbs-->
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a href="/dashboard">Home</a>
-          </li>
-          <li class="breadcrumb-item active">Dashboard</li>
-        </ol>
+        
         <hr>
-        <div style="height: 1000px;">
-          <!-- call content here -->
+        <div>
+          <!-- call code block named "content" here, this is where other
+          partials in the dashboard, such as file_upload.html, about.html,
+          options.html, etc. will automatically be wrapped around with this
+          base.html. you call certainly call the block foobazz or anything
+          you want, but "content" makes sense
+           -->
           {% block content %}{% endblock %}
         </div>
       </div>

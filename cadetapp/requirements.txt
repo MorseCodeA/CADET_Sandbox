@@ -17,5 +17,11 @@ pandas==0.20.3
 djangorestframework==3.7.3
 pipenv==8.3.2
 requests==2.9.1
+<<<<<<< HEAD
 polling==0.3.0
 jsonfield==2.0.2
+=======
+
+coverage==3.6
+selenium==2.33.0
+>>>>>>> 373445e9d96cc258a4b85e94a929907d22b2a32e

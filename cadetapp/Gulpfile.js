@@ -1,4 +1,8 @@
 // This is the gulp file for automating front-end HTML/CSS development
+// All raw assets that future front-end developers work on is available in the
+// cadetapp/assets.  All cadetapp/assets are compiled and are served in the
+// dashboard/static directory.
+
 //Include gulp
 var gulp = require('gulp');
 

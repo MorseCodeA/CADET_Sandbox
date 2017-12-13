@@ -1,3 +1,13 @@
+#-----------------------------------------------------------------------------
+# Purpose:     Create views classes to deliver the topic results and
+#              instructor results to the viewer.
+# Classes:     ChartTopicData, ChartTopicWordData, and ChartInstructorData
+#
+# proposed JSON structure for controller.views is in the 
+# distribution_chart/.sample_expected_json.py path
+#
+#-----------------------------------------------------------------------------
+
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from controller.views import *
@@ -12,10 +22,17 @@ def get_chart_data(request, *args, **kwargs):
 
 # Manipulate the topic chart
 class ChartTopicData(APIView):
-    # Populate the topic chart with the number of positive, neutral, and 
-    # negative comments per topic. Data is recieved from results/views.py
+    """
+    Purpose: call computeTopicResults, parse into proposed json structure to be
+    delivered to response data for the api request
+
+    Return: data object in json structure
+
+    How: Populate the topic chart with the number of positive, neutral, and
+    negative comments per topic. Data is received from results/views.py
+    """
     def get(self, request, format=None):
-        # retrieve results from results/views.py      
+        # retrieve results from results/views.py
         pos_list = computeTopicResults()[1]
         neu_list = computeTopicResults()[2]
         neg_list = computeTopicResults()[3]  
@@ -35,12 +52,19 @@ class ChartTopicData(APIView):
                 ]
             })
         return Response(data)
-# END class ChartTopicData
 
 # Manipulate the topic word panel below topic chart
 class ChartTopicWordData(APIView):
-    # Populate the panel below the topic chart with the list of words per 
-    # topic. Data is recieved from results/views.py
+    """
+    Purpose: call computeTopicResults, parse into proposed json structure
+    for topic-to-word mapping to be delivered to response data for the
+    api request
+
+    Return: data object in json structure
+
+    How: Populate the panel below the topic chart with the list of words
+    per topic. Data is recieved from results/views.py
+    """
     def get(self, request, format=None):
         # retrieve data from results/views.py
         topic_word_list = computeTopicResults()[0]
@@ -53,40 +77,22 @@ class ChartTopicWordData(APIView):
             "topic_id": x+1,
             "words": topic_word_list[x]
             })
-        
-#        topic_word_data = {
-#          "topic": [
-#            {
-#              "topic_id": "1",
-#              "words": "happy, good, fun, yay, smile"
-#            },
-#            {
-#              "topic_id": "2",
-#              "words": "sad, boo, mean, hard, lethal"
-#            },
-#            {
-#              "topic_id": "3",
-#              "words": "hub, hubba, buh, duh, huh"
-#            },
-#            {
-#              "topic_id": "4",
-#              "words": "foo, baz, exe, why, zee"
-#            },
-#            {
-#              "topic_id": "5",
-#              "words": "red, white, blue, yellow, green"
-#            }
-#          ]
-#        }
         return Response(data)
-# END class ChartTopicWordData
 
-# Manipulate the instrctor chart
 class ChartInstructorData(APIView):
-    # Populate the instructor chart with the number of positive, neutral, and 
-    # negative comments per instructor. Data is recieved from results/views.py
+    """
+    Purpose: call computeTopicResults, parse into proposed json structure
+    for topic-to-word mapping to be delivered to response data for the
+    api request
+
+    Return: data object in json structure
+
+    How:Populate the instructor chart with the number of positive, neutral, and
+    negative comments per instructor. Data is received from results/views.py
+    """
+
     def get(self, request, format=None):
-        # retieve data from results/views.py
+        # retrieve data from results/views.py
         inst_name_list = computeInstructorResults()[0]
         pos_list = computeInstructorResults()[1]
         neu_list = computeInstructorResults()[2]
@@ -107,4 +113,4 @@ class ChartInstructorData(APIView):
                 ]
             })
         return Response(data)
-# END class ChartInstructorData
+

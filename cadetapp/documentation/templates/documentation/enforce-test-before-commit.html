@@ -1,0 +1,782 @@
+{% extends 'dashboard/base.html' %}
+{% block content %}
+        <div class="documentation-wrapper-container container">
+            <h2> File Uploader </h2>
+            <div class="container">
+
+
+<!-- This work is licensed under a Creative Commons 3.0 Unported License.
+
+http://creativecommons.org/licenses/by/3.0/legalcode -->
+<p>Our team is implementing a database for the Course Assessment using Data
+Exploration of Text (CADET) project. Datasets containing course assessment
+comments and metadata will be able to be stored for future use. Users will no
+longer need to re-upload files each time they wish to analyze a particular set
+of data.</p>
+<p>This feature will request the program to run a sentiment analysis report for a
+particular, unprocessed dataset given as a parameter (Dataset ID). This
+operation will be performed via calls to a <a class="citation-reference" href="#restful" id="id1">[RESTful]</a> API described in
+specification <a class="citation-reference" href="#d82" id="id2">[D82]</a>. Other parameters include: number of topics, words per
+topic, and number of iterations. The datasets being passed into the sentiment
+analysis module will be retrieved from the database using the ID of the
+dataset. The results of the analysis will be stored in the database. If a
+query contains the same paramaters as one previously stored in the database,
+the results of the previous analysis will immediately be returned.</p>
+<div class="section" id="problem-description">
+<h1>Problem Description</h1>
+<p>Previously, files containing comments were uploaded and were directly
+transmitted to the comment analysis module. Here, they are processed and the
+results are reported back to the user. Because a database is being
+implemented, the analysis module can no longer receive data in this way. The
+datasets must now be retrieved from the database and passed to the analysis
+module, and a new interface is needed to support this change.</p>
+<div class="section" id="requirements">
+<h2>Requirements</h2>
+<ul class="simple">
+<li>Retrieve a specified dataset from the database</li>
+<li>Return and cache results of sentiment analysis</li>
+<li>If a specified dataset is not found, return a &quot;404 Not Found&quot; error with a
+description of the invalid request</li>
+<li>If an exception occurs during the analysis, return a &quot;500 Server Error&quot;</li>
+<li>Retrieve and return cached results if the analysis has been done in the past</li>
+<li>Same output data as current implementation</li>
+</ul>
+</div>
+<div class="section" id="use-cases">
+<h2>Use Cases</h2>
+<ul class="simple">
+<li>The user requests a report on a specified course from a specific year. The
+data is located in the database. A report request is called and the dataset is
+analyzed. The processed data is passed on to be presented to the user. The
+data is also stored in the database for future use.</li>
+<li>The user wishes to see a report for a previously processed dataset, but did
+not save the results. The previous report is cached in the database. The user
+again requests the report and is immediately returned the results without the
+need to re-process the dataset.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="proposed-change">
+<h1>Proposed Change</h1>
+<p>This feature is the bridge between the newly implemented database and the
+current analysis module. A separate table of the database will contain sets of
+specified comments. This table will have an auto-incremented integer serving as
+the ID for each dataset.</p>
+<p>This feature will take the following parameters:</p>
+<ul class="simple">
+<li>Dataset ID:         The ID of the stored set of comments</li>
+<li><dl class="first docutils">
+<dt>Number of Topics:   The number of topics (each topic is a set of related</dt>
+<dd>words found in comments) specified by the user</dd>
+</dl>
+</li>
+<li>Words per Topic:    The number of related words in a single topic</li>
+<li><dl class="first docutils">
+<dt>Iterations:         The number of iterations of <a class="citation-reference" href="#lda" id="id3">[LDA]</a> process (for topic</dt>
+<dd>analysis)</dd>
+</dl>
+</li>
+</ul>
+<p>If the Dataset ID is not found in the database, a &quot;404 Not Found&quot; error will
+be returned. Before an unnecessary analysis is performed, this feature will
+check if there is a cached result of this report by comparing the parameters
+passed in this call to those stored in the cached results.</p>
+<p>If this report has not been produced before, the dataset table will be
+accessed, and the comments in the specified set will be passed through the
+analysis module using the rest of the parameters provided in the call. The
+sentiment of each comment is set by the analysis module. Each comment is
+determined to be positive, negative, or neutral. If any error occurs during
+the processing, a &quot;500 Server Error&quot; will be returned.</p>
+<p>A list of JSON objects will be returned to the user and will also be cached in
+the database. The Work Items section covers the format of the results.</p>
+<div class="section" id="alternatives">
+<h2>Alternatives</h2>
+<p>An alternative would be to stay with the status quo. In this case, a database
+would not be used. The comments would instead be stored locally.</p>
+<p>The planned implementation provides the ability to cache results and, thanks
+to the metadata being stored, lays the groundwork for more complex queries in
+the future. Future additions could allow the filtering of comments included in
+datasets by using the metadata being stored.</p>
+</div>
+</div>
+<div class="section" id="testing">
+<h1>Testing</h1>
+<p>Testing will involve attempting to access valid and invalid datasets. The
+Proposed Changes section describes the expected result of attempting to access
+an invalid dataset. Valid accesses should produce the same results as the
+current implementation of the project. The results will be tested against
+this.</p>
+</div>
+<div class="section" id="documentation">
+<h1>Documentation</h1>
+<p>The documentation should describe the parameters being passed into the
+function and the format of the returned objects. Inline comments will be used
+to describe the actions being taken. These will appear in block comment form
+above the function. Smaller comments will be used to explain more complex
+operations that may not be wholly self-documented.</p>
+<p>Information about the HTTP status codes should be included in the
+documentation covering the whole API for this project. This documentation
+should also include how to request reports and the expected return value.</p>
+</div>
+<div class="section" id="implementation">
+<h1>Implementation</h1>
+<div class="section" id="work-items">
+<h2>Work Items</h2>
+<ul>
+<li><p class="first">Access Database</p>
+<p>The Dataset ID will be used to fetch the comments to be processed. The
+cached results will be accessed to check if a report for this dataset,
+with matching parameters, has been run previously.</p>
+</li>
+<li><p class="first">Format Data</p>
+<p>The data will need to be re-formatted to match the current input expected
+by the analysis module.</p>
+</li>
+<li><p class="first">Sentiment Analysis</p>
+<p>This phase will remain the same as the current implementation.</p>
+</li>
+<li><p class="first">Format Results</p>
+<p>The results of the analysis will also need to be re-formatted. The results
+will contain:</p>
+<blockquote>
+<ul class="simple">
+<li>Topic Model Dictionary</li>
+<li>List of Comment Objects</li>
+</ul>
+</blockquote>
+<p>The Topic Model will be a dictionary that uses the Topic ID stored in the
+comment object as a key that matches a comment to a list of related words.
+This list of words is known as a topic.</p>
+<p>The comment objects will contain these fields:</p>
+<blockquote>
+<ul class="simple">
+<li>Comment</li>
+<li>Comment ID</li>
+<li>Comment Type</li>
+<li>Course</li>
+<li>Instructor First Name</li>
+<li>Instructor Last Name</li>
+<li>Sentiment of Comment</li>
+<li>Topic ID</li>
+</ul>
+</blockquote>
+</li>
+<li><p class="first">Return and Cache Results</p>
+<p>The results will be store in the database, waiting to be retrieved by the
+presentation layer team. The analysis cache will contain the following for
+each report:</p>
+<blockquote>
+<ul class="simple">
+<li>Number of Topics</li>
+<li>Words Per Topic</li>
+<li>Iterations</li>
+<li>Result Set</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="references">
+<h1>References</h1>
+<table class="docutils citation" frame="void" id="restful" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[RESTful]</a></td><td>&quot;Representational State Transfer,&quot; Sept 2017. online:
+<a class="reference external" href="https://en.wikipedia.org/wiki/Representational_state_transfer">https://en.wikipedia.org/wiki/Representational_state_transfer</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="d82" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[D82]</a></td><td>Jason Porter, &quot;Metadata Retrieval,&quot; Sept 2017. online:
+<a class="reference external" href="https://web4.jhuep.com/D82">https://web4.jhuep.com/D82</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="lda" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[LDA]</a></td><td>&quot;Latent Dirichlet allocation,&quot; Sept 2017. online:
+<a class="reference external" href="https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation">https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation</a></td></tr>
+</tbody>
+</table>
+<!-- This work is licensed under a Creative Commons 3.0 Unported License.
+
+http://creativecommons.org/licenses/by/3.0/legalcode -->
+<p>Static code analysis needs to be added to the project's review process
+to help with code quality and to provide a guideline for coding standards
+for the team. The integration of code linting during the commit process
+will help reduce the scope of code reviews thereby making them more
+effective as a whole. By performing the linting automatically on every
+commit, this allows the developers to focus on the substance of the
+commit rather than the form and structure.</p>
+<div class="section" id="problem-description">
+<h1>Problem Description</h1>
+<p>As multiple developers write and interact with a code base, the absence
+of a unified style will lead to code that is difficult to maintain and
+understand. In addition, the absence of an agreed-upon style will lead to
+developers wasting time during code reviews to debate stylistic nuances
+of the code rather than the content. The appropraite solution for enforcing
+style guidelines is to incorporate it with the default commit process used
+by the team. Since Arcanist already provides options for pre-commit hooks,
+Arcanist needs to be configured to leverage third party linting tools to
+enforce code standards automatically. [ArcDiffDoc]</p>
+<div class="section" id="requirements">
+<h2>Requirements</h2>
+<blockquote>
+<ul class="simple">
+<li>The solution shall automatically run linting processes before a commit
+can be submitted for review.</li>
+<li>The solution shall be integrated with the existing <tt class="docutils literal">arc diff</tt> commit
+process</li>
+<li>The linters shall be properly configured to enforce coding standards
+at an appropriate level</li>
+<li>The linters shall have a documented configuration file explaining each
+of the settings</li>
+<li>The linters shall enforce documentation standards as well as code
+standards</li>
+<li>An installation guide shall be provided for developers to use when
+configuring their development environment</li>
+</ul>
+</blockquote>
+</div>
+<div class="section" id="use-cases">
+<h2>Use Cases</h2>
+<p>Name: Code Linting Automatically Executed</p>
+<dl class="docutils">
+<dt>Actors:</dt>
+<dd><ul class="first last simple">
+<li><dl class="first docutils">
+<dt>Developer</dt>
+<dd>Uses the static analysis tool to improve code quality</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Arcanist</dt>
+<dd>Allows developer to automatically run analysis tools before
+commit</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Linting Framework</dt>
+<dd>Software that performs static analysis of developer's code</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt>Preconditions:</dt>
+<dd><ul class="first last simple">
+<li>The developer has properly installed Arcanist</li>
+<li>The developer has properly installed and configured git</li>
+<li>The developer has written code that needs to be comitted</li>
+<li>The developer has installed the appropriate linting software</li>
+</ul>
+</dd>
+<dt>Error Flow:</dt>
+<dd>After the developer has finished writing code, the developer runs the
+command <tt class="docutils literal">arc diff</tt> to kick off the process of submitting code for review.
+During the diff process, Arcanist automatically executes a series of
+commands to lint the developer's code before submission. The linting
+process generates a series of warnings and errors due to formatting
+concerns within the code. Arcanist takes these errors and presents them
+to the user for correction. Arcanist stops the commit process until the
+developer addresses the errors.</dd>
+<dt>Post Conditions:</dt>
+<dd><ul class="first last simple">
+<li>The code has not been submitted</li>
+<li>The developer has print out of areas where his code needs to be
+refactored</li>
+</ul>
+</dd>
+<dt>Clean Flow:</dt>
+<dd>After the developer has finished writing the code, the developer runs
+the command <tt class="docutils literal">arc diff</tt> to kick off the process of submitting the code for
+review. During the diff process, Arcanist automatically executes a series
+of commands to lint the developer's code before submission. The linting
+process finds no style conflicts within the code and returns a success
+value. Arcanist then allows the diff process to continue. The code is
+successfully submitted for review.</dd>
+<dt>Post Conditions:</dt>
+<dd><ul class="first last simple">
+<li>The code has been submitted</li>
+<li>The developer is presented with an indication that the code did not have
+any style violations</li>
+</ul>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="proposed-change">
+<h1>Proposed Change</h1>
+<p>Arcanist's commit process is to be reconfigured to include the use of
+automatic linting processes. The linting process is to be configured to
+execute Python and JavaScript linting processes.</p>
+<p>The following linters shall be configured to execute automatically for
+all modified Python files:</p>
+<ul>
+<li><p class="first">autopep8</p>
+<ul class="simple">
+<li>This linter shall be configured to leverage its auto correct behavior
+which will immediately correct any small style concerns without
+developer intervention</li>
+<li>This linter shall be configured to appropriately enforce pep8 standards
+as well as team designated standards without becoming burdensome</li>
+</ul>
+</li>
+<li><p class="first">pydocstyle</p>
+<blockquote>
+<ul class="simple">
+<li>This linter shall be configured to enforce a unified Python
+documentation style.</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<p>The jshint shall be configured to execute automatically for
+all modified JavaScript files:</p>
+<p>All linting configurations shall be properly documented to identify which
+settings correspond to which desired behaviors. Configurations shall include
+both error and warning settings. Autocorrect behavior shall be implemented
+where available. The emphasis will be on correcting common syntax errors,
+reducing cyclomatic complexity, and conforming to python standard
+code behaviors, particularly those that are unique to the language</p>
+<p>The automatic linting feature will work hand-in-hand with the automated
+testing feature to comprise the entirety of the pre-commit documentation
+and quality evaluation process. The unit testing and linting components
+are already independently handled by Arcanist, so the integration process
+will be seamless.</p>
+<div class="section" id="alternatives">
+<h2>Alternatives</h2>
+<p>There are multiple third party linting options available for both Python
+and JavaScript. A more thorough list of options exists in the
+'awesome-static-analysis' repository on GitHub <a class="citation-reference" href="#staticanalysislist" id="id1">[StaticAnalysisList]</a>.
+Autopep8, pydocstyle, and jshint were selected for their widespread
+adoption and efficiency. Other options can be substituted if found to be
+of superior quality, but the options selected represent a sufficient set
+of static analysis tools.</p>
+</div>
+</div>
+<div class="section" id="testing">
+<h1>Testing</h1>
+<p>To properly test the configurations of the linters, Arcanist's linting
+command will be executed outside of the commit process to verify that the
+linters are working on their own</p>
+<p>To test the pre-commit hook, a poorly formatted code file will be submitted
+for review in order to trigger the automatic linting process</p>
+</div>
+<div class="section" id="documentation">
+<h1>Documentation</h1>
+<p>Each configuration setting shall be accompanied by inline documentations
+identifying what the specific setting addresses and why it is necessary</p>
+<p>Installation instructions shall be created for distribution to the
+developers to assist with the installation process</p>
+</div>
+<div class="section" id="implementation">
+<h1>Implementation</h1>
+<div class="section" id="work-items">
+<h2>Work Items</h2>
+<blockquote>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt>configure autopep8 linter with autocorrect</dt>
+<dd><ul class="first last">
+<li>Validate that autopep8 is properly configured</li>
+<li>Add pre-commit check for Python files</li>
+<li>Validate pre-commit check</li>
+<li>Draft installation documentation and configuration notes</li>
+<li>Deploy configured autopep8 to be used immediately for Data and
+UI teams</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>configure pydocstyle linter</dt>
+<dd><ul class="first last">
+<li>Validate the pydocstyle is properly configured</li>
+<li>Add pre-commit check for Python files</li>
+<li>Validate pre-commit check</li>
+<li>Draft installation documentation and configuration notes</li>
+<li>Deploy configured pydocstyle to be used immediately for Data and
+UI teams</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>configure jshint linter</dt>
+<dd><ul class="first last">
+<li>Validate the jshint linter is properly configured</li>
+<li>Add pre-commit check for JavaScript files</li>
+<li>Validate pre-commit check</li>
+<li>Draft installation documentation and configuration notes</li>
+<li>Deploy configured jshint to be used immediately for UI team</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>consolidate documentation. Update dev tools repository as necessary</li>
+</ul>
+</blockquote>
+</div>
+</div>
+<div class="section" id="references">
+<h1>References</h1>
+<table class="docutils citation" frame="void" id="arcdiffdoc" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[ArcDiffDoc]</td><td>Arcanist Documentation. Online:
+<a class="reference external" href="https://secure.phabricator.com/book/phabricator/article/arcanist_lint/">https://secure.phabricator.com/book/phabricator/article/arcanist_lint/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="staticanalysislist" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[StaticAnalysisList]</a></td><td>List of Static Analysis tools Online:
+<a class="reference external" href="https://github.com/mre/awesome-static-analysis">https://github.com/mre/awesome-static-analysis</a></td></tr>
+</tbody>
+</table>
+<!-- This work is licensed under a Creative Commons 3.0 Unported License.
+
+http://creativecommons.org/licenses/by/3.0/legalcode -->
+<p>To help maintain a stable code base, test should be run automatically
+before code can be submitted for review. This helps ensure that the code
+base is stable and that no existing features have been impacted by the
+latest enhancement. The tests should be run automatically as part of a
+larger pre-commit process.</p>
+<div class="section" id="problem-description">
+<h1>Problem Description</h1>
+<p>As multiple developers write and interact with the code, the opportunity
+for unintended impacts of changes grows exponentionally. Running unit tests
+early and often will help reduce the chance of unintended consequences
+from each commit. Forcing developers to write and execute tests helps
+ensure that the code base is stable and that future errors will be caught
+with the newest tests. The easiest way to enforce test execution is to make
+it part of the pre-commit process. Since Arcanist already provides options
+for pre-commit hooks, Arcanist will need to be configured to leverage
+third party testing tools to enforce code coverage and code stability
+<a class="citation-reference" href="#arccoverage" id="id1">[ArcCoverage]</a></p>
+<div class="section" id="requirements">
+<h2>Requirements</h2>
+<blockquote>
+<ul class="simple">
+<li>The solution shall automatically execute unit tests before each commit</li>
+<li>The solution shall provide the developer with an output of code coverage
+for each of the files included in the commit</li>
+<li>The solution shall enforce a certain percentage of code coverage for all
+files included in the commit</li>
+<li>The solution shall prevent any code from being committed if a test fails.</li>
+</ul>
+</blockquote>
+</div>
+<div class="section" id="use-cases">
+<h2>Use Cases</h2>
+<p>Name: Tests Are Run Automatically</p>
+<dl class="docutils">
+<dt>Actors:</dt>
+<dd><ul class="first last simple">
+<li><dl class="first docutils">
+<dt>Developer</dt>
+<dd>Person who has written code that needs to be evaluated</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Arcanist</dt>
+<dd>Framework/tool to automatically run tests during commit process</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt>Preconditions:</dt>
+<dd><ul class="first last simple">
+<li>Developer has properly installed Arcanist</li>
+<li>Developer has properly configured git</li>
+<li>Developer has written code that needs to be submitted</li>
+</ul>
+</dd>
+<dt>Error Flow:</dt>
+<dd>After the developer has finished writing the code, the developer runs the
+<tt class="docutils literal">arc diff</tt> command to kick off the process of committing code for review.
+During the diff process, Arcanist automatically executes a testing library
+that executes and evaluates all relevant unit tests for the commit. The
+test library finds that a test has failed and returns the failure.
+Arcanist presents the user with the error and stops the commit process.</dd>
+<dt>Post Conditions:</dt>
+<dd><ul class="first last simple">
+<li>The commit has been halted.</li>
+<li>The developer has been provided information regarding a failing test
+and is instructed to address the test failure</li>
+</ul>
+</dd>
+<dt>Clean Flow:</dt>
+<dd>After the developer has finished writing the code, the developer runs the
+<tt class="docutils literal">arc diff</tt> command to kick off the process of committing code for review.
+During the diff process, Arcanist automatically executes a testing library
+that executes and evaluates all relevant unit tests for the commit. The
+test library does not find any failed tests and returns success. Arcanist
+allows the diff process to continue. The code is committed</dd>
+<dt>Post Conditions:</dt>
+<dd><ul class="first last simple">
+<li>The commit has successfully completed</li>
+<li>The developer has been presented a success message</li>
+</ul>
+</dd>
+<dt>Lack Of Coverage Flow:</dt>
+<dd>After the developer has finished writing the code, the developer runs the
+<tt class="docutils literal">arc diff</tt> command to kick off the process of committing code for review.
+During the diff process, Arcanist automatically executes a testing library
+that executes and evaluates all relevant unit tests for the commit. The
+test library does not find any tests to run and returns an error.
+Arcanist presents the user with an alert regarding insufficient test
+coverage. Arcanist stops the commit process.</dd>
+<dt>Post Conditions:</dt>
+<dd><ul class="first last simple">
+<li>The commit has been halted.</li>
+<li>The developer has been directed to add additional tests.</li>
+</ul>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="proposed-change">
+<h1>Proposed Change</h1>
+<p>Arcanist's unit testing process is to be configured to execute the PyTest
+framework.[PyTest]_ Pytest will be installed and configured to appropriately
+locate tests and execute them. In addition, PyTest will be configured to
+incorporate Coverage.py which will help to evaluate code coverage based
+on the tests provided by the developers. Coverage.py will need to be
+installed and configured as appropriate.[CoveragePy]_</p>
+<p>In order to include a code coverage evaluation and failure condition, a
+custom unit testing workflow will need to be created. This will be
+accomplished using Phabricator's available interfaces. <a class="citation-reference" href="#arcanisttesting" id="id2">[ArcanistTesting]</a>.
+This custom testing framework will execute unit tests and also evaluate
+code coverage. If a test fails or the code coverage drops below an
+agreed-upon level, the commit will fail and the developer will be alerted
+to the issues encountered.</p>
+<p>The automatic testing feature will work hand-in-hand with the automated
+linting feature to comprise the entirety of the pre-commit analysis workflow
+for all code that is committed to the repository. The unit testing and
+linting components are independently handled by Arcanist already, so the
+integration process will be seamless.</p>
+<div class="section" id="alternatives">
+<h2>Alternatives</h2>
+<p>There are other testing libraries available for use with Python. PyTest was
+chosen because of its ability to incorporate Coverage.py which would provide
+code coverage analysis in addition to test execution. This feature is the
+key differentiator between other unit testing frameworks for Python.</p>
+</div>
+</div>
+<div class="section" id="testing">
+<h1>Testing</h1>
+<p>To properly test the configurations, Arcanist's unit testing commands will
+be executed outside of the commit process to verify that the PyTest framework
+has been properly configured.</p>
+<p>To test the pre-commit hook, code that causes a sample test to fail will be
+submitted for review to trigger the automatic testing process</p>
+</div>
+<div class="section" id="documentation">
+<h1>Documentation</h1>
+<p>Each configuration setting shall include inline documentation identifying
+what the specific setting addresses.</p>
+<p>The custom test framework shall include inline documentation for all methods
+and classes created.</p>
+<p>The custom test framework shall also have a developer guide that will explain
+the purpose and configuration of the test framework. This document will be
+similar in use to a unix'manual page'</p>
+</div>
+<div class="section" id="implementation">
+<h1>Implementation</h1>
+<div class="section" id="work-items">
+<h2>Work Items</h2>
+<ul class="simple">
+<li>Configure PyTest<ul>
+<li>Validate installation and configuration</li>
+<li>Install Coverage.py</li>
+<li>Validate Coverage.py installation and configuration</li>
+<li>Generate documentation</li>
+<li>Deploy basic Unit test pre-commit hook without code coverage
+evaluation</li>
+</ul>
+</li>
+<li>Create Custom Test Framework<ul>
+<li>Scaffold custom framework</li>
+<li>Validate framework is functioning by executing standard PyTest framework</li>
+<li>Add code coverage evaluation process</li>
+<li>Validate code coverage process</li>
+<li>Generate documentation for custom test framework</li>
+<li>Deploy custom test framework</li>
+</ul>
+</li>
+<li>Generate 'man page' for custom test framework<ul>
+<li>Using all of the configuration information from above, generate a
+robust help and user guide for the custom test framework that has been
+created.</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="references">
+<h1>References</h1>
+<table class="docutils citation" frame="void" id="pytest" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[PyTest]</td><td>PyTest
+Online: <a class="reference external" href="https://docs.PyTest.org/en/latest">https://docs.PyTest.org/en/latest</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="arccoverage" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[ArcCoverage]</a></td><td>Arcanist Coverage
+Online: <a class="reference external" href="https://coverage.readthedocs.io/en/coverage-4.4.1/">https://coverage.readthedocs.io/en/coverage-4.4.1/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="arcanisttesting" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[ArcanistTesting]</a></td><td>Arcanist Testing Frameworks Online:
+<a class="reference external" href="https://secure.phabricator.com/book/phabricator/article/arcanist_lint_unit">https://secure.phabricator.com/book/phabricator/article/arcanist_lint_unit</a>.</td></tr>
+</tbody>
+</table>
+<!-- This work is licensed under a Creative Commons 3.0 Unported License.
+http://creativecommons.org/licenses/by/3.0/legalcode -->
+<div class="section" id="cadet">
+<h1>CADET</h1>
+<p>CADET or Course Assessment using Data Exploration of Text is an application
+that collects feedback from students on courses for longitudinal study.
+CADET will categorize and cluster student responses and provide insights
+into students experience within the classes. The aim of this project is to
+convert CADET into a web application. This specification will mainly focus
+on the file upload code that will need to be improved, changed and updated
+to fit the existing framework.</p>
+</div>
+<div class="section" id="problem-description">
+<h1>Problem Description</h1>
+<p>The goal of this project is to develop and provide an online web application
+of CADET. The current version of CADET is a desktop application and this will
+be a web service port. This port will use a combination of [Django] and
+[Javascript] to create a presentation/UI front-end which will integrate with
+the back/end team. The goal with this specification is to create a file
+upload system that will help upload files to the server.</p>
+</div>
+<div class="section" id="requirements">
+<h1>Requirements</h1>
+<p>User Type Professor:</p>
+<ol class="arabic simple">
+<li>The user should be able to upload a file containing their
+course evaluations.
+Should allow the user to have an interface that allows upload a single
+file or multiple files.
+There are two ways to do this:
+Batch-drop view -- the user can just drag and drop file(s)
+Upload File button -- window open so the user can select files from desktop.</li>
+<li>Only the following file format are valid: CSV</li>
+<li>Redirect to an upload options page that will allow the user to input
+file options before creating the JSON transport file.</li>
+</ol>
+</div>
+<div class="section" id="use-cases">
+<h1>Use Cases</h1>
+<p>Professor: He is a professor at JHU. He had just finished teaching a
+semester and is batch submitting his course criticism on CADET. He is
+looking forward to the analysis and criticism on his performance.</p>
+<div class="section" id="case">
+<h2>Case</h2>
+<p>The users add CSV files (completed course comments) to web server.
+The user will be signed in navigate to the file upload page through the
+dashboard. The user will then submit their request by selecting a CSV file.
+This will then send the selected file to the server and redirect the user to
+an upload options page. There the user to input file options before sending
+the file to the server.</p>
+</div>
+</div>
+<div class="section" id="proposed-change">
+<h1>Proposed Change</h1>
+<p>Creating a method for uploading files and send info to data layer. The
+current version of CADET uses a python widget for XLSX and TXT files. The
+proposed change will implement this through an web interface using
+Django [Django] limiting the file input to only CSV.</p>
+<ol class="arabic simple">
+<li>Through the home page in the UI the user will be able to access the
+file upload page through a link. Within this new page, the individual
+should be able to upload a file containing their course evaluations. This
+interface should allow the user to upload a single file or multiple files
+(Batch). There are two methods that must be implemented to do this:
+Batch-drop functionality -- the user can just drag and drop file(s)
+from their file system into a window. The UI will recognize the path
+of the file and upload these files to a server.
+Upload File button functionality -- A window will open upon
+clicking this button. A new window will pop-out so the user can
+select files from their file system. The UI will take this path and
+upload the file to the server.</li>
+<li>Before the file is uploaded to the server, there should be a
+verification process on the file. This function will check that the user
+actually selected a file and that the file(s) selected are in the CSV
+format. Only allowing the CSV format will simplify the process in creating
+a JSON transport file.</li>
+<li>A confirmation window should appear to indicate that the selected files
+have been uploaded to the server.</li>
+<li>To let the user know that files were being loaded, a progress bar will be
+added during the load process and will update with file process. The
+current progress bar only updates with time while the proposed progress
+bar with update with actual file progress.</li>
+<li>The user will then be redirected to an upload options page. This page will
+allow the user to input file options before sending the file to the server.</li>
+</ol>
+<div class="section" id="alternatives">
+<h2>Alternatives</h2>
+<p>Another method is to allow the user to send or deposit the files directly into
+server to be analyzed. This method will not integrate with the web UI and we
+will not have the ability to check the compatibility of the uploaded file.</p>
+</div>
+</div>
+<div class="section" id="test-plan">
+<h1>Test Plan</h1>
+<p>The following are proposed test plans for the change:</p>
+<ol class="arabic simple">
+<li>User can correctly access their file systems when uploading a file.</li>
+<li>The correct files are uploaded to the server.</li>
+<li>Test for each of these 2 cases:
+The file type must be CSV
+The user selected an actual file.</li>
+<li>The user is successfuly redirected to the upload options page.</li>
+<li>The user is able to create a JSON object with the inputted options.</li>
+</ol>
+</div>
+<div class="section" id="implementation">
+<h1>Implementation</h1>
+<div class="section" id="work-items">
+<h2>Work Items</h2>
+<p>The features should be implemented in this order.
+1. Build the upload file button.
+2. Build test cases to make sure the correct files are uploaded.
+3. Integrate the button into UI interface.
+4. Design Test
+6. Build the Batch-drop functionality
+7. Integrate with with UI
+8. Build the upload options page.
+9. Design Test
+10. Integration Test
+11. Provide some type of user documentation to the doc/QA team.
+12. Fix documentation and get it formalized and submitted.</p>
+</div>
+</div>
+<div class="section" id="references">
+<h1>References</h1>
+<table class="docutils citation" frame="void" id="django" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[Django]</td><td><a class="reference external" href="https://www.djangoproject.com/">https://www.djangoproject.com/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="javascript" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[Javascript]</td><td><a class="reference external" href="https://www.javascript.com/">https://www.javascript.com/</a></td></tr>
+</tbody>
+</table>
+	      
+            </div>
+        </div>
+{% endblock %}

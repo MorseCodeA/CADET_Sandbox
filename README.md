@@ -1,7 +1,7 @@
-# CADET_Sandbox
+#### CADET Front End Developer Guide ####
 Python 3.4, Django 1.11
 
-A text repo to put all of our CADET Django code before we push it to Phabricator. 
+A guide to help developers install and run the front end of CADET.
 
 ## I. Set Up: Project Installation 
 
@@ -10,22 +10,27 @@ A text repo to put all of our CADET Django code before we push it to Phabricator
 - make sure you use virtualenv    
 
 ```bash
-git clone https://github.com/AshleyMorse/CADET_Sandbox  
-cd CADET_Sandbox 
+git clone ssh://git@web4.jhuep.com:2222/diffusion/CADET/cadet.git  
+cd cadet/src/front-end
 ```
 
-### 2. Virtual Environment (optional, but highly recommended)
+### A. Virtual Environment (optional, but highly recommended)
 
-A. General virtualenv 
+A. General virtualenv
+
 ```bash 
-# run virtualenv with python3, you can name your environment whatever. This example, we call it *cadetenv*.  
+# run virtualenv with python3, you can name your environment whatever. This
+# example, we call it *cadetenv*.
 python -m venv cadetenv   
 ```  
 If running virtual env command gives you an error, you might either have 
-anaconda installed, which you need to follow [this setup](https://uoa-eresearch.github.io/eresearch-cookbook/recipe/2014/11/20/conda/).  
+anaconda installed, which you need to follow[this setup:]
+(https://uoa-eresearch
+.github.io/eresearch-cookbook/recipe/2014/11/20/conda/).
 
-Mac and Ubuntu users might also run into installation error if pyenv is broken [broken pyenv](https://stackoverflow.com/questions/26215790/venv-doesnt-create-activate-script-python3) 
-so add this modifier to the same command:   
+Mac and Ubuntu users might also run into installation error if pyenv is
+broken, then add this modifier to the same command:
+
 ```bash
 python -m venv cadetenv --without-pip 
 ```
@@ -70,14 +75,21 @@ python manage.py migrate --run-syncdb
 
 # run server
 python manage.py runserver
+
+# run to ensure that results URL is working
+127.0.0.1:8000/results/test
+
+# website homepage
+127.0.0.1:8000/dashboard
 ```
 
 #### Common Issues in the Installation Steps  
 
-**Make sure you're using python +3.0**  
+Make sure you're using python +3.0!    
 
-You need these libraries installed in order to run our Django Cadet:  
-```
+#### You need these libraries installed in order to run our Django Cadet:
+
+```bash
 # notice we install with pip3 not pip
 pip3 install djangorestframework
 
@@ -87,9 +99,31 @@ sudo apt-get install npm
 # d3 library
 pip3 install django-nvd3
 
+# JSONField libary
+pip3 install jsonfield
+
+# Polling library
+pip3 install polling
 ```
 
-### IV. Front-End Development Set Up
+### IV. Running Test Suites
+Install dependencies
+
+```bash
+pip install coverage==3.6
+pip install selenium==2.33.0
+```
+
+#### To run test suite, use this command:
+
+```bash
+coverage run manage.py test [name of subapp]
+
+# example, running dashboard/tests.py would be
+coverage run manage.py test dashboard
+```
+
+### V. Front-End Development Set Up
 
 This section is for future front-end developers who wishes to modify the HTML,
 CSS, and JS of the project.
@@ -108,9 +142,11 @@ gulp
 
 ```
 
+Resources:
 
-
-
+[Ready to use Structure for Django Tests](https://dezoito.github.io/2015/09/21/how-to-test-django-applications_pt1.html)
+[Testing in Django Part 1 - Best Practices](https://realpython.com/blog/python/testing-in-django-part-1-best-practices-and-examples/)
+[Django Docs - Testing Tools](https://docs.djangoproject.com/en/2.0/topics/testing/tools/)
 
 
 

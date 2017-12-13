@@ -1,0 +1,1195 @@
+{% extends 'dashboard/base.html' %}
+{% block content %}
+        <div class="documentation-wrapper-container container">
+            <h2> Developer Documentation </h2>
+            <div class="container">
+
+
+<!-- This work is licensed under a Creative Commons 3.0 Unported License.
+
+http://creativecommons.org/licenses/by/3.0/legalcode -->
+<p>While using the CADET backend API, it would be useful to acquire specific
+details of the data existing within the CADET backend database. Data in the
+database is constituted of pre- and post-processed data. Retrieving this data,
+a subset of this data, or information about this data (collectively metadata)
+without re-processing the dataset through the Natural Language Processing
+(NLP) tools is a necessity.</p>
+<p>The CADET data layer will implement several methods of accessing metadata
+stored in the backend database. Existing pre-processed data and results from
+NLP tools stored in the database are likely to be comparatively large in size.
+This metadata will be available to gather more information about the existing
+data, and to help decide which data to request from the database before
+requesting a large, unneeded blob of data. Access to this metadata will be
+available in the form of GET requests made to the CADET backend API.</p>
+<div class="section" id="problem-description">
+<h1>Problem Description</h1>
+<p>Pre-processed data, in the form of comments submitted to the CADET system, and
+the results of the Natural Language Processing (NLP) tools, stored immediately
+in the CADET backend database, are likely to be large chunks of uncompressed
+text. In order to reduce the amount of data transmitted between the CADET
+backend API and the user, the CADET backend API shall implement a process of
+retrieving metadata about the existing datasets populating the database. This
+metadata can be used to more effectively find information of interest existing
+within the CADET backend database.</p>
+<p>Some examples:</p>
+<ul class="simple">
+<li>Getting the number of comments in a specified dataset</li>
+<li>Getting the range of semesters of a specified dataset</li>
+<li>Retrieving the current Topic Option ID from the NLP tool</li>
+</ul>
+<div class="section" id="requirements">
+<h2>Requirements</h2>
+<ul class="simple">
+<li>Properly formed tables with read/write access to the database</li>
+<li>Valid data being input into database tables</li>
+<li>Method of accessing database tables</li>
+<li>Web framework with the ability to define custom functions</li>
+</ul>
+</div>
+<div class="section" id="use-cases">
+<h2>Use Cases</h2>
+<ul class="simple">
+<li>The user requests the results of the Natural Language Processing (NLP) tools
+on a specific dataset after the dataset is processed and stored in a table.
+The user requests these results via a GET request to the appropriate URL
+corresponding to the table and ID of the results. The results get sent back
+to the user via a HTTP response with a <a class="citation-reference" href="#json" id="id1">[JSON]</a> object describing the
+results.</li>
+<li>The user requests metadata of a dataset stored in a table prior to
+processing or metadata of a result after processing. The user requests the
+metadata via a GET request via to the appropriate URL corresponding to the
+table and ID of the requested metadata. The metadata gets sent back to the
+user via a HTTP response with a JSON object describing the metadata.</li>
+<li>The user requests data or metadata through a GET request to a URL
+corresponding to data that does not exist. The user will receive a HTTP
+response with a JSON object containing an error field and an appropriate
+error code. The user should check for errors after receiving any response
+from the CADET backend API.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="proposed-change">
+<h1>Proposed Change</h1>
+<p>The CADET data layer is being implemented in <a class="citation-reference" href="#flask" id="id2">[Flask]</a>, a lightweight web
+framework, with a <a class="citation-reference" href="#restful" id="id3">[RESTful]</a> API. Implementing functions for GET requests to
+several URLs is relatively straightforward in Flask. Flask provides decorators
+to link functions as request handlers. These custom request handlers will
+retrieve the requested information from the database and wrap them neatly in a
+JSON object to be returned to the requester via an HTTP response.</p>
+<p>The URL to access resources (via a RESTful GET request) would be in one of the
+following formats:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.example.com/CADETProc">http://www.example.com/CADETProc</a>/&lt;table&gt;</li>
+<li><a class="reference external" href="http://www.example.com/CADETProc">http://www.example.com/CADETProc</a>/&lt;table&gt;/fields</li>
+<li><a class="reference external" href="http://www.example.com/CADETProc">http://www.example.com/CADETProc</a>/&lt;table&gt;/&lt;id&gt;</li>
+<li><a class="reference external" href="http://www.example.com/CADETProc">http://www.example.com/CADETProc</a>/&lt;table&gt;/&lt;id&gt;/&lt;field&gt;</li>
+</ul>
+<p>Details on how these URLs are used are covered below in the &quot;Implementation&quot;
+section.</p>
+<div class="section" id="alternatives">
+<h2>Alternatives</h2>
+<p>Other options include not storing the dataset in a database. This limits a
+users workflow to one dataset at a time. With the inclusion of a database a
+user can work on multiple datasets concurrently. The inclusion of a database
+necessitates the need to pull data from the database and send it to the user.</p>
+<p>Another alternative is to implement the solution utilizing the Django web
+framework instead of Flask. Django is a full suite of web tools, including a
+built-in ORM for database management. Django is a poor fit for this project
+because it is not as modular as Flask and has unneeded functionality,
+resulting in larger overhead, for a simple &quot;store and process&quot; server.</p>
+</div>
+</div>
+<div class="section" id="testing">
+<h1>Testing</h1>
+<p>Test plans for this feature include making connections to both valid and
+invalid resources (tables or elements in the tables) in the database. Expected
+results are discussed in the Proposed Changes section.</p>
+<p>Connections can be made through a multitude of methods however scripting via
+<a class="citation-reference" href="#curl" id="id4">[curl]</a> will be sufficient for testing this feature. Multiple requests can be
+sent individually through curl with manual validation of the output/returned
+object.</p>
+</div>
+<div class="section" id="documentation">
+<h1>Documentation</h1>
+<p>Inline comments should be used to describe the action being taken in the
+functions handling the request. These comments shall be in a block comment
+above the function and include separate comments explaining lines of code that
+do not self-document. If there is a need to update the functions handling the
+requests, the inline comments should be the first thing to reference.</p>
+<p>There needs to be user documentation for these requests. This documentation
+should include how to request the data, how to look up more data, and the
+expected return value for each request type. This might be handled in the
+documentation covering the whole API for this project.</p>
+</div>
+<div class="section" id="implementation">
+<h1>Implementation</h1>
+<div class="section" id="work-items">
+<h2>Work Items</h2>
+<ul class="simple">
+<li>Implementation - this feature can be implemented using several functions
+handling the requests. A function that can handle each &quot;class&quot; of requests,
+mentioned in the Proposed Changes section, can be made, and linked via the
+Flask decorators.</li>
+<li>The URL to access resources (via a RESTful GET request) would be in one of
+the following formats:<ul>
+<li><a class="reference external" href="http://www.example.com/CADETProc">http://www.example.com/CADETProc</a>/&lt;table&gt;</li>
+<li><a class="reference external" href="http://www.example.com/CADETProc">http://www.example.com/CADETProc</a>/&lt;table&gt;/fields</li>
+<li><a class="reference external" href="http://www.example.com/CADETProc">http://www.example.com/CADETProc</a>/&lt;table&gt;/&lt;id&gt;</li>
+<li><a class="reference external" href="http://www.example.com/CADETProc">http://www.example.com/CADETProc</a>/&lt;table&gt;/&lt;id&gt;/&lt;field&gt;</li>
+</ul>
+</li>
+<li>To access a table in the CADET backend database and retrieve the elements in
+the table, a GET request can be made to the first of the above example URLs.
+The request will be handled via a function with a Flask decorator capturing
+the request, which will then return the elements existing in the table to
+the user. As an example, a GET request made to &quot;/CADETProc/comments&quot; shall
+return a list of all the comment IDs that exist in the database table
+&quot;comments&quot;. When the specified table does not exist, a &quot;404 Not Found&quot; error
+shall be returned to the user.</li>
+<li>To retrieve a list of columns, or fields, that exist within a specified
+table, a GET request can be made to the second example URL above. This
+allows a user to request specific fields of the elements in the specified
+table. As an example, a GET request made to &quot;/CADETProc/comments/fields&quot;
+shall return a list of all the columns, or fields, that exist within the
+&quot;comments&quot; table, such as &quot;comment&quot;, &quot;date&quot;, etc. When the specified table
+does not exist, a &quot;404 Not Found&quot; error shall be returned to the user. When
+the table has no columns, an empty list shall be returned to the user.</li>
+<li>To retrieve a specific element from a table in the CADET backend database, a
+GET request can be made to the third example URL listed above. This will
+return an element defined by the ID requested. As an example, a GET request
+to &quot;/CADETProc/comments/4&quot; shall return the element with ID 4 existing in
+the table &quot;comments&quot;. When the specified table does not exist, a &quot;404 Not
+Found&quot; error shall be returned to the user. When the specified ID does not
+exist in the table, a &quot;404 Not Found&quot; error shall be returned to the user.</li>
+<li>To retrieve a specific field from a specified element of a table in the
+CADET backend database, a GET request can be made to the last example URL
+above. The request will return the specified field from the specified
+element. As an example, a GET request to &quot;/CADETProc/comments/4/date&quot; shall
+return the &quot;date&quot; field from the element with ID 4 existing in the table
+&quot;comments&quot;. When the specified table does not exist, a &quot;404 Not Found&quot; error
+shall be returned to the user. When the specified ID does not exist in the
+table, a &quot;404 Not Found&quot; error shall be returned to the user. When the table
+or element does not have the specified field, a &quot;404 Not Found&quot; error shall
+be returned to the user.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="references">
+<h1>References</h1>
+<table class="docutils citation" frame="void" id="flask" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[Flask]</a></td><td>Armin Ronacher, &quot;Welcome | Flask (A Python Microframework),&quot; Sept 2017.
+online: <a class="reference external" href="http://flask.pocoo.org/">http://flask.pocoo.org/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="json" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[JSON]</a></td><td>&quot;JSON,&quot; Sept 2017.
+online: <a class="reference external" href="http://www.json.org/">http://www.json.org/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="restful" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[RESTful]</a></td><td>&quot;Representational State Transfer,&quot;
+online: <a class="reference external" href="https://en.wikipedia.org/wiki/Representational_state_transfer">https://en.wikipedia.org/wiki/Representational_state_transfer</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="curl" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[curl]</a></td><td>Daniel Stenberg &quot;curl,&quot; Sept 2017.
+online: <a class="reference external" href="https://curl.haxx.se/">https://curl.haxx.se/</a></td></tr>
+</tbody>
+</table>
+<!-- This work is licensed under a Creative Commons 3.0 Unported License.
+
+http://creativecommons.org/licenses/by/3.0/legalcode -->
+<p>CADET (Course Assessment using Data Exploration of Text) is an application
+developed by students and faculty of [JHU EP]_. This program utilizes Natural
+Language Processing (<a class="citation-reference" href="#nlp" id="id1">[NLP]</a>) to examine the sentiments in evaluations left by
+students to quantify course and instuctor effectivness. A web service port of
+the existing CADET desktop application is being developed. One aspect of this
+update is that the web application will have two subsystems, presentation/UI
+and data/back-end, hosted on different platforms. This creates a gap in the
+flow of processed output from the data layer back to the user. The disconnect
+will be bridged by a presentation/UI-side interface which ingests the results
+and separates them into constituent parts.</p>
+<div class="section" id="problem-description">
+<h1>Problem Description</h1>
+<div class="section" id="platform">
+<h2>Platform</h2>
+<p>Currently, CADET exists as a desktop application, written in Python <a class="citation-reference" href="#python" id="id2">[Python]</a>,
+which runs on the user's local machine. This configuration presents two issues:</p>
+<ol class="arabic simple">
+<li>User base restricted to students/faculty with access to CADET source code.</li>
+<li>Application does not effectively manage the capabilities of host machine.
+Evaulating input takes a considerable amount of time, which varies by data
+set size and individual machine resources.</li>
+</ol>
+</div>
+<div class="section" id="source-code-modification">
+<h2>Source Code Modification</h2>
+<p>Porting CADET to a web application should address both these concerns: web
+services are accessible to non-technical individuals who may not have an
+understanding of how to build applications and off-loading the NLP processing
+will decrease local resource cost; additionally providing a conrete baseline
+for performance analysis. However, these changes require extensive modification
+of the existing source code along with new development. The current CADET
+processing flow is comprised of 3 main steps:</p>
+<ol class="arabic simple">
+<li>Import file(s) containing structured, unprocessed comment data.</li>
+<li>Parse/Evaluate a local copy of the data using Python's Natural Language
+Toolkit <a class="citation-reference" href="#nltk" id="id3">[NLTK]</a> to process the text using NLP techniques.</li>
+<li>Display the processed information to the user.</li>
+</ol>
+<p>A byproduct of the web application will be the separation/modularization of
+presentation and data control aspects.</p>
+</div>
+<div class="section" id="interface">
+<h2>Interface</h2>
+<p>Once the input data has been processed by the data layer, the result is
+returned to the presentation layer (this would fall between steps 2 and 3).
+A method by which the processed output of the data layer is gathered and
+interpreted by the presentation layer is necessary.</p>
+<div class="section" id="requirements">
+<h3>Requirements</h3>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Functional:</th><td class="field-body"><ul class="first simple">
+<li>Implemented in Python.</li>
+<li>Request JSON objects via RESTful API [RESTful API]_ exposed by data layer.</li>
+<li>Present retrieved data to presentation layer.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Quality:</th><td class="field-body"><ul class="first last simple">
+<li>Mimic functionality of desktop app.</li>
+<li>Gracefully handle situations when a resquest returns an error.</li>
+<li>Efficiently gather processed comment data.</li>
+<li>Adequate internal and external documentation.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="use-cases">
+<h3>Use Cases</h3>
+</div>
+</div>
+<div class="section" id="processed-data-retrieval">
+<h2>Processed Data Retrieval</h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Primary Actor:</th><td class="field-body">Presentation layer thread of control (TOC).</td>
+</tr>
+<tr class="field"><th class="field-name">Goals:</th><td class="field-body">Retrieve processed data from data layer database.</td>
+</tr>
+<tr class="field"><th class="field-name">Preconditions:</th><td class="field-body">The TOC has become aware requested results are finished being processed and
+knowns the table where the results are stored.</td>
+</tr>
+<tr class="field"><th class="field-name">Postconditions:</th><td class="field-body">JSON object(s) representing processed data has been read into the program.
+Comment data members and topic dictionary are easily accessible.</td>
+</tr>
+<tr class="field"><th class="field-name">Exceptions:</th><td class="field-body">Call to data layer API returns in failure due to connectivity or data
+retrieval results in error.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="semantic-highlighting">
+<h2>Semantic Highlighting</h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Primary Actor:</th><td class="field-body">Presentation layer thread Of control (TOC)</td>
+</tr>
+<tr class="field"><th class="field-name">Goals:</th><td class="field-body">Processed data has been grouped into catagories based in topic model input.
+This data is further grouped into positive, negative, and neutral comments.</td>
+</tr>
+<tr class="field"><th class="field-name">Preconditions:</th><td class="field-body">Error-free JSON objectS containing processed data from database has been
+successfully read into a local memory. Topic Model inputs are known.</td>
+</tr>
+<tr class="field"><th class="field-name">Postconditions:</th><td class="field-body">Data stored in an array where it can be easily accessed by display routines.</td>
+</tr>
+<tr class="field"><th class="field-name">Exceptions:</th><td class="field-body">Errors in results from data layer.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="proposed-change">
+<h1>Proposed Change</h1>
+<p>The main focus of this feature is to create an interface that will:</p>
+<ol class="arabic simple">
+<li>Utilize JSON objects with existing code</li>
+<li>Access the database API</li>
+<li>Retrieve and pass JSON objects</li>
+</ol>
+<p>In order to accomplish these goals, the current CADET code will need to be
+evaluated. The first step in implementing this feature will be to find the
+point where the processed comment data is passed from NTLK analysis back to
+front end code for display. Currently, this occurs in FileIngesterUtil.py,
+via an array of Comments.</p>
+<p>The next step is to wrap the Comment array into a JSON object. JavaScript
+Object Notation <a class="citation-reference" href="#json" id="id4">[JSON]</a> is lightweight data interchange format. It has become
+widely accepted as a convenient way to represent simple data structures.
+Altering the application to manipulate JSON objects does not provide any
+immediate improvements, but will be necessary for passing data. After the JSON
+wrapper has been implemented, the expected Comment members should be changed to
+reflect the proposed data structure described by the &quot;Data Analysis
+Specification&quot; <a class="citation-reference" href="#d88" id="id5">[D88]</a> feature. That specification document enumerates the JSON
+object fields that the data layer will return. The standard Python JSON
+[Python JSON]_ library will be used to handle these objects.</p>
+<p>As previously stated, the web version of CADET will serparate the presentation
+and data aspects of the application. In the specification document for the
+&quot;Metadata Retrieval&quot; <a class="citation-reference" href="#d82" id="id6">[D82]</a> feature, the mechanism for accessing processed
+comment data is described. This information will be housed in a database which
+presents an externally accessible RESTful API interface. REpresentational State
+Transfer <a class="citation-reference" href="#rest" id="id7">[REST]</a> is a standard for web APIs which conform to a set of defined
+principles. RESTful web services use common command words to send and receive
+data through calls to URLs. In this instance, GET resquests to the API will
+return the JSON objects mentioned in the last paragraph. A new class will be
+developed for the purpose of procuring this data.</p>
+<p>Before accessing the API, the class will need to know the ID of the table which
+contains the processed data it wants to access. From this information, it will
+be able to periodically poll the table's corresponding URL to query status.
+Once it has been determined the table is available, the class is able to
+discover the topic dictionary and the number Comment entries. It will then
+iterate over all the entries, retrieving each as an individual JSON object and
+storing them in an array. This array can then be passed out of the class where
+the &quot;Dashboard - Display topic comments from data layer&quot; <a class="citation-reference" href="#d93" id="id8">[D93]</a> presentation
+layer feature will take over further processing this data.</p>
+<div class="section" id="alternatives">
+<h2>Alternatives</h2>
+<p>The result of the NLTK could be processed before it is stored.</p>
+<ul class="simple">
+<li>The partition of presentation and data processing/storage better utilizes
+anticipated machine resources:<ul>
+<li>Presentation layer will run in the browser of the user's local machine,
+where resources necessary are ideally minimal, and</li>
+<li>Data processing and storage functionality will run on a remote server,
+where processing resources are a commodity.</li>
+</ul>
+</li>
+</ul>
+<p>A different type of object interchange format, such YAML <a class="citation-reference" href="#yaml" id="id9">[YAML]</a> or MessagePack
+<a class="citation-reference" href="#messagepack" id="id10">[MessagePack]</a>, is used to pass data.</p>
+<ul class="simple">
+<li>JSON has a detailed utilization history in similar application domains.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="testing">
+<h1>Testing</h1>
+<ul class="simple">
+<li>JSON objects with extisting code</li>
+<li>Comments using updated data members</li>
+<li>Data store ping mechanism</li>
+<li>REST API data retrival
+- Include various possible returned error codes</li>
+</ul>
+</div>
+<div class="section" id="documentation">
+<h1>Documentation</h1>
+<p>In-line code will be added to help future developers understand the rationale
+and mechanisms used to implement this feature. Formal documentation will be
+submitted to the Documentation Team; this will cover the processing flow and
+major data structures. As a result of this feature being &quot;under the hood&quot; to
+the user, no external interface documentation will be provided.</p>
+</div>
+<div class="section" id="implementation">
+<h1>Implementation</h1>
+<div class="section" id="work-items">
+<h2>Work Items</h2>
+<ol class="arabic simple">
+<li>Refactor existing code
+- Understand and informally document current product.
+- Incorporate JSON objects in processed data handoff.</li>
+<li>Comment object manipulation
+- Evaluate CADET data structures containing processed data.
+- Determine discrepencies with database return structure.
+- Refactor code to utilize new data strucure.
+- JSON objects are retrieved and locally accessible.</li>
+<li>Data layer API
+- Identify data layer access methology.
+- Design external throw away prototype to get JSON objects via REST API.
+- Integrate learned concepts into presentation layer code.</li>
+</ol>
+</div>
+</div>
+<div class="section" id="references">
+<h1>References</h1>
+<table class="docutils citation" frame="void" id="d82" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id6">[D82]</a></td><td>Jason Porter, &quot;Specification for data retrieval from CADET&quot;
+URL: <a class="reference external" href="https://web4.jhuep.com/D82">https://web4.jhuep.com/D82</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="d88" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[D88]</a></td><td>Chase Rogers, &quot;Add specification for data analysis&quot;
+URL: <a class="reference external" href="https://web4.jhuep.com/D88">https://web4.jhuep.com/D88</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="d93" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id8">[D93]</a></td><td>Kyle Hartner &quot;Display topic comments from data layer Spesifications&quot;
+URL: <a class="reference external" href="https://web4.jhuep.com/D93">https://web4.jhuep.com/D93</a></td></tr>
+</tbody>
+</table>
+<!-- [JHU EP] Johns Hopkins, Engineering for Professionals
+URL: https://ep.jhu.edu/ -->
+<table class="docutils citation" frame="void" id="json" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[JSON]</a></td><td>JavaScript Object Notation. Outline: <a class="reference external" href="http://www.json.org/">http://www.json.org/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="messagepack" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id10">[MessagePack]</a></td><td>MessagePack. Outline: <a class="reference external" href="http://msgpack.org/index.html">http://msgpack.org/index.html</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="nlp" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[NLP]</a></td><td>Matt Kiser, &quot;Introduction to Natural Language Processing (NLP) 2016&quot;
+August 2016, Outline:
+<a class="reference external" href="https://blog.algorithmia.com/introduction-natural-language-processing-nlp/">https://blog.algorithmia.com/introduction-natural-language-processing-nlp/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="nltk" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[NLTK]</a></td><td>Natural Language ToolKit. Outline: <a class="reference external" href="http://www.nltk.org/">http://www.nltk.org/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="python" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[Python]</a></td><td>Python Programming Language. Outline: <a class="reference external" href="https://www.python.org/">https://www.python.org/</a></td></tr>
+</tbody>
+</table>
+<!-- [Python JSON] The Standard Python Library, json Module.
+Outline: https://docs.python.org/3/library/json.html -->
+<table class="docutils citation" frame="void" id="rest" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id7">[REST]</a></td><td>Roy Fielding, &quot;CHAPTER 5 Representational State Transfer (REST)&quot; URL:
+<a class="reference external" href="https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.html">https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.html</a></td></tr>
+</tbody>
+</table>
+<!-- [RESTful API] Roy Fielding, September 2017.
+Outline: https://restfulapi.net/ -->
+<table class="docutils citation" frame="void" id="yaml" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id9">[YAML]</a></td><td>YAML Ain't a Markup Language. Outline: <a class="reference external" href="http://yaml.org/">http://yaml.org/</a></td></tr>
+</tbody>
+</table>
+<!-- This work is licensed under a Creative Commons 3.0 Unported License.
+
+http://creativecommons.org/licenses/by/3.0/legalcode -->
+<p>CADET (Course Assessment using Data Exploration of Text) is an application
+developed by students and faculty of [JHU EP]_. This program utilizes Natural
+Language Processing (<a class="citation-reference" href="#nlp" id="id1">[NLP]</a>) to examine the sentiments in evaluations left by
+students to quantify course and instuctor effectivness. A web service port of
+the existing CADET desktop application is being developed. One aspect of this
+update is that the web application will have two subsystems, presentation/UI
+and data/back-end, hosted on different platforms. This creates a gap in the
+flow of processed output from the data layer back to the user. The disconnect
+will be bridged by a presentation/UI-side interface which ingests the results
+and separates them into constituent parts.</p>
+<div class="section" id="problem-description">
+<h1>Problem Description</h1>
+<div class="section" id="platform">
+<h2>Platform</h2>
+<p>Currently, CADET exists as a desktop application, written in Python <a class="citation-reference" href="#python" id="id2">[Python]</a>,
+which runs on the user's local machine. This configuration presents two issues:</p>
+<ol class="arabic simple">
+<li>User base restricted to students/faculty with access to CADET source code.</li>
+<li>Application does not effectively manage the capabilities of host machine.
+Evaulating input takes a considerable amount of time, which varies by data
+set size and individual machine resources.</li>
+</ol>
+</div>
+<div class="section" id="source-code-modification">
+<h2>Source Code Modification</h2>
+<p>Porting CADET to a web application should address both these concerns: web
+services are accessible to non-technical individuals who may not have an
+understanding of how to build applications and off-loading the NLP processing
+will decrease local resource cost; additionally providing a conrete baseline
+for performance analysis. However, these changes require extensive modification
+of the existing source code along with new development. The current CADET
+processing flow is comprised of 3 main steps:</p>
+<ol class="arabic simple">
+<li>Import file(s) containing structured, unprocessed comment data.</li>
+<li>Parse/Evaluate a local copy of the data using Python's Natural Language
+Toolkit <a class="citation-reference" href="#nltk" id="id3">[NLTK]</a> to process the text using NLP techniques.</li>
+<li>Display the processed information to the user.</li>
+</ol>
+<p>A byproduct of the web application will be the separation/modularization of
+presentation and data control aspects.</p>
+</div>
+<div class="section" id="interface">
+<h2>Interface</h2>
+<p>Once the input data has been processed by the data layer, the result is
+returned to the presentation layer (this would fall between steps 2 and 3).
+A method by which the processed output of the data layer is gathered and
+interpreted by the presentation layer is necessary.</p>
+<div class="section" id="requirements">
+<h3>Requirements</h3>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Functional:</th><td class="field-body"><ul class="first simple">
+<li>Implemented in Python.</li>
+<li>Request JSON objects via RESTful API [RESTful API]_ exposed by data layer.</li>
+<li>Present retrieved data to presentation layer.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Quality:</th><td class="field-body"><ul class="first last simple">
+<li>Mimic functionality of desktop app.</li>
+<li>Gracefully handle situations when a resquest returns an error.</li>
+<li>Efficiently gather processed comment data.</li>
+<li>Adequate internal and external documentation.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="use-cases">
+<h3>Use Cases</h3>
+</div>
+</div>
+<div class="section" id="processed-data-retrieval">
+<h2>Processed Data Retrieval</h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Primary Actor:</th><td class="field-body">Presentation layer thread of control (TOC).</td>
+</tr>
+<tr class="field"><th class="field-name">Goals:</th><td class="field-body">Retrieve processed data from data layer database.</td>
+</tr>
+<tr class="field"><th class="field-name">Preconditions:</th><td class="field-body">The TOC has become aware requested results are finished being processed and
+knowns the table where the results are stored.</td>
+</tr>
+<tr class="field"><th class="field-name">Postconditions:</th><td class="field-body">JSON object(s) representing processed data has been read into the program.
+Comment data members and topic dictionary are easily accessible.</td>
+</tr>
+<tr class="field"><th class="field-name">Exceptions:</th><td class="field-body">Call to data layer API returns in failure due to connectivity or data
+retrieval results in error.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="semantic-highlighting">
+<h2>Semantic Highlighting</h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Primary Actor:</th><td class="field-body">Presentation layer thread Of control (TOC)</td>
+</tr>
+<tr class="field"><th class="field-name">Goals:</th><td class="field-body">Processed data has been grouped into catagories based in topic model input.
+This data is further grouped into positive, negative, and neutral comments.</td>
+</tr>
+<tr class="field"><th class="field-name">Preconditions:</th><td class="field-body">Error-free JSON objectS containing processed data from database has been
+successfully read into a local memory. Topic Model inputs are known.</td>
+</tr>
+<tr class="field"><th class="field-name">Postconditions:</th><td class="field-body">Data stored in an array where it can be easily accessed by display routines.</td>
+</tr>
+<tr class="field"><th class="field-name">Exceptions:</th><td class="field-body">Errors in results from data layer.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="proposed-change">
+<h1>Proposed Change</h1>
+<p>The main focus of this feature is to create an interface that will:</p>
+<ol class="arabic simple">
+<li>Utilize JSON objects with existing code</li>
+<li>Access the database API</li>
+<li>Retrieve and pass JSON objects</li>
+</ol>
+<p>In order to accomplish these goals, the current CADET code will need to be
+evaluated. The first step in implementing this feature will be to find the
+point where the processed comment data is passed from NTLK analysis back to
+front end code for display. Currently, this occurs in FileIngesterUtil.py,
+via an array of Comments.</p>
+<p>The next step is to wrap the Comment array into a JSON object. JavaScript
+Object Notation <a class="citation-reference" href="#json" id="id4">[JSON]</a> is lightweight data interchange format. It has become
+widely accepted as a convenient way to represent simple data structures.
+Altering the application to manipulate JSON objects does not provide any
+immediate improvements, but will be necessary for passing data. After the JSON
+wrapper has been implemented, the expected Comment members should be changed to
+reflect the proposed data structure described by the &quot;Data Analysis
+Specification&quot; <a class="citation-reference" href="#d88" id="id5">[D88]</a> feature. That specification document enumerates the JSON
+object fields that the data layer will return. The standard Python JSON
+[Python JSON]_ library will be used to handle these objects.</p>
+<p>As previously stated, the web version of CADET will serparate the presentation
+and data aspects of the application. In the specification document for the
+&quot;Metadata Retrieval&quot; <a class="citation-reference" href="#d82" id="id6">[D82]</a> feature, the mechanism for accessing processed
+comment data is described. This information will be housed in a database which
+presents an externally accessible RESTful API interface. REpresentational State
+Transfer <a class="citation-reference" href="#rest" id="id7">[REST]</a> is a standard for web APIs which conform to a set of defined
+principles. RESTful web services use common command words to send and receive
+data through calls to URLs. In this instance, GET resquests to the API will
+return the JSON objects mentioned in the last paragraph. A new class will be
+developed for the purpose of procuring this data.</p>
+<p>Before accessing the API, the class will need to know the ID of the table which
+contains the processed data it wants to access. From this information, it will
+be able to periodically poll the table's corresponding URL to query status.
+Once it has been determined the table is available, the class is able to
+discover the topic dictionary and the number Comment entries. It will then
+iterate over all the entries, retrieving each as an individual JSON object and
+storing them in an array. This array can then be passed out of the class where
+the &quot;Dashboard - Display topic comments from data layer&quot; <a class="citation-reference" href="#d93" id="id8">[D93]</a> presentation
+layer feature will take over further processing this data.</p>
+<div class="section" id="alternatives">
+<h2>Alternatives</h2>
+<p>The result of the NLTK could be processed before it is stored.</p>
+<ul class="simple">
+<li>The partition of presentation and data processing/storage better utilizes
+anticipated machine resources:<ul>
+<li>Presentation layer will run in the browser of the user's local machine,
+where resources necessary are ideally minimal, and</li>
+<li>Data processing and storage functionality will run on a remote server,
+where processing resources are a commodity.</li>
+</ul>
+</li>
+</ul>
+<p>A different type of object interchange format, such YAML <a class="citation-reference" href="#yaml" id="id9">[YAML]</a> or MessagePack
+<a class="citation-reference" href="#messagepack" id="id10">[MessagePack]</a>, is used to pass data.</p>
+<ul class="simple">
+<li>JSON has a detailed utilization history in similar application domains.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="testing">
+<h1>Testing</h1>
+<ul class="simple">
+<li>JSON objects with extisting code</li>
+<li>Comments using updated data members</li>
+<li>Data store ping mechanism</li>
+<li>REST API data retrival
+- Include various possible returned error codes</li>
+</ul>
+</div>
+<div class="section" id="documentation">
+<h1>Documentation</h1>
+<p>In-line code will be added to help future developers understand the rationale
+and mechanisms used to implement this feature. Formal documentation will be
+submitted to the Documentation Team; this will cover the processing flow and
+major data structures. As a result of this feature being &quot;under the hood&quot; to
+the user, no external interface documentation will be provided.</p>
+</div>
+<div class="section" id="implementation">
+<h1>Implementation</h1>
+<div class="section" id="work-items">
+<h2>Work Items</h2>
+<ol class="arabic simple">
+<li>Refactor existing code
+- Understand and informally document current product.
+- Incorporate JSON objects in processed data handoff.</li>
+<li>Comment object manipulation
+- Evaluate CADET data structures containing processed data.
+- Determine discrepencies with database return structure.
+- Refactor code to utilize new data strucure.
+- JSON objects are retrieved and locally accessible.</li>
+<li>Data layer API
+- Identify data layer access methology.
+- Design external throw away prototype to get JSON objects via REST API.
+- Integrate learned concepts into presentation layer code.</li>
+</ol>
+</div>
+</div>
+<div class="section" id="references">
+<h1>References</h1>
+<table class="docutils citation" frame="void" id="d82" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id6">[D82]</a></td><td>Jason Porter, &quot;Specification for data retrieval from CADET&quot;
+URL: <a class="reference external" href="https://web4.jhuep.com/D82">https://web4.jhuep.com/D82</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="d88" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[D88]</a></td><td>Chase Rogers, &quot;Add specification for data analysis&quot;
+URL: <a class="reference external" href="https://web4.jhuep.com/D88">https://web4.jhuep.com/D88</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="d93" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id8">[D93]</a></td><td>Kyle Hartner &quot;Display topic comments from data layer Spesifications&quot;
+URL: <a class="reference external" href="https://web4.jhuep.com/D93">https://web4.jhuep.com/D93</a></td></tr>
+</tbody>
+</table>
+<!-- [JHU EP] Johns Hopkins, Engineering for Professionals
+URL: https://ep.jhu.edu/ -->
+<table class="docutils citation" frame="void" id="json" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[JSON]</a></td><td>JavaScript Object Notation. Outline: <a class="reference external" href="http://www.json.org/">http://www.json.org/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="messagepack" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id10">[MessagePack]</a></td><td>MessagePack. Outline: <a class="reference external" href="http://msgpack.org/index.html">http://msgpack.org/index.html</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="nlp" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[NLP]</a></td><td>Matt Kiser, &quot;Introduction to Natural Language Processing (NLP) 2016&quot;
+August 2016, Outline:
+<a class="reference external" href="https://blog.algorithmia.com/introduction-natural-language-processing-nlp/">https://blog.algorithmia.com/introduction-natural-language-processing-nlp/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="nltk" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[NLTK]</a></td><td>Natural Language ToolKit. Outline: <a class="reference external" href="http://www.nltk.org/">http://www.nltk.org/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="python" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[Python]</a></td><td>Python Programming Language. Outline: <a class="reference external" href="https://www.python.org/">https://www.python.org/</a></td></tr>
+</tbody>
+</table>
+<!-- [Python JSON] The Standard Python Library, json Module.
+Outline: https://docs.python.org/3/library/json.html -->
+<table class="docutils citation" frame="void" id="rest" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id7">[REST]</a></td><td>Roy Fielding, &quot;CHAPTER 5 Representational State Transfer (REST)&quot; URL:
+<a class="reference external" href="https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.html">https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.html</a></td></tr>
+</tbody>
+</table>
+<!-- [RESTful API] Roy Fielding, September 2017.
+Outline: https://restfulapi.net/ -->
+<table class="docutils citation" frame="void" id="yaml" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id9">[YAML]</a></td><td>YAML Ain't a Markup Language. Outline: <a class="reference external" href="http://yaml.org/">http://yaml.org/</a></td></tr>
+</tbody>
+</table>
+<!-- This work is licensed under a Creative Commons 3.0 Unported License.
+
+http://creativecommons.org/licenses/by/3.0/legalcode -->
+<p>CADET (Course Assessment using Data Exploration of Text) is a tool that takes
+in student course evaluations and uses sentiment analysis and natural
+language processing to report the tone of voice, such as positive or
+negative, in an evaluation. This information will refect the teaching quality
+of a professor over serveral semesters and overall impressions of a course.
+Currently, this tool only exists as a desktop application, and the
+objective is to make CADET into a web application. A proposed solution is to
+refactor the existing front-end code to use Django <a class="citation-reference" href="#django" id="id1">[Django]</a> , a Python
+web framework, to make a functional web interface.</p>
+<div class="section" id="problem-description">
+<h1>Problem Description</h1>
+<p>The eventual goal of CADET is to be publicly released and used by the EP
+program leadership for school-wide quality class assessment. Turning the tool
+into a web application would make it more accessible to users. The existing
+code, if ported to a web application in its current state, has too many
+errors that would manifest itself in the web application.</p>
+<div class="section" id="requirements">
+<h2>Requirements</h2>
+<p>One functional requirement is that the web application has the exact same
+functionality as the desktop application, because in order to build off and
+expand for future versions, CADET needs to be assured it works in the Django
+environment. The functional front-end tasks include uploading files,
+displaying the data as a graph to the user, and exporting the data for later
+use. Another functional requirement is that the source code will not be
+changed from Python, as stated by the product owner. The quality requirements
+are that the web application is more user friendly than the Desktop app,
+is highly reliable in data processing, and can process files at a fast speed.</p>
+</div>
+<div class="section" id="use-cases">
+<h2>Use Cases</h2>
+<div class="section" id="using-cadet-online">
+<h3>Using CADET Online</h3>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Primary Actor:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>User</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Goals:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>To use the existing functionality of CADET on the web.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Preconditions:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>Existing code is refactored in Django and integrated with the HTML code to
+display a web page with options to file upload, display data, and export data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Postconditions:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>The user successfully demonstrates that they can perform the same tasks that
+are available on the desktop app.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Exceptions:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>A user could try to generate a graph with no data, which will raise an
+exception to alert the user that no files have been uploaded.</p>
+</div>
+<div class="section" id="interacting-with-back-end-layer">
+<h3>Interacting with Back-End Layer</h3>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Primary Actor:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>Back-End Database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Goals:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>To obtain data sent from the front-end via file upload.</li>
+<li>To submit information to the front-end to use for creating graphs.</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Preconditions:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>Specific design patterns <a class="citation-reference" href="#django-design-patterns" id="id2">[Django-Design-Patterns]</a> are chosen for the
+front-end that are compatible with sending data to the back-end and
+retrieving processed data from the back-end successfully. This would require
+that the back-end and front-end debvelopers understand the state of data when
+it transports from one end to the next.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Postconditions:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>Back-end is able to understand data from front-end and the data it sends back
+produces no errors for the front-end.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Exceptions:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>A human user could send in invalid code for the back-end, which will throw
+and exception to ensure that invalid code doesn't make it to the back-end.</p>
+</div>
+</div>
+</div>
+<div class="section" id="proposed-change">
+<h1>Proposed Change</h1>
+<p>In order to satisfy the requirement of creating a web application that has the
+same functionality as its desktop counterpart, the existing code needs to be
+refactored. The PyQt5 library that's currently used to create the widgets
+cannot easily be converted to a Django application, so the first step is
+determining what needs to be refactored and what needs to be rewritten.
+Going through each Python file, the front-end code needs to be separated from
+the data layer code. Front-end code includes panels, widgets, and checking
+the validity of data before it gets process, while data layer code involves
+data computation with natural language processing, sentiment analysis, and
+data storage. It is vital to be in communication with the back-end team to
+ensure that the front-end code refactoring does not create errors in their
+layer. New files will be created to store the front-end code and wrapped in
+the Django framework. The back-end team has specified that they will be using
+Flask framework, as it serves their needs better as specified in <a class="citation-reference" href="#d82" id="id3">[D82]</a> . This
+will not affect how we implement our side and communicate to the data layer
+because our interactions will be through a REST API (Representational State
+Transfer Application Program Interface), and will not matter if the front and
+back-end are built on different frameworks.</p>
+<p>In the larger system, Django will use HTML code to visually display the new
+CADET layout <a class="citation-reference" href="#d77" id="id4">[D77]</a> , and this will allow for testing of the basic
+functionality of the existing code. Once it is confirmed that CADET can
+upload files, display graphs, and export data, the requirement has been met.
+Continuous integration will still need to be conducted when the back-end
+is modifying their side of the code to reinforce this requirement.</p>
+<div class="section" id="alternatives">
+<h2>Alternatives</h2>
+<p>Other web frameworks could be used besides Django, such as Ruby on Rails
+<a class="citation-reference" href="#ruby-on-rails" id="id5">[Ruby-on-Rails]</a> , to wrap around the existing code. This would not be ideal,
+as it would require another programming language, Ruby, to be used.
+Development will be simpler now and later if there is only one programming
+language.</p>
+<p>Another alternative is skipping the separation of user interface and data layer
+to just wrap it all in Django. Lack of modularity between layers will create
+messy code that will be difficult to debug.</p>
+</div>
+</div>
+<div class="section" id="testing">
+<h1>Testing</h1>
+<p>Looking at the README.rst file in CADET’s git repo that past developers have
+left, it is assumed that at a minimum, CADET can upload files, display the
+results in a graph, and store the result as JSON <a class="citation-reference" href="#json" id="id6">[JSON]</a> objects for later
+use. Unit testing will be used to ensure that each of these functions are
+met. Integration testing will need to be performed once the data layer has
+improved their side to ensure that CADET still has basic front-end
+functionality.</p>
+</div>
+<div class="section" id="documentation">
+<h1>Documentation</h1>
+<p>Inline comments are a must if future developers are expected to understand
+the rational and modularity behind the functionality and class structures.
+Each file will contain the function names, parameters, descriptions, and
+desired outcomes. A user manual will be created from collaborating between
+the Documentation and front-end team to record how to perform the basic
+functions of importing/exporting files and displaying graphs.</p>
+</div>
+<div class="section" id="implementation">
+<h1>Implementation</h1>
+<div class="section" id="work-items">
+<h2>Work Items</h2>
+<ol class="arabic simple">
+<li>Identify the existing front-end code and seperate from data layer</li>
+<li>Research preexisting common Django design patterns similar to our problems
+<a class="citation-reference" href="#agiliq-models" id="id7">[AGILIQ-Models]</a></li>
+<li>Refactor or rewite code into Django to reflect original functionality</li>
+<li>Discuss with back-end team what type of data input and outputs to expect</li>
+<li>Integrate with HTML user interface</li>
+<li>Test for basic functionality</li>
+<li>Integrate testing with data layer to ensure it is still functional</li>
+</ol>
+</div>
+</div>
+<div class="section" id="references">
+<h1>References</h1>
+<table class="docutils citation" frame="void" id="agiliq-models" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id7">[AGILIQ-Models]</a></td><td><a class="reference external" href="http://agiliq.com/books/djangodesignpatterns/">http://agiliq.com/books/djangodesignpatterns/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="d77" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[D77]</a></td><td><a class="reference external" href="https://web4.jhuep.com/D77">https://web4.jhuep.com/D77</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="d82" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[D82]</a></td><td><a class="reference external" href="https://web4.jhuep.com/D82">https://web4.jhuep.com/D82</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="django" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[Django]</a></td><td><a class="reference external" href="https://www.djangoproject.com/">https://www.djangoproject.com/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="django-design-patterns" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[Django-Design-Patterns]</a></td><td><a class="reference external" href="http://tinyurl.com/Django-Design-PDF">http://tinyurl.com/Django-Design-PDF</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="json" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id6">[JSON]</a></td><td><a class="reference external" href="http://www.json.org/">http://www.json.org/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="ruby-on-rails" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[Ruby-on-Rails]</a></td><td><a class="reference external" href="http://rubyonrails.org/">http://rubyonrails.org/</a></td></tr>
+</tbody>
+</table>
+<!-- This work is licensed under a Creative Commons 3.0 Unported License.
+
+http://creativecommons.org/licenses/by/3.0/legalcode -->
+<p>Johns Hopkins EP Program uses CADET to automatically parse and categorize every
+semesters' student feedback for each of the class sections in the program. This
+method is relatively new and lacks any documentation or official tutorial for
+those that assemble the feedback for review. This specification is for an
+official web-based set of documentation outlining additions in functionality
+from each semester the project is worked on.</p>
+<div class="section" id="problem-description">
+<h1>Problem Description</h1>
+<p>The new CADET software does not have any official documentation for the
+development and maintenance of the program itself. In order to keep track of
+the changes that will occur over the life of the project, a method will be
+needed to allow the current developers to provide documentation for the next
+semesters developers. A simple and efficient way to do this would be to make
+the documents accessible to all in the web-based environment.</p>
+<div class="section" id="requirements">
+<h2>Requirements</h2>
+<p><strong>Functional Requirements</strong>
+- File extension detection to ensure it is a RST document
+- Parses referenced RST file to display in XHTML</p>
+<p><strong>Quality Requirements</strong>
+- Instructions to build and deploy developer documentation should work across
+multiple  platforms i.e- firefox, chrome, etc.</p>
+<ul class="simple">
+<li>Coding style should be clean, neat, and easy to use</li>
+</ul>
+</div>
+<div class="section" id="use-cases">
+<h2>Use Cases</h2>
+<ul class="simple">
+<li>Primary Actors: User, localhost</li>
+<li>Goal: Convert RST files into XHTML and host them on a web server</li>
+<li>Goal: Instructions to deploy user manual in a web based platform</li>
+<li>Preconditions:
+- User follows setup guide for DocUtils <a class="citation-reference" href="#docutils" id="id1">[DocUtils]</a>
+- User sets up environment for script
+- The CADET program has been hosted to an existing web server
+- An RST style document with correct formatting is part of the
+repository <a class="citation-reference" href="#rst" id="id2">[RST]</a></li>
+</ul>
+<p>After the user has finished writing their developer documentation, they shall
+run the 'rst2html.py' script. If there is an error encountered during the
+conversion process, there is an error output to the terminal with details of
+the error. If there are errors, the user shall have to rework the RST text file
+to address these errors and rerun the script. Once all errors are removed, the
+script will successfully generate all XHTML documents in the directory.</p>
+<ul class="simple">
+<li>Postconditions:
+- Correctly formatted XHTML files have been generated
+- XHTML files have been moved into directory for web hosting
+- A web page that displays the current semester, along with
+previous semesters implementation once deployed</li>
+</ul>
+</div>
+</div>
+<div class="section" id="proposed-change">
+<h1>Proposed Change</h1>
+<p>This change will create an automatic process for converting the developer
+documentation into web pages for ease of access. It will have a menu to
+navigate through each semester and show the added modules and other
+functionality along with how to use it. In the future semesters of the project
+it will be the job of the documentation team to generate any additional HTML
+pages created for the project. This will be a simple task since a script will
+be provided to automate the process.</p>
+<div class="section" id="alternatives">
+<h2>Alternatives</h2>
+<p>Alternativs Options:
+- Source code comments exclusively
+- Text document
+- Printed document</p>
+<p>The web based application for the developer achieves ease of access across
+multiple platforms allowing anyone to use it with internet access. Versus the
+alternative options, the web-based application will be easier to track changes
+across multiple semesters. Also, source code comments can only convey a limited
+amount of information whereas web-based pages can also display images and
+diagrams helpful for future developers.</p>
+</div>
+</div>
+<div class="section" id="testing">
+<h1>Testing</h1>
+<p>Testing will consist of two parts:
+1. Testing the platform for deployment, i.e - the Internet browser
+2. Checking the format of the submitted file to ensure it is a properly
+formatted RST specific text file.</p>
+<p>The test cases would be different browser platforms for the instructions but
+for simplicity it will be limited to Firefox and Chrome and different text file
+extensions will be submitted to ensure correct error handling occurs.</p>
+</div>
+<div class="section" id="documentation">
+<h1>Documentation</h1>
+<p>The web-based documentation will be the final product. Additionally there will
+be a script repository which will include a readme text file that has all the
+necessary setup steps and a step-by-step process of how to run the tool.</p>
+</div>
+<div class="section" id="implementation">
+<h1>Implementation</h1>
+<div class="section" id="work-items">
+<h2>Work Items</h2>
+<p><strong>Web-Based Instructions</strong>
+- Phase I: Generating a blank web page
+- Phase II: Add Headers and Sections
+- Phase III: Add baseline functionality of current CADET program
+- Phase IV: Add features provided by UI/Data layer teams</p>
+</div>
+</div>
+<div class="section" id="references">
+<h1>References</h1>
+<p>Properly formatted RST documentation:</p>
+<table class="docutils citation" frame="void" id="rst" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[RST]</a></td><td>David Goodger, &quot;reStructuredText Markup Specification,&quot; May 2016.
+Online: <a class="reference external" href="http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html">http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html</a></td></tr>
+</tbody>
+</table>
+<p>Installation Guide to DocUtils:</p>
+<table class="docutils citation" frame="void" id="docutils" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[DocUtils]</a></td><td>David Goodger, &quot;README: Docutils 0.15b.dev,&quot; September 2017.
+Online: <a class="reference external" href="http://docutils.sourceforge.net/README.html#installation">http://docutils.sourceforge.net/README.html#installation</a></td></tr>
+</tbody>
+</table>
+<p>Extensible HyperText Markup Language:</p>
+<table class="docutils citation" frame="void" id="xhtml" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[XHTML]</td><td>w3schools, &quot;HTML and XHTML,&quot; October 2017.
+Online: <a class="reference external" href="https://www.w3schools.com/html/html_xhtml.asp">https://www.w3schools.com/html/html_xhtml.asp</a></td></tr>
+</tbody>
+</table>
+	      
+            </div>
+        </div>
+{% endblock %}

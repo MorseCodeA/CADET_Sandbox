@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -115,6 +114,16 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# REST Framework testing api set up, this set up unrestricted access to the
+# API for local development.  In production envir, you may need to restrict
+# access to certain endpoints
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [],
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
@@ -137,11 +146,11 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
-#Create the Media directory where all the files are stored
+# Create the Media directory where all the uploaded files are stored
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Website for generating JSONs to a specified template
-GLOBAL_SETTINGS = {'BACKEND_URL': 'https://next.json-generator.com/'}
+GLOBAL_SETTINGS = {'BACKEND_URL': 'http://www.json-generator.com'}
 # Another optional website for viewing example JSONs
 #GLOBAL_SETTINGS = {'BACKEND_URL':'https://jsonplaceholder.typicode.com/'}

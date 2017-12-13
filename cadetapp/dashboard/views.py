@@ -1,11 +1,15 @@
+#-----------------------------------------------------------------------------
+# Purpose:     Dashboard serves all templates to the user as html pages. The
+#              pages correspond to the items on the vertical navigation bar.
+#              Pages include index, topic_distribution,
+#              instructor_distribution, stopword, about, export,
+#              after_upload_options
+#-----------------------------------------------------------------------------
+
 # -*- coding: utf-8 -*-
 import json
-from django.shortcuts import render, get_object_or_404, render_to_response, \
-    render, redirect
-from django.core.cache import cache
-from django.http import HttpResponse, JsonResponse
-from django.views.generic import View, TemplateView
-from django.urls import reverse
+from django.shortcuts import render
+from django.views.generic import TemplateView
 
 # Upload dependencies
 from fileupload.forms import DocumentForm
@@ -19,6 +23,13 @@ ChartInstructorData
 from documentation.views import DocumentationView
 
 class DashboardView(TemplateView):
+    """
+    Inherit from TemplateView, which normally is best used for templating
+    static html pages.
+
+    Return: none, just route user request on the browser to specific html
+    templates at the specified paths
+    """
     template_name = 'dashboard/index.html'
 
     def index(request):
@@ -35,13 +46,17 @@ class DashboardView(TemplateView):
         return render(request, 'dashboard/instructor-distribution.html')
 
     def stopword_view(request):
+        # http://example/dashboard/stopword
         return render(request, 'dashboard/stopword.html')
 
     def about_view(request):
+        # http://example/dashboard/about
         return render(request, 'dashboard/about.html')
 
     def export_view(request):
+        # http://example/dashboard/export
         return render(request, 'dashboard/export.html')
 
     def after_upload_options(request):
+        # http://example/dashboard/options
         return render(request, 'dashboard/options.html')

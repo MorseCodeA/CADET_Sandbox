@@ -110,7 +110,8 @@ nav #mainNav .navbar.navbar-expand-lg.navbar-dark.fixed-top {
   background-color: #F9F9F9 !important; }
 
 .bg-container {
-  background: url("../img/cadet-bg.jpg") no-repeat center center;
+  background: url("../img/cadet-bg.jpg") no-repeat;
+  background-image: url("../img/cadet-bg.jpg") no-repeat;
   background-size: cover; }
 
 .content-wrapper {
@@ -183,6 +184,26 @@ nav #mainNav .navbar.navbar-expand-lg.navbar-dark.fixed-top {
     width: 100%;
     background: #dee2e6; }
 
+.documentation-wrapper-container,
+documentation-api-container {
+  margin-bottom: 40px; }
+  .documentation-wrapper-container.container,
+  documentation-api-container.container {
+    background: rgba(255, 255, 255, 0.75);
+    padding: 20px; }
+
+.documentation-api-container.container, .documentation-wrapper-container.container {
+  padding-bottom: 30px; }
+  .documentation-api-container.container h1, .documentation-wrapper-container.container h1 {
+    color: #fff; }
+  .documentation-api-container.container p, .documentation-wrapper-container.container p {
+    font-family: "titling", sans-serif; }
+  .documentation-api-container.container h1, .documentation-api-container.container h2, .documentation-api-container.container h3, .documentation-wrapper-container.container h1, .documentation-wrapper-container.container h2, .documentation-wrapper-container.container h3 {
+    color: #005EB8; }
+
+h1.doc-home-title {
+  color: #fff; }
+
 #instructor-distribution .instructor-distribution-container,
 #instructor-distribution .instructor-comment-container {
   background: rgba(255, 255, 255, 0.85);
@@ -254,8 +275,9 @@ nav #mainNav .navbar.navbar-expand-lg.navbar-dark.fixed-top {
   color: #9B9B9B; }
 
 #topic-distribution .topic-comment-container {
-  margin-top: 20px;
-  padding-top: 1em; }
+  margin-top: 1.25em;
+  padding-top: 1em;
+  margin-bottom: 3.5em; }
   #topic-distribution .topic-comment-container table thead tr.table-heading {
     font-size: 0.85em;
     color: #868e96; }
