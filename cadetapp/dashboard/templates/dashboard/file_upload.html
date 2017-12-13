@@ -12,20 +12,31 @@
     <div class="file-uploader-container container">
         <div class="jumbotron">
             <div class="container">
+                <!-- File uploader container action="?X-Progress-ID=test" references the cache upload progress -->
                 <h2>Upload A File</h2>
                 <p>Select the files to upload</p>
                 <form method="post" enctype="multipart/form-data" action="?X-Progress-ID=test" autocomplete="off">
                     {% csrf_token %}
+                    <!-- Since the page only uses 1 upload button, this button will push that upload button -->
                     <label class="btn btn-submit">
                         <button type="button" class="btn btn-success" onclick="document.getElementById('id_file').click()">Browse Files...</button>
                     </label>
+                    <!-- Submit the file to be uploaded. This will run a javascript function that will eventually click
+                    on a the hidden form  submit button
+                     -->
                     <label class="btn btn-submit">
                         <button type="button" class="btn btn-primary" onclick="fileSubmit()">Submit</button>
                     </label>
                     <button type="submit" id="submit_button" hidden="hidden" value="submit"></button>
+                    <!-- Displays the progress bar  -->
                     <h2>
                         <progress id="progressBar" data-progress_bar_uuid="test" style="width:100%" value="0" max="100"></progress>
                     </h2>
+                    <!-- Define the drop zone area where the user can drop files. Also is the only upload button
+                      in the page is clicked by the button.
+                      Dropzone works by having the button follow the cursor so the user can drop the files on top
+                      of the button.
+                      -->
                     <div id="drop-zone">
                         Drop files here...
                         <div id="clickHere">
@@ -35,7 +46,9 @@
                 </form>
                 <div class="container">
 
-                    <!-- Trigger the modal with a button -->
+                    <!-- Trigger the modal with a button
+                    Modals are used as an error catching mechanism for invalid files
+                    -->
                     <button type="button" hidden="hidden" id=modal_button data-toggle="modal" data-target="#myModal"></button>
 
                     <!-- Modal -->
@@ -58,6 +71,8 @@
                     </div>
                 </div>
             </div>
+
+            <!-- File upload table displaying the information on the selected files-->
             <h3>File Browser</h3>
             <div class="table-responsive">
                 <table id= "myTable" class="table table-striped">
