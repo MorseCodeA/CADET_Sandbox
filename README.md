@@ -85,7 +85,7 @@ python manage.py runserver
 
 #### Common Issues in the Installation Steps  
 
-**Make sure you're using python +3.0**  
+Make sure you're using python +3.0!    
 
 #### You need these libraries installed in order to run our Django Cadet:
 
