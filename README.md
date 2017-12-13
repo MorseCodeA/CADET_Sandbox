@@ -16,7 +16,8 @@ cd cadet/src/front-end
 
 # A. Virtual Environment (optional, but highly recommended)
 
-A. General virtualenv 
+A. General virtualenv
+
 ```bash 
 # run virtualenv with python3, you can name your environment whatever. This
 # example, we call it *cadetenv*.
@@ -80,13 +81,15 @@ python manage.py runserver
 
 # website homepage
 127.0.0.1:8000/dashboard
+```
 
 #### Common Issues in the Installation Steps  
 
 **Make sure you're using python +3.0**  
 
-You need these libraries installed in order to run our Django Cadet:  
-```
+#### You need these libraries installed in order to run our Django Cadet:
+
+```bash
 # notice we install with pip3 not pip
 pip3 install djangorestframework
 
@@ -101,19 +104,19 @@ pip3 install jsonfield
 
 # Polling library
 pip3 install polling
-
 ```
 
 ### IV. Running Test Suites
-
 Install dependencies
-```
+
+```bash
 pip install coverage==3.6
 pip install selenium==2.33.0
 ```
 
-To run test suite, use this command:
-```
+#### To run test suite, use this command:
+
+```bash
 coverage run manage.py test [name of subapp]
 
 # example, running dashboard/tests.py would be
@@ -139,9 +142,15 @@ gulp
 
 ```
 
+Resources:
 
-
-
+[Ready to use Structure for Django Tests](https://dezoito.github
+.io/2015/09/21/how-to-test-django-applications_pt1.html)
+[Testing in Django Part 1 - Best Practices](https://realpython
+.com/blog/python/testing-in-django-part-1-best
+-practices-and-examples/)
+[Django Docs - Testing Tools](https://docs.djangoproject.com/en/2
+.0/topics/testing/tools/)
 
 
 
