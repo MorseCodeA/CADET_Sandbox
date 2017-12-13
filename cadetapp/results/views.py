@@ -4,6 +4,14 @@ from django.http import HttpResponse
 from .models import Results_Set
 import json, polling, random as rng, requests
 
+#-----------------------------------------------------------------------------
+# Purpose:     Create views fuction to retrieve results from data layer and
+#              store it using Results_Set model from /models.py
+#
+# Functions:   retrieve
+#
+#-----------------------------------------------------------------------------
+
 def retrieve(request,result_id):
     """
     Purpose: Retrieve data from either the database created by back end or 

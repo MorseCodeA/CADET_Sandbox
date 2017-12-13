@@ -5,6 +5,16 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from results.models import Results_Set
 
+#-----------------------------------------------------------------------------
+# Purpose:     The purpose of this file is to take Results_Set that stores 
+#              information from the data layer in results/views.py and compute
+#              the information to display in the topic and instructor chart in
+#              distribution_chart/views.py.
+#
+# Functions:   computeTopicResults, computeInstructorResults
+#
+#-----------------------------------------------------------------------------
+
 # The purpose of this file is to take Results_Set that stores information 
 # from the data layer in results/views.py and compute the information to 
 # display in the topic and instructor chart in distribution_chart/views.py.
