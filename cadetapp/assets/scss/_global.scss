@@ -205,9 +205,22 @@ nav {
       background: rgba(255,255,255,0.75); 
       padding: 20px;  
   }
-  h2 { 
-    color: #fff;
-  }
+}
+
+.documentation-api-container, .documentation-wrapper-container {
+   &.container {
+       padding-bottom: 30px;
+       p {
+            font-family: $body-font, sans-serif;
+       }
+       h1, h2, h3 {
+            color: $cadet-blue;
+       }
+   }
+}
+
+h1.doc-home-title {
+     color: #fff;
 }
 
 // Distributions

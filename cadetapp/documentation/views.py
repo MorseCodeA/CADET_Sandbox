@@ -15,7 +15,7 @@ class DocumentationView(TemplateView):
         return render(request,
         'documentation/DisplayTopicCommentsFromDataLayer.html')
     def enforce_code_standards(request):
-        return render(request, 'documentation/enforce_code_standards.html')
+        return render(request, 'documentation/enforce-code-standards.html')
     def enforce_test_before_commit(request):
         return render(request, 'documentation/enforce-test-before-commit.html')
     def file_uploader(request):
@@ -28,7 +28,7 @@ class DocumentationView(TemplateView):
         return render(request,
         'documentation/presentation-layer-interface-for-data-results.html')
     def refactor_front_end_code(request):
-        return render(request, 'documentation/refactor_front_end_code.html')
+        return render(request, 'documentation/refactor-front-end-code.html')
     def web_dev_docs(request):
         return render(request, 'documentation/web-dev-docs.html')
     def web_tutorial(request):
