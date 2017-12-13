@@ -104,7 +104,23 @@ pip3 install polling
 
 ```
 
-### IV. Front-End Development Set Up
+### IV. Running Test Suites
+
+Install dependencies
+```
+pip install coverage==3.6
+pip install selenium==2.33.0
+```
+
+To run test suite, use this command:
+```
+coverage run manage.py test [name of subapp]
+
+# example, running dashboard/tests.py would be
+coverage run manage.py test dashboard
+```
+
+### V. Front-End Development Set Up
 
 This section is for future front-end developers who wishes to modify the HTML,
 CSS, and JS of the project.
