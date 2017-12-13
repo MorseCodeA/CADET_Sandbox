@@ -209,6 +209,9 @@ nav {
 
 .documentation-api-container, .documentation-wrapper-container {
    &.container {
+       h1 {
+        color: #fff;
+       }
        padding-bottom: 30px;
        p {
             font-family: $body-font, sans-serif;
@@ -218,6 +221,7 @@ nav {
        }
    }
 }
+
 
 h1.doc-home-title {
      color: #fff;

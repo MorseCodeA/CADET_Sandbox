@@ -194,6 +194,8 @@ documentation-api-container {
 
 .documentation-api-container.container, .documentation-wrapper-container.container {
   padding-bottom: 30px; }
+  .documentation-api-container.container h1, .documentation-wrapper-container.container h1 {
+    color: #fff; }
   .documentation-api-container.container p, .documentation-wrapper-container.container p {
     font-family: "titling", sans-serif; }
   .documentation-api-container.container h1, .documentation-api-container.container h2, .documentation-api-container.container h3, .documentation-wrapper-container.container h1, .documentation-wrapper-container.container h2, .documentation-wrapper-container.container h3 {
