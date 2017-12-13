@@ -15,7 +15,7 @@ from results.models import Results_Set
 #
 #-----------------------------------------------------------------------------
 
-# The purpose of this file is to take Results_Set that stores information 
+# The pu:rpose of this file is to take Results_Set that stores information
 # from the data layer in results/views.py and compute the information to 
 # display in the topic and instructor chart in distribution_chart/views.py.
 
@@ -60,12 +60,12 @@ def computeInstructorResults():
     Purpose: Parse JSON result to populate instructor chart.
 
     Return: a list with 4 values: a list of a the instructor's first and last 
-    name per instruictor, a list of the number of postive comments per 
+    name per instructor, a list of the number of postive comments per
     inctructor, a list of the number of neutal comments per instructor, and a 
     list of the negative comments per instructor.
 
     How: Retrieve the latest result JSON, parse it, then obtain the 
-    instructor's first and last name, and number of postive, netural, and 
+    instructor's first and last name, and number of positive, neutral, and
     negative comments per each instructor.
     """
     # retrieve the most recent JSON, which is determined by its result id

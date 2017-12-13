@@ -14,19 +14,19 @@ class DashboardViewTest(TestCase):
         request = self.factory.get('/dashboard/index')
         response = DashboardView.as_view()(request)
         self.assertEqual(response.status_code, 200)
-
+        # this tests to see if the request page have the "Dashboard Home text"
+        self.assertContains(response,
+                            "Dashboard Home")
 
     def test_get_topic_distribution(self):
         # Create an instance of a GET request for index
         request = self.factory.get('/dashboard/topic-distribution')
-
         response = DashboardView.as_view()(request)
         self.assertEqual(response.status_code, 200)
 
     def test_get_instructor_distribution(self):
         # Create an instance of a GET request for index
         request = self.factory.get('/dashboard/instructor-distribution')
-
         response = DashboardView.as_view()(request)
         self.assertEqual(response.status_code, 200)
 
@@ -52,10 +52,11 @@ class DashboardViewTest(TestCase):
         response = DashboardView.as_view()(request)
         self.assertEqual(response.status_code, 200)
 
-
     def test_get_after_upload_options(self):
         # Create an instance of a GET request for index
         request = self.factory.get('/dashboard/options')
 
         response = DashboardView.as_view()(request)
         self.assertEqual(response.status_code, 200)
+
+
