@@ -200,9 +200,13 @@ nav {
 // Documentations
 .documentation-wrapper-container, 
   documentation-api-container {
+    margin-bottom: 40px;
     &.container {
       background: rgba(255,255,255,0.75); 
       padding: 20px;  
+  }
+  h2 { 
+    color: #fff;
   }
 }
 

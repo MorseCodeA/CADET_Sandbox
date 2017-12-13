@@ -184,10 +184,16 @@ nav #mainNav .navbar.navbar-expand-lg.navbar-dark.fixed-top {
     width: 100%;
     background: #dee2e6; }
 
-.documentation-wrapper-container.container,
-documentation-api-container.container {
-  background: rgba(255, 255, 255, 0.75);
-  padding: 20px; }
+.documentation-wrapper-container,
+documentation-api-container {
+  margin-bottom: 40px; }
+  .documentation-wrapper-container.container,
+  documentation-api-container.container {
+    background: rgba(255, 255, 255, 0.75);
+    padding: 20px; }
+  .documentation-wrapper-container h2,
+  documentation-api-container h2 {
+    color: #fff; }
 
 #instructor-distribution .instructor-distribution-container,
 #instructor-distribution .instructor-comment-container {
