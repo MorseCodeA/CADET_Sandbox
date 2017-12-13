@@ -32,4 +32,4 @@ class DocumentationView(TemplateView):
     def web_dev_docs(request):
         return render(request, 'documentation/web-dev-docs.html')
     def web_tutorial(request):
-        return render(request, '/documentation/web-tutorial.html')
+        return render(request, 'documentation/web-tutorial.html')

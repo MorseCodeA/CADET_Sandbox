@@ -2,7 +2,7 @@ from django.conf.urls import url
 from .views import DocumentationView
 
 urlpatterns = [
-    url('/', DocumentationView.home, name="doc-home.html"),
+    url('doc-home', DocumentationView.home, name="doc-home.html"),
 
     # go here http://localhost:8000/dashboard/documentation/back-end-database
     # and it will work, but with no styling from your html
