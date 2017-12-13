@@ -14,7 +14,7 @@ git clone ssh://git@web4.jhuep.com:2222/diffusion/CADET/cadet.git
 cd cadet/src/front-end
 ```
 
-# A. Virtual Environment (optional, but highly recommended)
+### A. Virtual Environment (optional, but highly recommended)
 
 A. General virtualenv
 
@@ -144,13 +144,9 @@ gulp
 
 Resources:
 
-[Ready to use Structure for Django Tests](https://dezoito.github
-.io/2015/09/21/how-to-test-django-applications_pt1.html)
-[Testing in Django Part 1 - Best Practices](https://realpython
-.com/blog/python/testing-in-django-part-1-best
--practices-and-examples/)
-[Django Docs - Testing Tools](https://docs.djangoproject.com/en/2
-.0/topics/testing/tools/)
+[Ready to use Structure for Django Tests](https://dezoito.github.io/2015/09/21/how-to-test-django-applications_pt1.html)
+[Testing in Django Part 1 - Best Practices](https://realpython.com/blog/python/testing-in-django-part-1-best-practices-and-examples/)
+[Django Docs - Testing Tools](https://docs.djangoproject.com/en/2.0/topics/testing/tools/)
 
 
 
