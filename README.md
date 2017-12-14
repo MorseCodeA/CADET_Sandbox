@@ -25,8 +25,7 @@ python -m venv cadetenv
 ```  
 If running virtual env command gives you an error, you might either have 
 anaconda installed, which you need to follow[this setup:]
-(https://uoa-eresearch
-.github.io/eresearch-cookbook/recipe/2014/11/20/conda/).
+(https://uoa-eresearch.github.io/eresearch-cookbook/recipe/2014/11/20/conda/).
 
 Mac and Ubuntu users might also run into installation error if pyenv is
 broken, then add this modifier to the same command:
@@ -50,6 +49,7 @@ Skip Step II: Django Installation.
 ```bash
 # upgrade pip
 pip install --upgrade pip
+- Make sure you are running pip +3.0, it might be necessary to enter 'pip3'
 
 # install django 
 pip install django~=1.10.0 
@@ -85,7 +85,8 @@ python manage.py runserver
 
 #### Common Issues in the Installation Steps  
 
-Make sure you're using python +3.0!    
+Make sure you're using python +3.0! You may need to run 'python3' instead 
+of 'python' for commands.
 
 #### You need these libraries installed in order to run our Django Cadet:
 
@@ -105,6 +106,14 @@ pip3 install jsonfield
 # Polling library
 pip3 install polling
 ```
+
+## Removing/Repopulating the Database if Needed
+1. 'cd cadet/src/front-end/cadetapp'
+2. remove '/migrations' folder in app you want to clear
+- for example 'rm -r /results/migrations'
+3. 'rm db.sqlite3'
+4. 'python manage.py makemigrations "app_name"' 
+5. 'pythom manage.py migrate'
 
 ### IV. Running Test Suites
 Install dependencies
@@ -139,10 +148,18 @@ npm init
 # this command finds the Gulpfile.js and run all tasks there, mostly it tells 
 # gulp to compile and minify all js and sass files in teh assets directory
 gulp
-
 ```
 
-Resources:
+### Errors and Commented Out Code
+There are some errors including that we did not use the full functionality of 
+stop words, URL redirecting errors, and file uploads errors where the upload 
+options are not fully visible.
+
+There is also commented out code in results/models.py and dashboard/models.py 
+where models caould be used to store the data layer results instead of just 
+passing it on through to the charts. This was would be more organized and allow the user to manipulate the data in better.
+
+# Resources:
 
 [Ready to use Structure for Django Tests](https://dezoito.github.io/2015/09/21/how-to-test-django-applications_pt1.html)
 [Testing in Django Part 1 - Best Practices](https://realpython.com/blog/python/testing-in-django-part-1-best-practices-and-examples/)

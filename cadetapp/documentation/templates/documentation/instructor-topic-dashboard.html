@@ -1,11 +1,394 @@
 {% extends 'dashboard/base.html' %}
 {% block content %}
         <div class="documentation-wrapper-container container">
-            <h2> Metadata Retrieval </h2>
+            <h2> Instructor Topic Dashboard </h2>
             <div class="container">
 
 
-	      
+<!-- This work is licensed under a Creative Commons 3.0 Unported License.
+
+http://creativecommons.org/licenses/by/3.0/legalcode -->
+<p>The intention of the original CADET program is to provide longitutional
+analysis and pedagogical directions from the collected course evaluations.
+The current desktop CADET program has a user interface that cannot be run on
+web browsers. Furthermore, the CADET desktop UI is also missing validation and
+errors messages, so if ported to the web, will pose behavioral and
+interaction issues for end-users. This specification outlines a proposal for
+adding a new web user interface to replace the desktop user interface. The
+new web user interface needs to have the same capabilities as the desktop
+system.  Those capabilities includes: uploading files, select options
+regarding natural language processing, and switching from the
+topics-comments view and instructors-comments view.</p>
+<div class="section" id="problem-description">
+<h1>Problem Description</h1>
+<p>In order to port the desktop system to a web system, CADET needs to address
+two major missing features. The first is structural, while the second is
+behavioral. The current desktop system uses a python PyQt5 <a class="citation-reference" href="#pyqt5" id="id1">[PyQt5]</a> library
+for its main desktop-based GUI.  The current PyQt5 setup in the program
+currently cannot run on browsers due to missing templates in Django and a
+web library in PyQt5. Django is a modern web framework written in Python,
+used mostly for agile web development <a class="citation-reference" href="#meetdjango" id="id2">[MeetDjango]</a>. Django framework
+expects a new structure of view templates in its directory.  In addition to
+missing templates for the new Django framework, the desktop system does not
+display behavioral changes in the presentation of information most web users
+would expect. For example, error messages are not displayed in the CADET
+desktop GUI for users. This missing behavior makes it hard for users to
+understand why the program either crashes or fail to hide labels when not in
+used.</p>
+<div class="section" id="requirements">
+<h2>Requirements</h2>
+<p>The current dashboard heavily relies on PyQt5 for graphical output with
+<strong>Numpy</strong> and <strong>MatPlot</strong> Python libraries. The web dashboard still would
+use refactored and rewritten code related Numpy and MatPlot, but needs to
+replace PyQt5 with a complete front-end system--both in HTML templates, and
+Javascript to handle events--in the dashboard. PyQt5 library of Python will
+not be imported to the web.</p>
+<p>Functional Requirements:</p>
+<ul class="simple">
+<li>Create a dashboard UI that is compatible with current data visualization
+libraries from the Django framework</li>
+<li>Follow the branding guidelines of from official JHU branding in terms of
+color choice, typography, and graphic treatment. However, the web
+application should refrain from using any specific logos, until the
+university approves the application. <a class="citation-reference" href="#jhubranding" id="id3">[JHUBranding]</a></li>
+<li>Adheres to the latest web user-experience best practices <a class="citation-reference" href="#googleui" id="id4">[GoogleUI]</a></li>
+<li>Display options to easily navigate between upload view, options view, and
+distributions view.</li>
+<li>The distribution view incorporates two panels:<ul>
+<li>The first panel displays the instructor to comments distribution graph</li>
+<li>The second panel displays the topics to comments distribution graph</li>
+</ul>
+</li>
+<li>Display three different sentiments--positive, negative, and neutral--in
+the distribution graphs</li>
+<li>The options view has these inputs: number of topics, words per topics,
+number of iterations</li>
+<li>Display all comments tied to a word under the topic-comments cluster, if
+the user selects on a word</li>
+<li>Create Python templates for Django</li>
+</ul>
+<p>Quality Requirements:</p>
+<p>Create an intuitive, clean user-interface based on common web standards.
+There are no permanent set of criteria to define &quot;clean&quot; or &quot;intuitive&quot; since
+design trends shift from one year to the next. However, the site
+webchecklist.com provides a decent guide for best practices, usability, code
+quality, and accessibility <a class="citation-reference" href="#webchecklist" id="id5">[webchecklist]</a>. The current dashboard will focus
+on the four criteria listed above. Other criteria that focus on mobile
+devices, web analytics, search engine optimization, and social media are out
+of the scope of this specification.</p>
+</div>
+<div class="section" id="use-case">
+<h2>Use Case</h2>
+<p>The department chair and the instructor will have the exact use case.</p>
+<p>Primary Actors:  The department chair needs to upload a file and view
+topics by comments or comments by instructor distributions.</p>
+<p>Precondition:</p>
+<ul class="simple">
+<li>The department chair must have already logged into the CADET system</li>
+<li>The department chair has already uploaded a valid file and it has been
+processed through the Python natural language library</li>
+<li>The RESTful API has valid requests to obtain data in the database</li>
+<li>The department chair is using a Chrome or Firefox browser.</li>
+<li>The data is already processed with the natural processing language API,
+and is accessible in the RESTful API with URL browser requests.</li>
+<li>The user has already finished inputting the topic model options for the
+number of topics.</li>
+</ul>
+<p>Postcondition: Graphical representation of the processed data.</p>
+<ol class="arabic simple">
+<li>The user has the ability to switch between different views in the dashboard.</li>
+<li>If the user clicks on the topics distribution view, the page should
+display comments across a chosen topic.</li>
+<li>If the user clicks on the instructor distribution view, the page should load
+to display sentiment comments directed at the instructor.</li>
+</ol>
+<p>Variations: The department chair's primary objective might not be to view
+instructors and topics, but to have more granular view--such as sorting
+topics or professors by specific semester.  This is out of the scope of the
+current iteration of this dashboard.</p>
+<p>Variation Handling: Disclaimer or user-friendly text state the purpose of the
+current functionality of the dashboard.</p>
+</div>
+</div>
+<div class="section" id="proposed-change">
+<h1>Proposed Change</h1>
+<p>The CADET web UI system will use the majority of the refactored and
+rewritten code from the original desktop UI. This feature only concerns
+itself with dashboard-related python HTML templates, relating Cascading
+Style Sheets (CSS) <a class="citation-reference" href="#css" id="id6">[CSS]</a>, and JavaScript in the Django application directory
+<a class="citation-reference" href="#viewdjango" id="id7">[ViewDjango]</a>. The HTML templates may call instances of a class that stores
+the necessary parsed data such as comments, topics, words, instructor's
+name, etc. for display. The templates will also call other partial templates
+such as the header, navigation bar, topics-comments panel, instructor
+panel, and footer.</p>
+<p>The templates may use a preexisting template library to provide basic
+skeletal setup for development.  Django-Dash <a class="citation-reference" href="#django-dash" id="id8">[Django-Dash]</a>, Django-Jet
+<a class="citation-reference" href="#django-jet" id="id9">[Django-Jet]</a>, and Django-Dashing <a class="citation-reference" href="#django-dashing" id="id10">[Django-Dashing]</a> are three popular
+dashboard libraries for the Django framework.  All three of the
+above-mentioned dashboard libraries will be tested, along with a base
+hand-coded HTML version.  However, only one library will be selected at the end
+of the semester. The decision to select a specific library depends on how
+it integrates with other features. Django-Jet has an interface that looks most
+similar to the mock-up design, however it is unclear how it will integrate
+with D87 - Refactor Front-End Code Specification <a class="citation-reference" href="#d87" id="id11">[D87]</a> and D83 - File
+Upload Specification <a class="citation-reference" href="#d83" id="id12">[D83]</a>.  The Django-Dash and Django-Dashing library has
+the most active updates and documentation, especially sections on
+integration with graphical libraries. All three of these libraries are
+modular and have shown some compatibility with <strong>matplotib</strong> and <strong>numby</strong>.</p>
+<p>The developer still need to instantiate objects to work with the modular
+dashboard libraries to to match the branding of JHU guidelines. The
+templates also need a JavaScript framework to handle the frontend user
+interactions. The feature will not handle backend classes which deals with
+parsing the logic between the database and the view. The feature will rely
+on ZeplinApp <a class="citation-reference" href="#zeplinapp" id="id13">[ZeplinApp]</a> to convert design mockups straight into HTML. As
+for the CSS, the feature relies on SASS <a class="citation-reference" href="#sass" id="id14">[Sass]</a>, a CSS preprocessor, to
+organize all stylesheets.</p>
+<p>This feature fits into the larger picture because it is akin to a
+smartly-dressed salesman accepting and returning a request for an item. Any
+requests from the customer--i.e., the user--requires the need to interact
+with the customer in the sales floor (our front-end layer) and also sends the
+message to the backroom (our back-end layer). The order is processed, then
+returns back to the sales floor in a packaged format that the customer
+expected. This means from the front-end perspective, the dashboard acts as
+the salesman who delivers the request slip(s), ie. the upload file(s). From
+the back-end perspective, the dashboard passes the upload file through the
+Django framework. It is not the task of the salesman to create or package
+the item in the store.  However, this request is transferred to other parts
+of the program, as outlined in D83, D87, and D89 <a class="citation-reference" href="#d89" id="id15">[D89]</a>. The results from
+D89 - Presentation Layer Interface for Data Layer Results Specification
+<a class="citation-reference" href="#d89" id="id16">[D89]</a> in the form of a JSON object is the final product that the salesman
+brings back to the front-end of the store.</p>
+<div class="section" id="alternatives">
+<h2>Alternatives</h2>
+<p>Although there are alternatives to PtQt5 library, such as Kivy <a class="citation-reference" href="#kivy" id="id17">[Kivy]</a>,
+however the latter is known more for smaller applications and game
+development <a class="citation-reference" href="#pythonatemygui" id="id18">[PythonAteMyGui]</a>. Building a complete web UI system from
+scratch, with some help from internal Django templates libraries and
+external JavaScript libraries allow the web CADET application more flexibility
+to scale up to future computation and structural complexity.</p>
+<p>There are different libraries such as Django Suit <a class="citation-reference" href="#djangosuit" id="id19">[DjangoSuit]</a> to provide
+out-of-the-box front-end templates. However, they are not as well documented
+or has extensive libraries as Django-Jet, Django-Dash, and Django-Dashing.</p>
+</div>
+</div>
+<div class="section" id="testing">
+<h1>Testing</h1>
+<ul class="simple">
+<li>Unit Testing: Use the built-in Django in unit test <a class="citation-reference" href="#testclient" id="id20">[testClient]</a>
+package to test POST and GET requests in a mock browser.</li>
+<li>Integration Testing: Selenium <a class="citation-reference" href="#seleniumdjango" id="id21">[SeleniumDjango]</a> or similar library for
+behavior-driven testing, to emulate a user's experience and interaction with
+the web site.</li>
+<li>Informal Peer-Review: Design mockups and prototypes will be posted on
+common design prototyping web applications such as MarvelApp
+<a class="citation-reference" href="#marvelapp" id="id22">[MarvelApp]</a> and ZeplinApp for all CADET team to review and
+offer suggestions. MarvelApp and ZeplinApp are tools that allow designers
+to present their mockups in the point-of-view of users and how the users
+interact with the website.</li>
+</ul>
+</div>
+<div class="section" id="documentation">
+<h1>Documentation</h1>
+<p>In-line comments will be provided in the source code for future developing
+teams.  Instructions on setting up and downloading relevant UI Django
+packages, branding assets, and testing tools will be provided in the
+repository in the docs directory.</p>
+</div>
+<div class="section" id="implementation">
+<h1>Implementation</h1>
+<div class="section" id="work-items">
+<h2>Work Items</h2>
+<ol class="arabic simple">
+<li>Design wire frames to test user flow of the app. The current design is
+available to view at <a class="reference external" href="https://marvelapp.com/2b300af">https://marvelapp.com/2b300af</a></li>
+<li>Design prototypes of screens and upload to MarvelApp for demo
+with front-end and back-end team.</li>
+<li>Set up the asset pipeline tool for Django front-end development.</li>
+<li>Convert design prototype to static HTML screens and put on a live server.</li>
+<li>Create the first dashboard to use as base HTML, in which styling will be
+transferred to the final refactored dashboard.</li>
+<li>Select Javascript library for handling front-end event triggers.</li>
+<li>Create additional dashboard types from three libraries: Django-Jet,
+Django-Dash, and Django-Dashing.</li>
+<li>From the 3 different libraries, select one which works best with the
+refactored code from  D87 - Refactor Front-End Code Specification <a class="citation-reference" href="#d87" id="id23">[D87]</a>.</li>
+<li>Integrate the dashboard with the upload functionality from D83 - File
+Uploader Specification <a class="citation-reference" href="#d83" id="id24">[D83]</a>.</li>
+<li>Integrate the two dashboard backend features as outlined in D97 -
+Dashboard, Display Topic Comments From Data Layer <a class="citation-reference" href="#d97" id="id25">[D97]</a> : comment
+sentiment highlighting display and word group associated comments display.</li>
+<li>Refactor templates under the design pattern, template inheritance tree,
+in Django CADET app <a class="citation-reference" href="#djangodesignspatterns" id="id26">[DjangoDesignsPatterns]</a></li>
+<li>Check in with the data layer team and documentation team to match
+specifications.</li>
+</ol>
+</div>
+</div>
+<div class="section" id="references">
+<h1>References</h1>
+<table class="docutils citation" frame="void" id="awesomedjango" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[AwesomeDjango]</td><td><a class="reference external" href="http://awesome-django.com/#awesome-django-boilerplate">http://awesome-django.com/#awesome-django-boilerplate</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="css" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id6">[CSS]</a></td><td><a class="reference external" href="https://www.w3.org/Style/CSS/Overview.en.html">https://www.w3.org/Style/CSS/Overview.en.html</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="d83" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[D83]</td><td><em>(<a class="fn-backref" href="#id12">1</a>, <a class="fn-backref" href="#id24">2</a>)</em> File Uploader <a class="reference external" href="https://web4.jhuep.com/D83">https://web4.jhuep.com/D83</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="d87" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[D87]</td><td><em>(<a class="fn-backref" href="#id11">1</a>, <a class="fn-backref" href="#id23">2</a>)</em> Refactor Front-End Code Specification, <a class="reference external" href="https://web4.jhuep.com/D87">https://web4.jhuep.com/D87</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="d89" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[D89]</td><td><em>(<a class="fn-backref" href="#id15">1</a>, <a class="fn-backref" href="#id16">2</a>)</em> Presentation Layer Interface for Data Layer Results
+Specification, <a class="reference external" href="https://web4.jhuep.com/D89">https://web4.jhuep.com/D89</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="d97" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id25">[D97]</a></td><td>Dashboard - Display Topic Comments From Data Layer,
+<a class="reference external" href="https://web4.jhuep.com/D89">https://web4.jhuep.com/D89</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="dashboarddesign" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[DashboardDesign]</td><td>Dashboard Design
+<a class="reference external" href="http://uxmovement.com/navigation/top-navigation-vs-left-navigation-which">http://uxmovement.com/navigation/top-navigation-vs-left-navigation-which</a>
+-works-better/</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="django-dash" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id8">[Django-Dash]</a></td><td><a class="reference external" href="https://github.com/barseghyanartur/django-dash">https://github.com/barseghyanartur/django-dash</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="django-dashing" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id10">[Django-Dashing]</a></td><td><a class="reference external" href="https://github.com/talpor/django-dashing">https://github.com/talpor/django-dashing</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="djangodesignspatterns" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id26">[DjangoDesignsPatterns]</a></td><td>Django Design Patterns and Best Practices.
+Chapter 5. Page 81. <a class="reference external" href="http://bit.ly/2x7aTcO">http://bit.ly/2x7aTcO</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="djangosuit" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id19">[DjangoSuit]</a></td><td><a class="reference external" href="http://djangosuit.com/">http://djangosuit.com/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="django-jet" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id9">[Django-Jet]</a></td><td><a class="reference external" href="http://jet.geex-arts.com/">http://jet.geex-arts.com/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="googleui" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[GoogleUI]</a></td><td><a class="reference external" href="https://developers.google.com/web/fundamentals/design-and-ui/">https://developers.google.com/web/fundamentals/design-and-ui/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="howdjangoworks" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[HowDjangoWorks]</td><td><a class="reference external" href="http://bit.ly/2wS0rFW">http://bit.ly/2wS0rFW</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="jhubranding" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[JHUBranding]</a></td><td>Johns Hopkins University Official Branding Guidelines.
+April 2016. <a class="reference external" href="http://brand.jhu.edu/">http://brand.jhu.edu/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="kivy" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id17">[Kivy]</a></td><td><a class="reference external" href="https://kivy.org/#home">https://kivy.org/#home</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="marvelapp" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id22">[MarvelApp]</a></td><td><a class="reference external" href="https://marvelapp.com/">https://marvelapp.com/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="meetdjango" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[MeetDjango]</a></td><td><a class="reference external" href="https://www.djangoproject.com/">https://www.djangoproject.com/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="pythonatemygui" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id18">[PythonAteMyGui]</a></td><td><a class="reference external" href="https://medium.com/&#64;tryexceptpass/a-python-ate-my-gui-971f2326ce59">https://medium.com/&#64;tryexceptpass/a-python-ate-my-gui-971f2326ce59</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="pyqt5" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[PyQt5]</a></td><td><a class="reference external" href="http://pyqt.sourceforge.net/Docs/PyQt5/">http://pyqt.sourceforge.net/Docs/PyQt5/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="sass" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id14">[Sass]</a></td><td><a class="reference external" href="http://sass-lang.com/">http://sass-lang.com/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="seleniumdjango" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id21">[SeleniumDjango]</a></td><td><a class="reference external" href="https://django-selenium.readthedocs.io/en/latest/#what-is-it/">https://django-selenium.readthedocs.io/en/latest/#what-is-it/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="testclient" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id20">[testClient]</a></td><td><a class="reference external" href="https://docs.djangoproject.com/en/1.11/topics/http/views/">https://docs.djangoproject.com/en/1.11/topics/http/views/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="viewdjango" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id7">[ViewDjango]</a></td><td><a class="reference external" href="https://docs.djangoproject.com/en/1.11/topics/http/views/">https://docs.djangoproject.com/en/1.11/topics/http/views/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="webchecklist" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[webchecklist]</a></td><td><a class="reference external" href="http://webdevchecklist.com/">http://webdevchecklist.com/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="zeplinapp" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id13">[ZeplinApp]</a></td><td><a class="reference external" href="https://zeplin.io/">https://zeplin.io/</a></td></tr>
+</tbody>
+</table>
+
             </div>
         </div>
 {% endblock %}
