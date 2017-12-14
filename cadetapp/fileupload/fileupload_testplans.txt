@@ -1,0 +1,69 @@
+Tests for File Upload:
+
+Test 1: 
+The user is able to navigate to the following page:
+127.0.0.1:8000/dashboard/file_upload/ loads
+Result:
+Pass
+
+Test 2: 
+The user is able to "Browse Files.." button which brings up a file browser of
+their local file system.
+Result:
+Pass
+
+Test 3:
+The user is able to select files from their local file system.
+Result:
+Pass
+
+Test 4:
+The file browser table updates correctly with file information from the
+uploaded files that the user selected.
+Result:
+Pass
+
+Test 5:
+The user is able to select either a single file or multiple files.
+Result:
+Pass
+
+Test 6:
+The user is able to drag local files into the "Drop files here" box.
+Result:
+Pass
+
+Test 7:
+The user is able to click on the "Submit" button. The file should be
+uploaded to the "../media/downloads" directory. 
+Result:
+Pass
+
+Test 8:
+The progress bar should update with the current progress of the uploaded
+file.
+Result:
+Pass
+
+Test 9:
+If the user did not select a file or selected a file with an invalid
+format, and error message should appear.
+Result:
+Pass
+
+Test 10:
+The user is redirected to the following page after clicking "Submit":
+http://127.0.0.1:8000/dashboard/file_upload/options
+Result:
+Pass
+
+Test 11:
+The user is able to select csv files from the 
+"../media/downloads" directory on the options page.
+Result:
+Pass
+
+Test 12:
+The user is only able to input positive integers in the input fields.
+Result:
+Pass
