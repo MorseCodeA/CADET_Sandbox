@@ -148,10 +148,18 @@ npm init
 # this command finds the Gulpfile.js and run all tasks there, mostly it tells 
 # gulp to compile and minify all js and sass files in teh assets directory
 gulp
-
 ```
 
-Resources:
+### Errors and Commented Out Code
+There are some errors including that we did not use the full functionality of 
+stop words, URL redirecting errors, and file uploads errors where the upload 
+options are not fully visible.
+
+There is also commented out code in results/models.py and dashboard/models.py 
+where models caould be used to store the data layer results instead of just 
+passing it on through to the charts. This was would be more organized and allow the user to manipulate the data in better.
+
+# Resources:
 
 [Ready to use Structure for Django Tests](https://dezoito.github.io/2015/09/21/how-to-test-django-applications_pt1.html)
 [Testing in Django Part 1 - Best Practices](https://realpython.com/blog/python/testing-in-django-part-1-best-practices-and-examples/)
