@@ -22,6 +22,9 @@ ChartInstructorData
 # Documentation depenciences
 from documentation.views import DocumentationView
 
+# Controller dependencies
+from controller.views import computeTopicResults
+
 class DashboardView(TemplateView):
     """
     Inherit from TemplateView, which normally is best used for templating
@@ -39,6 +42,7 @@ class DashboardView(TemplateView):
 
     def topic_distribution(request):
         # http://example/dashboard/topic-distribution
+        computeTopicResults()
         return render(request, 'dashboard/topic-distribution.html')
 
     def instructor_distribution(request):
