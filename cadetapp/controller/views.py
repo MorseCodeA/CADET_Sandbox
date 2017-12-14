@@ -78,9 +78,9 @@ def computeInstructorResults():
 	    inst_name_list.append(entry['instructor_first_name']
                                   + " "
                                   + inst_JSON[x]['instructor_last_name'])
-	    pos_list.append(entry['comments']['positive']))
-	    neu_list.append(entry['comments']['neutral']))
-	    neg_list.append(entry['comments']['negative']))
+	    pos_list.append(len(entry['comments']['positive']))
+	    neu_list.append(len(entry['comments']['neutral']))
+	    neg_list.append(len(entry['comments']['negative']))
 	    
     result = [inst_name_list, pos_list, neu_list, neg_list]
     return result
