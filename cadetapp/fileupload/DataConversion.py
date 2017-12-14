@@ -9,7 +9,10 @@ class CSVfiletoJSONobj:
 	def _init_(self):
 		self.inputpath = 'string'
 		self.outputpath = 'string'
-		self.fieldnames = ("anon_id","program","modality","course_num_sect_id","instructor_last_name", "instructor_first__name", "course_comments","instructor_comments","additional_comments")
+		self.fieldnames = ("anon_id","program","modality",
+						   "course_num_sect_id","instructor_last_name",
+						   "instructor_first__name", "course_comments",
+						   "instructor_comments","additional_comments")
 
 	def get_input_path(self):
 		return self.inputpath
