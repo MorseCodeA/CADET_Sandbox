@@ -152,8 +152,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Website for generating JSONs to a specified template
 GLOBAL_SETTINGS = {
-    'ALTERNATIVE_URL':'http://www.json-generator.com/api/json/get/ceeCPfmcoi/0',
-    'BACKEND_URL':'127.0.0.1:5000',
+    'ALTERNATIVE_URL':'http://www.json-generator.com/api/json/get/ceeCPfmcoi/',
+    'BACKEND_URL':'http://127.0.0.1:5000',
     'PLACEHOLDER_URL':'https://jsonplaceholder.typicode.com/users/',
 }
 
