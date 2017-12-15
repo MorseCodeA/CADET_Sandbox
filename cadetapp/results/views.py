@@ -28,7 +28,7 @@ def retrieve(request,result_id):
     Template expected can be found in Results-example.json
     """
     USE_ALTERNATIVE_URL=False    # Takes precident
-    USE_PLACEHOLDER_URL=True
+    USE_PLACEHOLDER_URL=False
     if (USE_ALTERNATIVE_URL):
         url = settings.GLOBAL_SETTINGS['ALTERNATIVE_URL']
     elif (USE_PLACEHOLDER_URL):
