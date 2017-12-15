@@ -157,7 +157,43 @@ options are not fully visible.
 
 There is also commented out code in results/models.py and dashboard/models.py 
 where models caould be used to store the data layer results instead of just 
-passing it on through to the charts. This was would be more organized and allow the user to manipulate the data in better.
+passing it on through to the charts. This was would be more organized and 
+allow the user to manipulate the data in better.
+
+### Test Plan
+Run Back end code: 
+First run data layer's code, which is './install.sh' then ./start.sh' 
+in the /cadet/Datalayer folder. 
+
+Run Front end code:
+In the /cadet/src/front-end/cadet, run 'python manage.py migrate' then 
+'python manage.py runserver'. Go to 127.0.0.1:8000 to view our home page. 
+To upload a file and view it, go to 'Upload' tab and select the csv file 
+under /media/downloads to submit. This will redirect you to an Upload 
+Options page. If you do not see the file name in the first tab, please 
+restart the server and submit the same file again (bug). If you are 
+redirected to a very long URL, just remove the '/dashboard' part that 
+repeats at the end (bug). On the Upload Options page, enter your 
+parameters and upload the file to the database (there should be a 
+confirmation on the page and on the data layer terminal).
+
+This will redirect you to the topics distribution charts. The charts 
+represent the number of positive, neutral, and negative comments per 
+topic and instructors for the topic and instructors page respectively.
+The topics page the list of sentiment words per topic taken from the 
+data layer. It was meant for the instructor names to appear, but the 
+JSON we recieved did not have those name fields. We compensated by 
+nameing each instructor 'instructor 1', 'instructor 2', etc. 
+
+If you would like to adjust the upload options, please go to the upload 
+page first, then the upload option page, otherwise you may not see 
+anything there (bug).
+
+Going to the Documents tab will show all of the documentation.
+
+There is currently no page for Export or Team.
+
+Going to the GitHub page will redirect you to our GitHub.
 
 # Resources:
 
