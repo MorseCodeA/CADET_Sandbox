@@ -19,6 +19,7 @@ def option_view(request):
     """
     if request.method == 'POST':
         form = JsonForm(request.POST)
+        #On POST pull CSV to “Download” folder and call Data Conversion method
         if form.is_valid():
             media_path = settings.MEDIA_ROOT + '/downloads/'
             comments = form.cleaned_data['comments']
@@ -35,6 +36,7 @@ def option_view(request):
 
             PushDataToDataTeam = DataPush()
             PushDataToDataTeam._init_()
+
             resultset_id = PushDataToDataTeam.PushJSONObject(
                 comments,
                 topics,
