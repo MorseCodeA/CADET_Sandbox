@@ -73,14 +73,17 @@ def computeInstructorResults():
     pos_list = []
     neu_list = []
     neg_list = []
-	
-    for entry in result_JSON['results']['instuctor_stats']:
-	    inst_name_list.append(entry['instructor_first_name']
-                                  + " "
-                                  + inst_JSON[x]['instructor_last_name'])
-	    pos_list.append(len(entry['comments']['positive']))
-	    neu_list.append(len(entry['comments']['neutral']))
-	    neg_list.append(len(entry['comments']['negative']))
+
+    instr_num=1
+    for entry in result_JSON['results']['instructor_stats']:
+        inst_name_list.append('Instructor %s'%instr_num)
+        instr_num += 1 # increment instr_num for the time being
+        #inst_name_list.append(entry['instructor_first_name']
+        #                      + " "
+        #                      + inst_JSON[x]['instructor_last_name'])
+        pos_list.append(len(entry['comments']['positive']))
+        neu_list.append(len(entry['comments']['neutral']))
+        neg_list.append(len(entry['comments']['negative']))
 	    
     result = [inst_name_list, pos_list, neu_list, neg_list]
     return result
