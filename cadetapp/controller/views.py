@@ -35,21 +35,18 @@ def computeTopicResults():
     """
     # retrieve the most recent JSON, which is determined by its result id
     last_result = Results_Set.objects.all().order_by('-id')[0]
-    result_JSON = last_result.jsonObjs
-	
-    topic_JSON = result_JSON[0]['results']['topics_stats']
-    num_of_topics = len(topic_JSON)
-	
+    result_JSON = last_result.jsonObj
+		
     topic_word_list = []
     pos_list = []
     neu_list = []
     neg_list = []
 	
-    for x in range(num_of_topics):
-	    topic_word_list.append(topic_JSON[x]['words'])
-	    pos_list.append(len(topic_JSON[x]['comments']['positive']))
-	    neu_list.append(len(topic_JSON[x]['comments']['neutral']))
-	    neg_list.append(len(topic_JSON[x]['comments']['negative']))
+    for entry in result_JSON['results']['topics_stats']:
+	    topic_word_list.append(entry['words'])
+	    pos_list.append(len(entry['comments']['positive']))
+	    neu_list.append(len(entry['comments']['neutral']))
+	    neg_list.append(len(entry['comments']['negative']))
 	    
     result = [topic_word_list, pos_list, neu_list, neg_list]
     return result
@@ -70,22 +67,23 @@ def computeInstructorResults():
     """
     # retrieve the most recent JSON, which is determined by its result id
     last_result = Results_Set.objects.all().order_by('-id')[0]
-    result_JSON = last_result.jsonObjs
-    
-    inst_JSON = result_JSON[0]['results']['instructor_stats']
-    num_of_inst = len(inst_JSON)
-	
+    result_JSON = last_result.jsonObj
+     	
     inst_name_list = []
     pos_list = []
     neu_list = []
     neg_list = []
-	
-    for x in range(num_of_inst):
-	    inst_name_list.append(inst_JSON[x]['instructor_first_name'] + " " +\
-	    inst_JSON[x]['instructor_last_name'])
-	    pos_list.append(len(inst_JSON[x]['comments']['positive']))
-	    neu_list.append(len(inst_JSON[x]['comments']['neutral']))
-	    neg_list.append(len(inst_JSON[x]['comments']['negative']))
+
+    instr_num=1
+    for entry in result_JSON['results']['instructor_stats']:
+        inst_name_list.append('Instructor %s'%instr_num)
+        instr_num += 1 # increment instr_num for the time being
+        #inst_name_list.append(entry['instructor_first_name']
+        #                      + " "
+        #                      + inst_JSON[x]['instructor_last_name'])
+        pos_list.append(len(entry['comments']['positive']))
+        neu_list.append(len(entry['comments']['neutral']))
+        neg_list.append(len(entry['comments']['negative']))
 	    
     result = [inst_name_list, pos_list, neu_list, neg_list]
     return result

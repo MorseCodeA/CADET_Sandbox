@@ -1,6 +1,4 @@
-import os
-import csv
-import json
+import csv, json, os
 
 # Added Class DataConversion.py and function through which the program
 # receives a CSV file (without regard for delimiter) and converts it to
@@ -14,10 +12,15 @@ class CSVfiletoJSONobj:
 	def _init_(self):
 		self.inputpath = 'string'
 		self.outputpath = 'string'
-		self.fieldnames = ("anon_id","program","modality",
-						   "course_num_sect_id","instructor_last_name",
-						   "instructor_first__name", "course_comments",
-						   "instructor_comments","additional_comments")
+		self.fieldnames = ("anon_id",
+                                   "program",
+                                   "modality",
+                                   "course_num_sect_id",
+                                   "instructor_last_name",
+                                   "instructor_first__name",
+                                   "course_comments",
+                                   "instructor_comments",
+                                   "additional_comments")
 
 	#Getters and Setters.
 	def get_input_path(self):
@@ -50,5 +53,5 @@ class CSVfiletoJSONobj:
 		for row in reader:
 			json_list.append(row)
 		json.dump(json_list, jsonfile)
-
+# END class CSVfiletoJSONobj
 

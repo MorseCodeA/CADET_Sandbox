@@ -1,14 +1,38 @@
 from django.db import models
 from datetime import datetime
 import json, jsonfield
-import requests
-import random
+
+""" results.models documentation
+The results.models package contains the data structures that are necessary to
+store, in the local database, results from the data layer.
+
+Classes:
+    Results_Set(models.Model): Processed comments results returned from data 
+       layer.   
+
+Notes:
+    Much of this class is commented out. These commented out classes reference
+    tables found in the backend database which are not exposed to the user 
+    interface layer (this module). These classes were developed well before
+    an understanding of the results return structure was establsished.
+    Please see the 'Latest Update' header for further information.
+"""
 
 # The model that stores the data from data layer in the form of an id and 
 # JSON object. Will be used by controller/views.py to reteieve data.
 class Results_Set(models.Model):
+        """
+        A Results_Set is the result of the processing of comments submission
+        by the NLTK. Results_Set is a table consisting of Resutls_Set() 
+        object entries.
+
+        Members:
+            id (int): primary key for table. id is also the results id returned
+                when a new submission is posted.
+            jsonObj (json): JSON object of the returned results
+        """
         id=models.IntegerField(primary_key=True,unique=True,default=-1)
-        jsonObjs=jsonfield.JSONField(null=True,blank=True)
+        jsonObj=jsonfield.JSONField(null=True,blank=True)
 # END class Results_Set
 
 ##################################################
@@ -41,7 +65,7 @@ class Results_Set(models.Model):
 
 #class Comments(models.Model):
 #        """
-
+#
 #        """
 #        id = models.AutoField(primary_key=True)
 #        positive = models.TextField()
@@ -59,7 +83,7 @@ class Results_Set(models.Model):
 #        first_name=models.CharField(max_length=30,default='Joel')
 #        last_name=models.CharField(max_length=30,default='Coffman')
 ## END class Instructor
-#        
+        
 #class Course(models.Model):
 #        """Course is an class being offered.
 #        Attributes:
@@ -89,7 +113,7 @@ class Results_Set(models.Model):
 #                default=0)
 #        num_sect=models.IntegerField(default=0)
 ## END class Course
-#                        
+                        
 #class Comment(models.Model):
 #        """Comment is a part of a processed, submitted review.
 #        Attributes:
@@ -123,7 +147,7 @@ class Results_Set(models.Model):
 #        )
 #        tone = models.IntegerField(choices=TONES,default=0)
 #        topic = models.IntegerField(default=0)
-##END class Comment
+## END class Comment
 
 #class Topic_Words(models.Model):
 #        """Topic Words is a set of words that constitue a topic.
@@ -135,8 +159,7 @@ class Results_Set(models.Model):
 #        id=models.IntegerField(primary_key=True,unique=True,default=-1)
 #        topic_id=models.IntegerField(default=-1)
 #        words=models.CharField(max_length=30,default='kittens')
-
-##END class Topic_Words
+## END class Topic_Words
 
 #class Results_Details(models.Model):
 #        """Results_Details correlates a comment to a topic ID.
@@ -160,7 +183,7 @@ class Results_Set(models.Model):
 #        )
 #        course_comm_sent = models.IntegerField(choices=COMMENT_STAT,default=0)
 #        instr_comm_sent = models.IntegerField(choices=COMMENT_STAT,default=0)
-##END class Results_Details
+## END class Results_Details
 
 #class Results(models.Model):
 #        """Results are the output of the NLTK processing
@@ -178,7 +201,7 @@ class Results_Set(models.Model):
 #        iterations=models.IntegerField(default=3)
 #        stop_words=models.IntegerField(default=4)
 #        timestamp=models.DateTimeField(auto_now=True)
-##END class Results
+## END class Results
 
 #class Results_Topic(models.Model):
 #        """Results_Topics does something, but I do not know what
@@ -190,4 +213,4 @@ class Results_Set(models.Model):
 #        results=models.ForeignKey(
 #                Results,
 #                on_delete=models.CASCADE)        
-##END class Results_Details
+## END class Results_Details

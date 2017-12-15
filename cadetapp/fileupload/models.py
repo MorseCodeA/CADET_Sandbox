@@ -12,13 +12,17 @@ class Document(models.Model):
     # model is not returning title of doc in view
     def __unicode__(self):
          return self.name
-
+# END class Document
+     
 class Json_Model(models.Model):
     """
     Purpose: This is the model for the upload options page.
     The 4 options correspond to the 4 different user inputs.
     """
-    files = models.FilePathField(path=settings.MEDIA_ROOT + '/downloads/', match=".*\.csv$")
+    files = models.FilePathField(
+        path=settings.MEDIA_ROOT + '/downloads/',
+        match=".*\.csv$")
     comments = models.PositiveIntegerField()
     topics = models.PositiveIntegerField()
     iterations = models.PositiveIntegerField()
+# END class Json_Model

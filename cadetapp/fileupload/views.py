@@ -1,16 +1,14 @@
-# Create your views here.
-
-from django.shortcuts import render, redirect
+from django.conf import settings
 from django.contrib import messages
 from django.core.cache import cache
-import json
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from .DataConversion import CSVfiletoJSONobj
 from .forms import DocumentForm, JsonForm
 from .models import Document
-from django.conf import settings
-from .DataConversion import CSVfiletoJSONobj
 from .PushJSON import DataPush
-import os
+from results.views import retrieve
+import os,json
 
 def option_view(request):
     """
@@ -30,20 +28,28 @@ def option_view(request):
             JSONinput = CSVfiletoJSONobj()
             JSONinput._init_()
             JSONinput.set_input_path(form.cleaned_data['files'])
-            JSONinput.set_output_path(media_path + str('cadet-file-to-json.json'))
+            JSONinput.set_output_path(media_path
+                                      + str('cadet-file-to-json.json'))
             JSONinput.CSVtoJSON_Obj()
-            messages.info(request, 'The JSON file has been successfully created!')
+            messages.info(request,
+                          'The JSON file has been successfully created!')
 
             PushDataToDataTeam = DataPush()
             PushDataToDataTeam._init_()
-            PushDataToDataTeam.PushJSONObject(comments, topics,
-                    iterations, media_path + str('cadet-file-to-json.json'))
 
-            messages.info(request, 'The JSON file has been successfully created!')
-            return redirect(request.path_info)
+            resultset_id = PushDataToDataTeam.PushJSONObject(
+                comments,
+                topics,
+                iterations,
+                media_path + str('cadet-file-to-json.json'))
+
+            messages.info(request,
+                          'The JSON file has been successfully created!')
+            return redirect(retrieve,result_id=resultset_id)
     else:
         form = JsonForm()
     return render(request, 'options.html', {'form': form})
+# END option_view(request)
 
 def upload_view(request):
     """
@@ -61,6 +67,7 @@ def upload_view(request):
     else:
         form = DocumentForm()
     return render(request, 'file_upload.html', {'form': form})
+# END def upload_view
 
 def upload_progress(request):
     """
@@ -79,3 +86,4 @@ def upload_progress(request):
         cache_key = "%s_%s" % (request.META['REMOTE_ADDR'], progress_id)
         data = cache.get(cache_key)
         return HttpResponse(json.dumps(data))
+# END def upload_progress

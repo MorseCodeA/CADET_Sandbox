@@ -35,12 +35,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'dashboard',
-    'fileupload',
     'controller',
-    'rest_framework',
+    'dashboard',
     'distribution_chart',
     'documentation',
+    'fileupload',
+    'rest_framework',
     'results',
 ]
 
@@ -151,6 +151,13 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Website for generating JSONs to a specified template
-GLOBAL_SETTINGS = {'BACKEND_URL': 'http://www.json-generator.com'}
-# Another optional website for viewing example JSONs
-#GLOBAL_SETTINGS = {'BACKEND_URL':'https://jsonplaceholder.typicode.com/'}
+GLOBAL_SETTINGS = {
+    'ALTERNATIVE_URL':'http://www.json-generator.com/api/json/get/ceeCPfmcoi/',
+    'BACKEND_URL':'http://localhost:5000/api/Result/',
+    'PLACEHOLDER_URL':'https://jsonplaceholder.typicode.com/users/',
+}
+
+POLLING_SETTINGS = {
+    'RETRIES':2,
+    'TIMEOUT':5,
+}
