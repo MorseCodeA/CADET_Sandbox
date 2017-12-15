@@ -23,7 +23,7 @@ ChartInstructorData
 from documentation.views import DocumentationView
 
 # Controller dependencies
-from controller.views import computeTopicResults
+from  controller.views import *
 
 class DashboardView(TemplateView):
     """
@@ -47,6 +47,7 @@ class DashboardView(TemplateView):
 
     def instructor_distribution(request):
         # http://example/dashboard/instructor-distribution
+        computeInstructorResults()
         return render(request, 'dashboard/instructor-distribution.html')
 
     def stopword_view(request):
