@@ -34,9 +34,10 @@ class DataPush:
 		strfinalJSON = str(finalJSON)
 		strfinalJSON = strfinalJSON.replace("\'", "\"")
 		finalJSON = json.loads(strfinalJSON)
-		self.PushObject(strfinalJSON)
+		return self.PushObject(strfinalJSON)
 
 	def PushObject(self, data_json):
 		response = requests.post(self.url, data_json)
-		print('THIS IS THE NUBER JOSH NEEDS!   = ', response.json)
-		return redirect('views.retrieve', result_id=response)
+		#print('THIS IS THE NUBER JOSH NEEDS = '+
+                #      str(response.json()['resultset_id']))
+		return response.json()['resultset_id']

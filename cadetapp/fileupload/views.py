@@ -7,6 +7,7 @@ from .DataConversion import CSVfiletoJSONobj
 from .forms import DocumentForm, JsonForm
 from .models import Document
 from .PushJSON import DataPush
+from results.views import retrieve
 import os,json
 
 def option_view(request):
@@ -34,15 +35,15 @@ def option_view(request):
 
             PushDataToDataTeam = DataPush()
             PushDataToDataTeam._init_()
-            PushDataToDataTeam.PushJSONObject(comments,
-                                              topics,
-                                              iterations,
-                                              media_path
-                                              + str('cadet-file-to-json.json'))
+            resultset_id = PushDataToDataTeam.PushJSONObject(
+                comments,
+                topics,
+                iterations,
+                media_path + str('cadet-file-to-json.json'))
 
             messages.info(request,
                           'The JSON file has been successfully created!')
-            return redirect(request.path_info)
+            return redirect(retrieve,result_id=resultset_id)
     else:
         form = JsonForm()
     return render(request, 'options.html', {'form': form})
