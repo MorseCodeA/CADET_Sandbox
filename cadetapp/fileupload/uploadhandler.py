@@ -4,7 +4,9 @@ from django.core.files.uploadhandler import TemporaryFileUploadHandler
 
 class ProgressBarUploadHandler(TemporaryFileUploadHandler):
     """
-    Cache system for TemporaryFileUploadHandler
+    Purpose: This is a custom file uploader that uses a
+    Cache system to grab file upload progress. This is instantiated
+    in the cadet.app.settings and used in views.py
     """
     def __init__(self, *args, **kwargs):
         super(TemporaryFileUploadHandler, self).__init__(*args, **kwargs)

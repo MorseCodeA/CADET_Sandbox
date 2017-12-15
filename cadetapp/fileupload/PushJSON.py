@@ -28,7 +28,8 @@ class DataPush:
 
 	def PushJSONObject(self, Comments, Topics, Iterations, StringEnter):
 		finalJSON={}
-		finalJSON['meta_file_info'] = self.ReadParamsObject(Comments, Topics, Iterations)
+		finalJSON['meta_file_info'] = self.ReadParamsObject(Comments,
+															Topics, Iterations)
 		finalJSON['raw_file_stats'] = self.ReadJSONObject(StringEnter)
 		strfinalJSON = str(finalJSON)
 		strfinalJSON = strfinalJSON.replace("\'", "\"")

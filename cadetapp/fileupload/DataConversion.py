@@ -35,6 +35,7 @@ class CSVfiletoJSONobj:
 	def set_fieldnames(self, fields):
 		self.fieldnames.append(fields)
 		
+
 	def CSVtoJSON_Obj(self):
 		csvfile = open(self.inputpath, 'r')
 		jsonfile = open(self.outputpath, 'w')

@@ -1,7 +1,13 @@
 {% load staticfiles %}
 <!-- Jack's dependencies -->
 <script src="{% static 'vendor/bootstrap/js/bootstrap337.min.js' %}"></script>
+<!-- This url is used with the upload progress bar-->
 <script>upload_progress_url = "/dashboard/file_upload/upload_progress"</script>
+
+<!-- Javascript code for the dropzone
+    Purpose is to have the upload button follow where the mouse cursor is so the
+    user drops the files on top of the upload button
+-->
 <script>
     $(function () {
     var dropZoneId = "drop-zone";
@@ -26,6 +32,8 @@
     }, true);
     })
 </script>
+
+<!-- Javascript code for the cached upload progress bar -->
 <script>
 $(document).ready(function(){
             $("#open_btn").click(function() {
@@ -63,6 +71,10 @@ $(document).ready(function(){
   });
 });
 </script>
+
+<!-- Javascript code to update the table in the file_upload page
+with the selected file information
+-->
 <script>
     function Upload(){
         var x = document.getElementById("id_file");
@@ -87,6 +99,7 @@ $(document).ready(function(){
         }
     }
 </script>
+
 <script>
 //Function that allows the dropdown button to work
 $(function(){
@@ -97,6 +110,11 @@ $(function(){
 
 });
 </script>
+
+<!-- Javascript code for error catching on the uploaded file.
+Checks the file extensions and returns a modal popup box if
+it is invalid
+-->
 <script>
     function fileSubmit(){
         var file_input = document.getElementById("id_file");
