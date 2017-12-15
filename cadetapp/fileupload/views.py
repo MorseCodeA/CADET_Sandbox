@@ -21,6 +21,7 @@ def option_view(request):
     """
     if request.method == 'POST':
         form = JsonForm(request.POST)
+        #On POST pull CSV to “Download” folder and call Data Conversion method
         if form.is_valid():
             media_path = settings.MEDIA_ROOT + '/downloads/'
             comments = form.cleaned_data['comments']
@@ -35,7 +36,8 @@ def option_view(request):
 
             PushDataToDataTeam = DataPush()
             PushDataToDataTeam._init_()
-            PushDataToDataTeam.PushJSONObject(comments, topics, iterations, media_path + str('cadet-file-to-json.json'))
+            PushDataToDataTeam.PushJSONObject(comments, topics,
+                    iterations, media_path + str('cadet-file-to-json.json'))
 
             messages.info(request, 'The JSON file has been successfully created!')
             return redirect(request.path_info)
